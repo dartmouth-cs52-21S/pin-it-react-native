@@ -1,22 +1,12 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { LogBox } from 'react-native';
+import MainTabBar from './navigation/MainTabBar';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Hello world!</Text>
-      {/* eslint-disable-next-line react/style-prop-object */}
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+LogBox.ignoreAllLogs();// Ignore all log notifications
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const App = (props) => {
+  return <MainTabBar />;
+};
+
+export default App;
