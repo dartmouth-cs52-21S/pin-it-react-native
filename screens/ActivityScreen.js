@@ -6,8 +6,8 @@ import {
 import { getLocationInfo, createLocation } from '../services/LocationService';
 
 const ActivityScreen = (props) => {
-  const [lat, setLat] = useState(0);
-  const [lng, setLng] = useState(0);
+  const [lat, setLat] = useState('0');
+  const [lng, setLng] = useState('0');
   const [info, setInfo] = useState('');
 
   const getInfo = async (latitude, longitude) => {
