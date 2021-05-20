@@ -1,6 +1,8 @@
 # Project Name
 
 ![Team Photo](https://user-images.githubusercontent.com/52898557/118916110-edbbbe80-b8f3-11eb-9bd8-db6e92e4070d.png)
+![image](https://user-images.githubusercontent.com/52898557/118916227-1e035d00-b8f4-11eb-9403-fc47679e1dfc.png)
+
 
 
 This is the frontend repository for our CS52 final project, Pin-It (*name subject to change*). Pin-It is a mobile app that challenges users to explore their surroundings by suggesting new locations to visit nearby.
@@ -22,10 +24,6 @@ The following is a general overview of the project structure.
 - **reducers/** - reducers for users, posts, app
 - **screens/** - containers for the components
 - **selectors/** - functions to select redux state items
-- **models/** - schema for different data types
-- **controllers/** - controllers for the data models
-- **server.js** - the CRUD API server
-- **router.js** - routes for the API server requests
 
 
 ## Setup
