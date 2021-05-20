@@ -7,6 +7,17 @@ TODO: short project description, some sample screenshots or mockups
 
 ## Architecture
 
+The following is a general overview of the project structure.
+
+- **App.js** - highest level App component and redux provider
+- **actions/** - redux actions for users, posts, app
+- **assets/** - all images and icons
+- **components/** - React components
+- **navigation/** - stack navigators and main tab navigator
+- **reducers/** - reducers for users, posts, app
+- **screens/** - containers for the components
+- **selectors/** - functions to select redux state items 
+
 
 ## Setup
 
