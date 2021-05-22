@@ -7,7 +7,7 @@ export const ActionTypes = {
   AUTH_ERROR: 'AUTH_ERROR',
 };
 
-export const ROOT_URL = 'https://platform-api4532.herokuapp.com/api';
+export const ROOT_URL = 'https://not-pin-it.herokuapp.com/api';
 // export const ROOT_URL = 'http://localhost:9090/api';
 
 const storeData = async (value) => {
@@ -56,15 +56,17 @@ export function signinUser({ email, password }, history) {
   };
 }
 
-export function signupUser({ email, password, username }, nav) {
+export function signupUser({ email, password, username }) {
+  console.log('he32re');
   return (dispatch) => {
     axios.post(`${ROOT_URL}/signup`, { email, password, username })
       .then((response) => {
+        console.log('bruh');
         dispatch({ type: ActionTypes.AUTH_USER });
         storeData(response.data.token);
-        nav.navigate('Home');
       })
       .catch((error) => {
+        console.log('123');
         dispatch(authError(`Sign In Failed: ${error.response.data.error}`));
       });
   };

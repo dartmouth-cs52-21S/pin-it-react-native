@@ -18,7 +18,7 @@ const MainTabBar = (props) => {
     Home: faHome,
     Activity: faDice,
     Profile: faUser,
-    Signup: faUser,
+    SignUp: faUser,
   };
 
   return (
