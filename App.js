@@ -18,16 +18,16 @@ const store = createStore(reducers, {}, compose(
 const getData = async () => {
   try {
     const value = await AsyncStorage.getItem('token');
+    if (value !== null) {
+      store.dispatch({ type: ActionTypes.AUTH_USER });
+    }
     return value;
   } catch (e) {
     return e;
   }
 };
 
-const token = getData();
-if (token) {
-  store.dispatch({ type: ActionTypes.AUTH_USER });
-}
+getData();
 
 const App = (props) => {
   return (

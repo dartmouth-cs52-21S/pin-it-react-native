@@ -32,7 +32,7 @@ const MainTabBar = (props) => {
             },
           })}
         >
-          {props.authenticated ? (
+          {props.authenticated === false ? (
             <Tab.Screen name="SignUp" component={SignUpTab} />
           ) : (
             <Tab.Screen name="Home" component={HomeTab} />
