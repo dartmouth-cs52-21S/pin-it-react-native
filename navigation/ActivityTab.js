@@ -6,7 +6,7 @@ import {
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import OngoingActivityScreen from '../screens/OngoingActivityScreen';
 import NewActivityScreen from '../screens/NewActivityScreen';
-import { bgPrimary } from '../constants/colors';
+import { bgSecondary } from '../constants/colors';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -19,6 +19,10 @@ const ActivityTab = () => {
         activeTintColor: 'black',
         inactiveTintColor: 'white',
         indicatorStyle: styles.tabBarIndicator,
+        labelStyle: {
+          fontSize: 11,
+          textTransform: 'none',
+        },
       }}
     >
       <Tab.Screen name="New" component={NewActivityScreen} />
@@ -37,13 +41,13 @@ const styles = StyleSheet.create({
     height: 48,
     alignSelf: 'center',
     borderRadius: 100,
-    backgroundColor: bgPrimary,
+    backgroundColor: bgSecondary,
   },
 
   tabBarIndicator: {
     backgroundColor: 'white',
     height: 48,
-    borderColor: bgPrimary,
+    borderColor: bgSecondary,
     borderWidth: 3,
     borderRadius: 100,
   },
