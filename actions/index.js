@@ -1,19 +1,71 @@
-// keys for actiontypes
+import axios from 'axios';
+import { AsyncStorage } from 'react-native';
+
 export const ActionTypes = {
-  INCREMENT: 'INCREMENT',
-  DECREMENT: 'DECREMENT',
+  AUTH_USER: 'AUTH_USER',
+  DEAUTH_USER: 'DEAUTH_USER',
+  AUTH_ERROR: 'AUTH_ERROR',
 };
 
-export function increment() {
+export const ROOT_URL = 'https://platform-api4532.herokuapp.com/api';
+// export const ROOT_URL = 'http://localhost:9090/api';
+
+const storeData = async (value) => {
+  try {
+    await AsyncStorage.setItem('token', value);
+  } catch (e) {
+    // saving error
+  }
+};
+
+const deleteData = async () => {
+  try {
+    await AsyncStorage.removeItem('token');
+  } catch (e) {
+    // saving error
+  }
+};
+
+export function signoutUser(history) {
+  return (dispatch) => {
+    deleteData();
+    dispatch({ type: ActionTypes.DEAUTH_USER });
+    history.push('/');
+  };
+}
+// trigger to deauth if there is error
+// can also use in your error reducer if you have one to display an error message
+export function authError(error) {
   return {
-    type: ActionTypes.INCREMENT,
-    payload: null,
+    type: ActionTypes.AUTH_ERROR,
+    message: error,
   };
 }
 
-export function decrement() {
-  return {
-    type: ActionTypes.DECREMENT,
-    payload: null,
+export function signinUser({ email, password }, history) {
+  return (dispatch) => {
+    axios.post(`${ROOT_URL}/signin`, { email, password })
+      .then((response) => {
+        dispatch({ type: ActionTypes.AUTH_USER });
+        storeData(response.data.token);
+        history.push('/');
+      })
+      .catch((error) => {
+        dispatch(authError(`Sign In Failed: ${error.response.data}`));
+      });
+  };
+}
+
+export function signupUser({ email, password, username }, nav) {
+  return (dispatch) => {
+    axios.post(`${ROOT_URL}/signup`, { email, password, username })
+      .then((response) => {
+        dispatch({ type: ActionTypes.AUTH_USER });
+        storeData(response.data.token);
+        nav.navigate('Home');
+      })
+      .catch((error) => {
+        dispatch(authError(`Sign In Failed: ${error.response.data.error}`));
+      });
   };
 }

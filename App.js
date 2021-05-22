@@ -1,12 +1,40 @@
 import React from 'react';
-import { LogBox } from 'react-native';
+import { LogBox, AsyncStorage } from 'react-native';
+import { createStore, applyMiddleware, compose } from 'redux';
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
 import MainTabBar from './navigation/MainTabBar';
+import { ActionTypes } from './actions/index';
+import reducers from './reducers';
 
 LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 LogBox.ignoreAllLogs();// Ignore all log notifications
 
+const store = createStore(reducers, {}, compose(
+  applyMiddleware(thunk),
+  window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : (f) => f,
+));
+
+const getData = async () => {
+  try {
+    const value = await AsyncStorage.getItem('token');
+    return value;
+  } catch (e) {
+    return e;
+  }
+};
+
+const token = getData();
+if (token) {
+  store.dispatch({ type: ActionTypes.AUTH_USER });
+}
+
 const App = (props) => {
-  return <MainTabBar />;
+  return (
+    <Provider store={store}>
+      <MainTabBar />
+    </Provider>
+  );
 };
 
 export default App;
