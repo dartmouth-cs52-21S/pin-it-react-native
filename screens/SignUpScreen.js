@@ -19,7 +19,7 @@ const SignUpScreen = (props) => {
       <TextInput style={styles.textInput} value={email} onChangeText={(text) => setEmail(text)} />
       <Text>Password</Text>
       <TextInput style={styles.textInput} value={password} onChangeText={(text) => setPassword(text)} />
-      <Button title="Submit" onPress={() => signupUser({ email, password, username })} />
+      <Button title="Submit" onPress={() => props.signupUser({ email, password, username })} />
     </View>
   );
 };

@@ -57,11 +57,11 @@ export function signinUser({ email, password }, history) {
 }
 
 export function signupUser({ email, password, username }) {
-  console.log('he32re');
+  console.log('here');
   return (dispatch) => {
     axios.post(`${ROOT_URL}/signup`, { email, password, username })
       .then((response) => {
-        console.log('bruh');
+        console.log('test');
         dispatch({ type: ActionTypes.AUTH_USER });
         storeData(response.data.token);
       })
