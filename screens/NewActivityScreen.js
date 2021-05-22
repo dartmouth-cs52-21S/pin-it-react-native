@@ -1,13 +1,22 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import MapView, { Marker } from 'react-native-maps';
+import { Modalize } from 'react-native-modalize';
+import { Portal } from 'react-native-portalize';
 import {
   StyleSheet, View, TouchableOpacity, Text,
 } from 'react-native';
 import { bgPrimary } from '../constants/colors';
+import NewMissionModal from '../components/NewMissionModal';
 
 const NewActivityScreen = (props) => {
+  const modalizeRef = useRef(null);
+
   const onMarkerPress = (e) => {
     console.log('pressed');
+  };
+
+  const onModalPress = (e) => {
+    modalizeRef.current?.open();
   };
 
   return (
@@ -20,9 +29,17 @@ const NewActivityScreen = (props) => {
         />
       </MapView>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.newActivityButton}>
+        <TouchableOpacity style={styles.newActivityButton} onPress={onModalPress}>
           <Text style={styles.buttonText}>🎲 Generate New Mission</Text>
         </TouchableOpacity>
+        <Portal>
+          <Modalize ref={modalizeRef}
+            modalHeight={500}
+            modalStyle={{ backgroundColor: bgPrimary }}
+          >
+            <NewMissionModal />
+          </Modalize>
+        </Portal>
       </View>
     </View>
   );
@@ -53,8 +70,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   buttonText: {
-    fontSize: 16,
-    color: 'black',
+    fontSize: 14,
+    color: 'white',
     fontWeight: '500',
   },
 });
