@@ -3,7 +3,7 @@ import {
   View, Text, StyleSheet, TextInput, TouchableOpacity,
 } from 'react-native';
 import ButtonGroup from './ButtonGroup';
-import { bgSecondary, accentGreen } from '../constants/colors';
+import { bgTertiary, accentGreen } from '../constants/colors';
 
 const NewMissionModal = (props) => {
   const [address, onChangeAddress] = useState('1791 Seattle Dr, Houston, TX 77923');
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
   address: {
-    backgroundColor: bgSecondary,
+    backgroundColor: bgTertiary,
     borderRadius: 10,
     padding: 8,
     color: 'white',

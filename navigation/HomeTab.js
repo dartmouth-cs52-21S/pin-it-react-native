@@ -2,6 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import FeedScreen from '../screens/FeedScreen';
+import { bgPrimary } from '../constants/colors';
 
 const Stack = createStackNavigator();
 
@@ -14,11 +15,14 @@ const HomeTab = () => {
         name="FeedScreen"
         component={FeedScreen}
         options={{
-          title: 'feed',
+          title: 'Explore',
           headerStyle: {
-            backgroundColor: '#349eeb',
+            backgroundColor: bgPrimary,
+            shadowOffset: { height: 0, width: 0 }, // Gets rid of white line underneath
           },
           headerTintColor: '#fff',
+          headerTitleStyle: { fontSize: 25 },
+          headerTitleAlign: 'left',
         }}
       />
     </Stack.Navigator>

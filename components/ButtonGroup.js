@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity,
 } from 'react-native';
-import { accentPink, bgSecondary } from '../constants/colors';
+import { accentPink, bgTertiary } from '../constants/colors';
 
 const ButtonGroup = (props) => {
   const [selected, setSelected] = useState([]);
@@ -19,7 +19,7 @@ const ButtonGroup = (props) => {
           style={[styles.button, {
             backgroundColor: selected.includes(choice)
               ? accentPink
-              : bgSecondary,
+              : bgTertiary,
           }]}
         >
           <Text style={styles.buttonText}>{choice}</Text>
