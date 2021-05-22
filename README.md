@@ -1,4 +1,4 @@
-# Project Name
+# Pin-It React Native
 
 ![Team Photo](https://user-images.githubusercontent.com/52898557/118916227-1e035d00-b8f4-11eb-9403-fc47679e1dfc.png)
 
