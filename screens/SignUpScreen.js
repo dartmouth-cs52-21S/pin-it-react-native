@@ -4,7 +4,7 @@ import {
   TextInput, Button, Text, StyleSheet,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { signupUser } from '../actions/index';
+import { signUpUser } from '../actions/index';
 
 const SignUpScreen = (props) => {
   const [email, setEmail] = useState('');
@@ -19,7 +19,7 @@ const SignUpScreen = (props) => {
       <TextInput style={styles.textInput} value={email} onChangeText={(text) => setEmail(text)} />
       <Text>Password</Text>
       <TextInput style={styles.textInput} value={password} onChangeText={(text) => setPassword(text)} />
-      <Button title="Submit" onPress={() => props.signupUser({ email, password, username })} />
+      <Button title="Submit" onPress={() => props.signUpUser({ email, password, username })} />
     </View>
   );
 };
@@ -42,4 +42,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(null, { signupUser })(SignUpScreen);
+export default connect(null, { signUpUser })(SignUpScreen);

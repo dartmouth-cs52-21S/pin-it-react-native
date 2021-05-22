@@ -26,11 +26,10 @@ const deleteData = async () => {
   }
 };
 
-export function signoutUser(history) {
+export function signOutUser() {
   return (dispatch) => {
     deleteData();
     dispatch({ type: ActionTypes.DEAUTH_USER });
-    history.push('/');
   };
 }
 // trigger to deauth if there is error
@@ -42,13 +41,12 @@ export function authError(error) {
   };
 }
 
-export function signinUser({ email, password }, history) {
+export function signInUser({ email, password }) {
   return (dispatch) => {
-    axios.post(`${ROOT_URL}/signin`, { email, password })
+    axios.post(`${ROOT_URL}/signIn`, { email, password })
       .then((response) => {
         dispatch({ type: ActionTypes.AUTH_USER });
         storeData(response.data.token);
-        history.push('/');
       })
       .catch((error) => {
         dispatch(authError(`Sign In Failed: ${error.response.data}`));
@@ -56,10 +54,10 @@ export function signinUser({ email, password }, history) {
   };
 }
 
-export function signupUser({ email, password, username }) {
+export function signUpUser({ email, password, username }) {
   console.log('here');
   return (dispatch) => {
-    axios.post(`${ROOT_URL}/signup`, { email, password, username })
+    axios.post(`${ROOT_URL}/signUp`, { email, password, username })
       .then((response) => {
         console.log('test');
         dispatch({ type: ActionTypes.AUTH_USER });

@@ -6,10 +6,10 @@ import { Host } from 'react-native-portalize';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHome, faDice, faUser } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
-// import ProfileTab from './ProfileTab';
+import ProfileTab from './ProfileTab';
 import HomeTab from './HomeTab';
 import SignUpTab from './SignUpTab';
-// import ActivityTab from './ActivityTab';
+import ActivityTab from './ActivityTab';
 
 const Tab = createBottomTabNavigator();
 
@@ -35,7 +35,11 @@ const MainTabBar = (props) => {
           {props.authenticated === false ? (
             <Tab.Screen name="SignUp" component={SignUpTab} />
           ) : (
-            <Tab.Screen name="Home" component={HomeTab} />
+            <>
+              <Tab.Screen name="Home" component={HomeTab} />
+              <Tab.Screen name="Activity" component={ActivityTab} />
+              <Tab.Screen name="Profile" component={ProfileTab} />
+            </>
           )}
         </Tab.Navigator>
       </Host>
