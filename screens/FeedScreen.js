@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  SafeAreaView, FlatList, StyleSheet, StatusBar, Text, ScrollView,
+  SafeAreaView, FlatList, StyleSheet, StatusBar, Text,
 } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import Card from '../components/Card';
