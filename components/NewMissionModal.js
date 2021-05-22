@@ -5,7 +5,7 @@ import {
 import ButtonGroup from './ButtonGroup';
 import { bgSecondary, accentGreen } from '../constants/colors';
 
-const NewMission = (props) => {
+const NewMissionModal = (props) => {
   const [address, onChangeAddress] = useState('1791 Seattle Dr, Houston, TX 77923');
 
   const handleSubmit = () => {
@@ -83,4 +83,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NewMission;
+export default NewMissionModal;

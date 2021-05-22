@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import LocationInput from '../components/LocationInput';
-import NewMission from '../components/NewMission';
+import NewMissionModal from '../components/NewMissionModal';
 
 const ActivityScreen = (props) => {
   return (
     <View style={styles.mainContainer}>
-      <NewMission />
+      <NewMissionModal />
       <LocationInput />
     </View>
   );
