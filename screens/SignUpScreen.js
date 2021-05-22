@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   View,
-  Overlay, TextInput, Button, Text, StyleSheet,
+  TextInput, Button, Text, StyleSheet,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { signupUser } from '../actions/index';
@@ -10,19 +10,16 @@ const SignUpScreen = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
-  const display = true;
 
   return (
     <View style={styles.container}>
-      <Overlay fullScreen={display}>
-        <Text>Username</Text>
-        <TextInput style={styles.textInput} value={username} onChangeText={(text) => setUsername(text)} />
-        <Text>Email</Text>
-        <TextInput style={styles.textInput} value={email} onChangeText={(text) => setEmail(text)} />
-        <Text>Password</Text>
-        <TextInput style={styles.textInput} value={password} onChangeText={(text) => setPassword(text)} />
-        <Button title="Submit" onPress={() => signupUser({ email, password, username })} />
-      </Overlay>
+      <Text>Username</Text>
+      <TextInput style={styles.textInput} value={username} onChangeText={(text) => setUsername(text)} />
+      <Text>Email</Text>
+      <TextInput style={styles.textInput} value={email} onChangeText={(text) => setEmail(text)} />
+      <Text>Password</Text>
+      <TextInput style={styles.textInput} value={password} onChangeText={(text) => setPassword(text)} />
+      <Button title="Submit" onPress={() => signupUser({ email, password, username })} />
     </View>
   );
 };
