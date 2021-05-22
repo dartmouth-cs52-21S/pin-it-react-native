@@ -11,7 +11,6 @@ import LeaderboardTab from './LeaderboardTab';
 import ActivityTab from './ActivityTab';
 import UploadTab from './UploadTab';
 import ProfileTab from './ProfileTab';
-import { bgPrimary } from '../constants/colors';
 
 const Tab = createBottomTabNavigator();
 
