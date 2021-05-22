@@ -1,8 +1,16 @@
 import React from 'react';
-import { View } from 'react-native';
+import {
+  View, Button,
+} from 'react-native';
+import { connect } from 'react-redux';
+import { signOutUser } from '../actions/index';
 
 const ProfileScreen = (props) => {
-  return (<View />);
+  return (
+    <View>
+      <Button title="Log Out" onPress={() => props.signOutUser()} />
+    </View>
+  );
 };
 
-export default ProfileScreen;
+export default connect(null, { signOutUser })(ProfileScreen);
