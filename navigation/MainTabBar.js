@@ -2,7 +2,8 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Host } from 'react-native-portalize';
-import Ionicons from 'react-native-vector-icons/FontAwesome';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faHome, faDice, faUser } from '@fortawesome/free-solid-svg-icons';
 import ProfileTab from './ProfileTab';
 import HomeTab from './HomeTab';
 import ActivityTab from './ActivityTab';
@@ -11,9 +12,9 @@ const Tab = createBottomTabNavigator();
 
 const MainTabBar = () => {
   const icons = {
-    Home: 'home',
-    Activity: 'cube',
-    Profile: 'user',
+    Home: faHome,
+    Activity: faDice,
+    Profile: faUser,
   };
 
   return (
@@ -23,7 +24,7 @@ const MainTabBar = () => {
           initialRouteName="Search"
           screenOptions={({ route }) => ({
             tabBarIcon: ({ focused }) => {
-              return <Ionicons name={icons[route.name]} size={26} color={focused ? '#58AADA' : 'grey'} />;
+              return <FontAwesomeIcon icon={icons[route.name]} size={26} color={focused ? '#58AADA' : 'grey'} />;
             },
           })}
         >
