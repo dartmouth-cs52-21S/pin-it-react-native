@@ -1,8 +1,10 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { LogBox, AsyncStorage } from 'react-native';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
+import Toast from 'react-native-toast-message';
 import MainTabBar from './src/navigation/MainTabBar';
 import { ActionTypes } from './src/actions/auth';
 import reducers from './src/reducers';
@@ -33,6 +35,7 @@ const App = (props) => {
   return (
     <Provider store={store}>
       <MainTabBar />
+      <Toast ref={(ref) => Toast.setRef(ref)} />
     </Provider>
   );
 };

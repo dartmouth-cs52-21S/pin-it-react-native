@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  View, Button,
-} from 'react-native';
+import { View, Button } from 'react-native';
 import { connect } from 'react-redux';
 import { signOutUser } from '../actions/auth';
 

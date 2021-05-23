@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { AsyncStorage } from 'react-native';
+import Toast from 'react-native-toast-message';
 import { setError } from './app';
 import config from '../../app-config';
 
@@ -27,10 +28,17 @@ const deleteData = async () => {
   }
 };
 
+const displayToast = (type, text1, text2) => {
+  Toast.show({
+    type, topOffset: 35, text1, text2,
+  });
+};
+
 export function signOutUser() {
   return (dispatch) => {
     deleteData();
     dispatch({ type: ActionTypes.DEAUTH_USER });
+    displayToast('success', 'Successfully signed out');
   };
 }
 
@@ -41,9 +49,11 @@ export function signInUser(authInfo) {
       .then((response) => {
         dispatch({ type: ActionTypes.AUTH_USER });
         storeData(response.data.token);
+        displayToast('success', 'Successfully signed in');
       })
       .catch((error) => {
-        dispatch(setError(`Sign In Failed: ${error.response.data}`));
+        dispatch(setError(`Sign in failed: ${error.response.data}`));
+        displayToast('error', 'Sign in failed', error.response.data);
       });
   };
 }
@@ -55,9 +65,11 @@ export function signUpUser(authInfo) {
       .then((response) => {
         dispatch({ type: ActionTypes.AUTH_USER });
         storeData(response.data.token);
+        displayToast('success', 'Successfully signed up');
       })
       .catch((error) => {
-        dispatch(setError(`Sign In Failed: ${error.response.data.error}`));
+        dispatch(setError(`Sign up failed: ${error.response.data.error}`));
+        displayToast('error', 'Sign up failed', error.response.data.error);
       });
   };
 }
