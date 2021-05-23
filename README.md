@@ -31,7 +31,7 @@ Note: Although the app is using currently using Expo, we are planning to eject i
 
 ## Deployment
 
-The expo app is accessible with this qr code. 
+The expo app is accessible with this qr code, set up in our workflows for continuous integration 😃. 
 <img width="288" alt="Screen Shot 2021-05-22 at 5 59 43 PM" src="https://user-images.githubusercontent.com/77286845/119244667-9b62e380-bb27-11eb-8b63-fbde30829525.png">
 Unfortunately you have to be logged in to access it with an iphone so... heres our info. Expo email: cs52goats@gmail.com, password: cs52dart
 
