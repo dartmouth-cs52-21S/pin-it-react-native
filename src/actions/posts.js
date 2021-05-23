@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { setError } from './app';
 import config from '../../app-config';
-import { getPhoto } from '../services/imageUpload';
-// uploadPhoto
+import { getPhoto, uploadPhoto } from '../services/imageUpload';
+
 const { api } = config;
 
 export const ActionTypes = {
@@ -27,9 +27,8 @@ export const handleImageUpload = (onSuccess) => async (dispatch) => {
   const photo = await getPhoto();
 
   if (photo) {
-    // const result = await uploadPhoto(photo);
-    // dispatch({ type: ActionTypes.SET_UPLOADED_IMG, payload: result.data.url });
-    dispatch({ type: ActionTypes.SET_UPLOADED_IMG, payload: 'https://play-lh.googleusercontent.com/IeNJWoKYx1waOhfWF6TiuSiWBLfqLb18lmZYXSgsH1fvb8v1IYiZr5aYWe0Gxu-pVZX3' });
+    const result = await uploadPhoto(photo);
+    dispatch({ type: ActionTypes.SET_UPLOADED_IMG, payload: result.data.url });
     onSuccess();
   }
 };
