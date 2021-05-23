@@ -1,25 +1,21 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
   Text, TouchableOpacity, View, StyleSheet,
 } from 'react-native';
-import { getPhoto, uploadPhoto } from '../services/ImageUpload';
+import { handleImageUpload } from '../../actions/posts';
 
 const UploadScreen = (props) => {
+  const { handleImageUpload: handleUploadPress } = props;
+  const onSuccess = () => props.navigation.navigate('PostEditingScreen');
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.uploadButton} onPress={onButtonPress}>
+      <TouchableOpacity style={styles.uploadButton} onPress={() => handleUploadPress(onSuccess)}>
         <Text>Upload Photo</Text>
       </TouchableOpacity>
     </View>
   );
-};
-
-const onButtonPress = async () => {
-  const photo = await getPhoto();
-  if (photo) {
-    const result = await uploadPhoto(photo);
-    console.log(result.data.url);
-  }
 };
 
 const styles = StyleSheet.create({
@@ -38,4 +34,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UploadScreen;
+export default connect(null, { handleImageUpload })(UploadScreen);

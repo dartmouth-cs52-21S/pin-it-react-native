@@ -4,7 +4,7 @@ import {
   TextInput, Button, Text, StyleSheet,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { signInUser } from '../actions/index';
+import { signInUser } from '../../actions/auth';
 
 const SignInScreen = (props) => {
   const [email, setEmail] = useState('');

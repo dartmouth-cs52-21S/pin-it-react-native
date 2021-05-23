@@ -1,9 +1,7 @@
 import React from 'react';
-import {
-  Text, View, StyleSheet,
-} from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 
-const LeaderboardScreen = () => (
+const OngoingActivityScreen = () => (
   <View style={styles.container}>
     <Text>Todo</Text>
   </View>
@@ -18,4 +16,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LeaderboardScreen;
+export default OngoingActivityScreen;

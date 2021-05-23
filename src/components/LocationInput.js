@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
-  View,
-  TextInput, Button, Text, StyleSheet,
+  View, TextInput, Button, Text, StyleSheet,
 } from 'react-native';
 import { getLocationInfo, createLocation } from '../services/LocationService';
 

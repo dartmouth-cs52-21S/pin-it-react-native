@@ -3,9 +3,9 @@ import { LogBox, AsyncStorage } from 'react-native';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
-import MainTabBar from './navigation/MainTabBar';
-import { ActionTypes } from './actions/index';
-import reducers from './reducers';
+import MainTabBar from '~/navigation/MainTabBar';
+import { ActionTypes } from '~/actions/auth';
+import reducers from '~/reducers';
 
 LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 LogBox.ignoreAllLogs();// Ignore all log notifications

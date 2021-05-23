@@ -1,9 +1,10 @@
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
+import config from '../../app-config';
 
 // code adapted from image uploading tutorial at https://dev.to/joypalumbo/uploading-images-to-cloudinary-in-react-native-using-cloudinary-s-api-37mo#:~:text=Go%20to%20your%20Cloudinary%20Dashboard,down%20to%20%22upload%20presets%22.
 
-const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/djc5u8rjt/upload';
+const { cloudinaryApi } = config;
 
 export const getPhoto = async () => {
   try {
@@ -30,7 +31,7 @@ export const getPhoto = async () => {
 export const uploadPhoto = async (photo) => {
   try {
     const base64Img = `data:image/jpg;base64,${photo}`;
-    const result = await axios.post(CLOUDINARY_URL, { file: base64Img, upload_preset: 'zem5scju' });
+    const result = await axios.post(cloudinaryApi, { file: base64Img, upload_preset: 'zem5scju' });
     return result;
   } catch (error) {
     return null;
