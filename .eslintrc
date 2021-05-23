@@ -46,6 +46,14 @@
             "jsx": true,
             "sourceType": "module"
         }
+    },
+    "settings": {
+        "import/resolver": {
+            "babel-plugin-root-import": {
+                "rootPathPrefix": "~",
+                "rootPathSuffix": "src"
+            }
+        }
     }
 }
 

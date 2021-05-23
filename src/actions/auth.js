@@ -1,14 +1,15 @@
 import axios from 'axios';
 import { AsyncStorage } from 'react-native';
+import { setError } from './app';
+import config from '../../app-config';
+
+const { api } = config;
 
 export const ActionTypes = {
   AUTH_USER: 'AUTH_USER',
   DEAUTH_USER: 'DEAUTH_USER',
   AUTH_ERROR: 'AUTH_ERROR',
 };
-
-export const ROOT_URL = 'https://not-pin-it.herokuapp.com/api';
-// export const ROOT_URL = 'http://localhost:9090/api';
 
 const storeData = async (value) => {
   try {
@@ -32,40 +33,31 @@ export function signOutUser() {
     dispatch({ type: ActionTypes.DEAUTH_USER });
   };
 }
-// trigger to deauth if there is error
-// can also use in your error reducer if you have one to display an error message
-export function authError(error) {
-  return {
-    type: ActionTypes.AUTH_ERROR,
-    message: error,
-  };
-}
 
-export function signInUser({ email, password }) {
+export function signInUser(authInfo) {
   return (dispatch) => {
-    axios.post(`${ROOT_URL}/signIn`, { email, password })
+    axios
+      .post(`${api}/signIn`, authInfo)
       .then((response) => {
         dispatch({ type: ActionTypes.AUTH_USER });
         storeData(response.data.token);
       })
       .catch((error) => {
-        dispatch(authError(`Sign In Failed: ${error.response.data}`));
+        dispatch(setError(`Sign In Failed: ${error.response.data}`));
       });
   };
 }
 
-export function signUpUser({ email, password, username }) {
-  console.log('here');
+export function signUpUser(authInfo) {
   return (dispatch) => {
-    axios.post(`${ROOT_URL}/signUp`, { email, password, username })
+    axios
+      .post(`${api}/signUp`, authInfo)
       .then((response) => {
-        console.log('test');
         dispatch({ type: ActionTypes.AUTH_USER });
         storeData(response.data.token);
       })
       .catch((error) => {
-        console.log('123');
-        dispatch(authError(`Sign In Failed: ${error.response.data.error}`));
+        dispatch(setError(`Sign In Failed: ${error.response.data.error}`));
       });
   };
 }

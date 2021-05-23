@@ -13,7 +13,7 @@ import LeaderboardTab from './LeaderboardTab';
 import ActivityTab from './ActivityTab';
 import UploadTab from './UploadTab';
 import ProfileTab from './ProfileTab';
-import SignUpTab from './SignUpTab';
+import AuthTab from './AuthTab';
 
 const Tab = createBottomTabNavigator();
 
@@ -42,7 +42,7 @@ const MainTabBar = (props) => {
           })}
         >
           {props.authenticated === false ? (
-            <Tab.Screen name="SignUp" component={SignUpTab} />
+            <Tab.Screen name="SignUp" component={AuthTab} />
           ) : (
             <>
               <Tab.Screen name="Home" component={HomeTab} />

@@ -1,16 +1,14 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import SignUpScreen from '../screens/SignUpScreen';
-
-import SignInScreen from '../screens/SignInScreen';
+import { SignInScreen, SignUpScreen } from '../screens/auth';
 import { bgPrimary } from '../constants/colors';
 
 const Stack = createStackNavigator();
 
 // nest stack navigator to handle two internal views
 // "name" prop is the name of the route
-const SignUpTab = () => {
+const AuthTab = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -45,4 +43,4 @@ const SignUpTab = () => {
   );
 };
 
-export default SignUpTab;
+export default AuthTab;

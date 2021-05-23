@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import {
   View,
-  TextInput, Button, Text, StyleSheet,
+  TextInput,
+  Button,
+  Text,
+  StyleSheet,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { signUpUser } from '../actions/index';
+import { signUpUser } from '../../actions/auth';
 
 const SignUpScreen = (props) => {
   const [email, setEmail] = useState('');

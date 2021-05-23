@@ -3,7 +3,7 @@ import {
   View, Button,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { signOutUser } from '../actions/index';
+import { signOutUser } from '../actions/auth';
 
 const ProfileScreen = (props) => {
   return (

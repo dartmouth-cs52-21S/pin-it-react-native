@@ -1,8 +1,5 @@
-/* eslint-disable no-unused-vars */
 import React from 'react';
-import {
-  Text, StyleSheet, View,
-} from 'react-native';
+import { StyleSheet } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import OngoingActivityScreen from '../screens/OngoingActivityScreen';
 import NewActivityScreen from '../screens/NewActivityScreen';

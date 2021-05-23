@@ -1,10 +1,10 @@
-import { ActionTypes } from '../actions';
+import { ActionTypes } from '../actions/auth';
 
 const initialState = {
   authenticated: false,
 };
 
-const authReducer = (state = initialState, action) => {
+const AuthReducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.AUTH_USER:
       return { authenticated: true };
@@ -17,4 +17,4 @@ const authReducer = (state = initialState, action) => {
   }
 };
 
-export default authReducer;
+export default AuthReducer;

@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
-    borderRadius: 15,
+    borderRadius: 5,
   },
   iconContainer: {
     backgroundColor: '#2CA8C7',

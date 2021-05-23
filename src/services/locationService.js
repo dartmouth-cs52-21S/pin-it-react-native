@@ -1,8 +1,10 @@
 import axios from 'axios';
+import config from '../../app-config';
+
+const { googleApi, googleApiKey, api } = config;
 
 export const getLocationInfo = async (lat, long) => {
-  const key = 'AIzaSyB5i9i5HT2Pk5AOokA7056tqFPvAdSXta4'; // GET RID OF THIS LATER
-  const req = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${long}&key=${key}`;
+  const req = `${googleApi}/geocode/json?latlng=${lat},${long}&key=${googleApiKey}`;
   const response = await axios.get(req);
   const place = {
     address: response.data.results[0].formatted_address,
@@ -12,9 +14,8 @@ export const getLocationInfo = async (lat, long) => {
 };
 
 export const createLocation = async (location) => {
-  const url = 'https://not-pin-it.herokuapp.com/api/locations';
   try {
-    const response = await axios.post(url, location);
+    const response = await axios.post(`${api}/locations`, location);
     return response;
   } catch (error) {
     return error;
