@@ -10,12 +10,16 @@ const Stack = createStackNavigator();
 // "name" prop is the name of the route
 const AuthTab = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      navigationOptions={{
+        headerBackTitle: 'none',
+      }}
+    >
       <Stack.Screen
         name="SignInScreen"
         component={SignInScreen}
         options={{
-          title: 'Sign In',
+          title: '',
           headerStyle: {
             backgroundColor: bgPrimary,
             shadowOffset: { height: 0, width: 0 }, // Gets rid of white line underneath
@@ -29,7 +33,7 @@ const AuthTab = () => {
         name="SignUpScreen"
         component={SignUpScreen}
         options={{
-          title: 'Sign Up',
+          title: '',
           headerStyle: {
             backgroundColor: bgPrimary,
             shadowOffset: { height: 0, width: 0 }, // Gets rid of white line underneath

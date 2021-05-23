@@ -29,7 +29,7 @@ const deleteData = async () => {
 
 const displayToast = (type, text1, text2) => {
   Toast.show({
-    type, topOffset: 35, text1, text2,
+    type, topOffset: 45, text1, text2,
   });
 };
 
@@ -51,7 +51,7 @@ export function signInUser(authInfo) {
         displayToast('success', 'Successfully signed in');
       })
       .catch((error) => {
-        displayToast('error', 'Sign in failed', error.response.data);
+        displayToast('error', 'Sign in failed', 'Username or password is incorrect');
       });
   };
 }
