@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 import Toast from 'react-native-toast-message';
-import { setError } from './app';
 import config from '../../app-config';
 
 const { api } = config;
@@ -52,7 +51,6 @@ export function signInUser(authInfo) {
         displayToast('success', 'Successfully signed in');
       })
       .catch((error) => {
-        dispatch(setError(`Sign in failed: ${error.response.data}`));
         displayToast('error', 'Sign in failed', error.response.data);
       });
   };
@@ -68,7 +66,6 @@ export function signUpUser(authInfo) {
         displayToast('success', 'Successfully signed up');
       })
       .catch((error) => {
-        dispatch(setError(`Sign up failed: ${error.response.data.error}`));
         displayToast('error', 'Sign up failed', error.response.data.error);
       });
   };
