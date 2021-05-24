@@ -5,9 +5,9 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import Toast from 'react-native-toast-message';
-import MainTabBar from './src/navigation/MainTabBar';
 import { ActionTypes } from './src/actions/auth';
 import reducers from './src/reducers';
+import RootNavigationStack from './src/navigation/RootNavigationStack';
 
 LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 LogBox.ignoreAllLogs();// Ignore all log notifications
@@ -34,7 +34,7 @@ getData();
 const App = (props) => {
   return (
     <Provider store={store}>
-      <MainTabBar />
+      <RootNavigationStack />
       <Toast ref={(ref) => Toast.setRef(ref)} />
     </Provider>
   );
