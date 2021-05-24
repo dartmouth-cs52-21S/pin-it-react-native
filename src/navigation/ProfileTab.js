@@ -8,7 +8,7 @@ const Stack = createStackNavigator();
 
 const ProfileTab = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen
         name="ProfileScreen"
         component={ProfileScreen}
