@@ -7,6 +7,9 @@ import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { signOutUser } from '../actions/auth';
 import * as Colors from '../constants/colors';
 
+const instaLogo = require('../assets/instagram.png');
+const youtubeLogo = require('../assets/youtube.png');
+
 const MissionsTab = () => (<Text style={styles.testText}>Missions</Text>);
 const PostsTab = () => (<Text style={styles.testText}>Posts</Text>);
 const BadgesTab = () => (<Text style={styles.testText}>Badges</Text>);
@@ -19,16 +22,24 @@ const renderScene = SceneMap({
   badges: BadgesTab,
 });
 
+const renderLabel = (labelProps) => (
+  <Text style={[
+    { fontSize: 14, textAlign: 'center', width: 70 },
+    labelProps.focused ? { color: Colors.accentPurple, fontWeight: 'bold' } : { color: 'white' },
+  ]}
+  >
+    {labelProps.route.title}
+  </Text>
+);
+
 const renderTabBar = (props) => (
   <TabBar
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...props}
     indicatorStyle={{ backgroundColor: Colors.accentPurple }}
-    style={{ backgroundColor: Colors.bgPrimary, marginLeft: 50, marginRight: 50 }}
-    labelStyle={{ fontSize: 13 }}
+    style={{ backgroundColor: Colors.bgPrimary, marginLeft: 45, marginRight: 45 }}
     tabStyle={{ padding: 0 }}
-    activeColor={Colors.accentPurple}
-    inactiveColor="white"
+    renderLabel={renderLabel}
   />
 );
 
@@ -90,7 +101,9 @@ const ProfileScreen = (props) => {
       </View>
       <Text style={styles.bioText}>{user.bio}</Text>
       <View style={styles.socialsContainer}>
+        <Image style={styles.socialsLogo} source={instaLogo} />
         <Text style={styles.socialsText}>Instagram</Text>
+        <Image style={styles.socialsLogo} source={youtubeLogo} />
         <Text style={styles.socialsText}>Youtube</Text>
       </View>
       <View style={styles.logoutButtonContainer}>
@@ -119,7 +132,7 @@ const styles = StyleSheet.create({
     right: 10,
   },
   profileHeaderContainer: {
-    marginTop: 40,
+    marginTop: 30,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -152,16 +165,21 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginLeft: 30,
     marginRight: 20,
-    marginTop: 20,
+    marginTop: 25,
   },
   socialsContainer: {
-    marginTop: 20,
+    marginTop: 25,
     flexDirection: 'row',
     justifyContent: 'center',
   },
+  socialsLogo: {
+    width: 18,
+    height: 18,
+    marginLeft: 20,
+  },
   socialsText: {
     color: Colors.accentPurple,
-    marginLeft: 20,
+    marginLeft: 8,
     marginRight: 20,
     fontSize: 16,
   },
