@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { setError } from './app';
+import { AsyncStorage } from 'react-native';
+import { setError, displayToast } from './app';
 import config from '../../app-config';
 import { getPhoto, uploadPhoto } from '../services/imageUpload';
 
@@ -33,24 +34,26 @@ export const handleImageUpload = (onSuccess) => async (dispatch) => {
   }
 };
 
-export function createPost(newPost) {
-  return (dispatch) => {
-    axios
-      .post(`${api}/post`, newPost)
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        dispatch(setError(`Posting failed: ${error.response.data.error}`));
-      });
-  };
-}
+export const createPost = (newPost, onSuccess) => async (dispatch) => {
+  const token = await AsyncStorage.getItem('token');
+
+  axios
+    .post(`${api}/posts`, newPost, { headers: { authorization: token } })
+    .then((response) => {
+      console.log(response.data);
+      onSuccess();
+      displayToast('success', 'Post successfully created');
+    })
+    .catch((error) => {
+      console.log(error);
+      dispatch(setError(`Posting failed: ${error.response.data.error}`));
+    });
+};
 
 export function getPosts() {
   return (dispatch) => {
     axios
-      .get(`${api}/post`)
+      .get(`${api}/posts`)
       .then((response) => {
         dispatch({ type: ActionTypes.GET_POSTS, payload: response.data });
       })

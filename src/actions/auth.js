@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { AsyncStorage } from 'react-native';
-import Toast from 'react-native-toast-message';
+import { displayToast } from './app';
 import config from '../../app-config';
 
 const { api } = config;
@@ -25,12 +25,6 @@ const deleteData = async () => {
   } catch (e) {
     // saving error
   }
-};
-
-const displayToast = (type, text1, text2) => {
-  Toast.show({
-    type, topOffset: 45, text1, text2,
-  });
 };
 
 export function signOutUser() {
