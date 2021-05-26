@@ -12,26 +12,80 @@ const mockData = [
   {
     id: 'test1',
     title: 'Dish Society',
-    rating: 4,
     category: 'Restaurant',
     latitude: 0,
     longitude: 0,
-    images: [
-      { image: 'https://images.getbento.com/accounts/fa5a0ad193d9db0f760b62a4b1633afd/media/images/67297Memorial_entrance.jpg' },
-      { image: 'https://images.getbento.com/accounts/fa5a0ad193d9db0f760b62a4b1633afd/media/images/4171table_spread_2.jpg' },
+    posts: [
+      {
+        username: 'Tester_10',
+        images: [
+          { image: 'https://images.getbento.com/accounts/fa5a0ad193d9db0f760b62a4b1633afd/media/images/67297Memorial_entrance.jpg' },
+          { image: 'https://images.getbento.com/accounts/fa5a0ad193d9db0f760b62a4b1633afd/media/images/4171table_spread_2.jpg' },
+        ],
+        caption: 'super interesting caption fjdsk fds fds jfdsl wjqiod shj fdshjkql fdhusalk cbdshajk fdshac hdsjkc hskcds',
+        location: {
+          title: 'Dish Society',
+          placeId: 'jfkdlf', // Google maps place id
+          category: 'Restaurant',
+          latitude: 10,
+          longitude: 20,
+        },
+      },
+      {
+        username: 'Tester_11',
+        images: [
+          { image: 'https://images.fineartamerica.com/images/artworkimages/mediumlarge/2/central-square-cambridge-ma-graffiti-alley-cambridge-massachusetts-toby-mcguire.jpg' },
+          { image: 'https://scoutcambridge.com/wp-content/uploads/2018/03/ByDanaForsythe-1.jpg' },
+          { image: 'https://gregcookland.com/wonderland/wp-content/uploads/2020/06/picBlackLivesMatter-GraffitiAlleyCambridge200618_0038w.jpg' }],
+        caption: 'super interesting caption',
+        location: {
+          title: 'Graffiti',
+          placeId: 'jfkdlf', // Google maps place id
+          category: 'Restaurant',
+          latitude: 11,
+          longitude: 20,
+        },
+      },
     ],
   },
   {
     id: 'test2',
-    title: 'Graffiti Alley in Central Square',
-    rating: 2,
+    title: 'Dish Society',
     category: 'Restaurant',
-    latitude: 20,
-    longitude: 20,
-    images: [
-      { image: 'https://images.fineartamerica.com/images/artworkimages/mediumlarge/2/central-square-cambridge-ma-graffiti-alley-cambridge-massachusetts-toby-mcguire.jpg' },
-      { image: 'https://scoutcambridge.com/wp-content/uploads/2018/03/ByDanaForsythe-1.jpg' },
-      { image: 'https://gregcookland.com/wonderland/wp-content/uploads/2020/06/picBlackLivesMatter-GraffitiAlleyCambridge200618_0038w.jpg' }],
+    latitude: 0,
+    longitude: 0,
+    posts: [
+      {
+        username: 'Tester_10',
+        images: [
+          { image: 'https://images.getbento.com/accounts/fa5a0ad193d9db0f760b62a4b1633afd/media/images/67297Memorial_entrance.jpg' },
+          { image: 'https://images.getbento.com/accounts/fa5a0ad193d9db0f760b62a4b1633afd/media/images/4171table_spread_2.jpg' },
+        ],
+        caption: 'super interesting caption',
+        location: {
+          title: 'Dish Society',
+          placeId: 'jfkdlf', // Google maps place id
+          category: 'Restaurant',
+          latitude: 10,
+          longitude: 20,
+        },
+      },
+      {
+        username: 'Tester_11',
+        images: [
+          { image: 'https://images.fineartamerica.com/images/artworkimages/mediumlarge/2/central-square-cambridge-ma-graffiti-alley-cambridge-massachusetts-toby-mcguire.jpg' },
+          { image: 'https://scoutcambridge.com/wp-content/uploads/2018/03/ByDanaForsythe-1.jpg' },
+          { image: 'https://gregcookland.com/wonderland/wp-content/uploads/2020/06/picBlackLivesMatter-GraffitiAlleyCambridge200618_0038w.jpg' }],
+        caption: 'super interesting caption',
+        location: {
+          title: 'Graffiti',
+          placeId: 'jfkdlf', // Google maps place id
+          category: 'Restaurant',
+          latitude: 11,
+          longitude: 20,
+        },
+      },
+    ],
   },
 ];
 
@@ -91,7 +145,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
-    paddingHorizontal: 15,
+    paddingHorizontal: 5,
     paddingVertical: 15,
     backgroundColor: bgPrimary,
   },
@@ -100,7 +154,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'transparent',
     borderTopColor: 'transparent',
     margin: 0,
-    paddingHorizontal: 0,
+    paddingHorizontal: 10,
   },
   title: {
     fontSize: 25,

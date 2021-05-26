@@ -6,12 +6,12 @@ import { connect } from 'react-redux';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { signOutUser } from '../actions/auth';
 import * as Colors from '../constants/colors';
+import PostsTab from '../components/PostsTab';
 
 const instaLogo = require('../assets/instagram.png');
 const youtubeLogo = require('../assets/youtube.png');
 
 const MissionsTab = () => (<Text style={styles.testText}>Missions</Text>);
-const PostsTab = () => (<Text style={styles.testText}>Posts</Text>);
 const BadgesTab = () => (<Text style={styles.testText}>Badges</Text>);
 const PinsTab = () => (<Text style={styles.testText}>Pins</Text>);
 
@@ -63,7 +63,52 @@ const ProfileScreen = (props) => {
         },
       },
     ],
-    posts: [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    missions: [
+      {
+        missionId: {
+          title: 'Fancy Cupcakery',
+          completed: true,
+        },
+      },
+      {
+        missionId: {
+          title: 'World Traveler',
+          iconUrl: '',
+        },
+      },
+    ],
+    posts: [
+      {
+        username: 'Tester_10',
+        images: [
+          { image: 'https://images.getbento.com/accounts/fa5a0ad193d9db0f760b62a4b1633afd/media/images/67297Memorial_entrance.jpg' },
+          { image: 'https://images.getbento.com/accounts/fa5a0ad193d9db0f760b62a4b1633afd/media/images/4171table_spread_2.jpg' },
+        ],
+        caption: 'super interesting caption',
+        location: {
+          title: 'Dish Society',
+          placeId: 'jfkdlf', // Google maps place id
+          category: 'Restaurant',
+          latitude: 10,
+          longitude: 20,
+        },
+      },
+      {
+        username: 'Tester_10',
+        images: [
+          { image: 'https://images.fineartamerica.com/images/artworkimages/mediumlarge/2/central-square-cambridge-ma-graffiti-alley-cambridge-massachusetts-toby-mcguire.jpg' },
+          { image: 'https://scoutcambridge.com/wp-content/uploads/2018/03/ByDanaForsythe-1.jpg' },
+          { image: 'https://gregcookland.com/wonderland/wp-content/uploads/2020/06/picBlackLivesMatter-GraffitiAlleyCambridge200618_0038w.jpg' }],
+        caption: 'super interesting caption',
+        location: {
+          title: 'Graffiti',
+          placeId: 'jfkdlf', // Google maps place id
+          category: 'Public Art',
+          latitude: 11,
+          longitude: 20,
+        },
+      },
+    ],
     bio: '"Food Eats First!"',
   };
 
