@@ -5,6 +5,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import Toast from 'react-native-toast-message';
+
 import { ActionTypes } from './src/actions/auth';
 import reducers from './src/reducers';
 import RootNavigationStack from './src/navigation/RootNavigationStack';

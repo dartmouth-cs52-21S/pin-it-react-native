@@ -7,7 +7,7 @@ import { handleImageUpload } from '../../actions/posts';
 
 const UploadScreen = (props) => {
   const { handleImageUpload: handleUploadPress } = props;
-  const onSuccess = () => props.navigation.navigate('PostEditingScreen');
+  const onSuccess = () => props.navigation.navigate('PostCreationScreen');
 
   return (
     <View style={styles.container}>
