@@ -3,7 +3,11 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
-  faHome, faDice, faUser, faPlusCircle, faChartBar,
+  faHome,
+  faUser,
+  faDice,
+  faPlusCircle,
+  faChartBar,
 } from '@fortawesome/free-solid-svg-icons';
 import HomeTab from './HomeTab';
 import LeaderboardTab from './LeaderboardTab';
@@ -14,7 +18,7 @@ import ProfileTab from './ProfileTab';
 const Tab = createBottomTabNavigator();
 
 const MainTabBar = (props) => {
-  const icons = {
+  const solidIcons = {
     Home: faHome,
     Leaderboard: faChartBar,
     Activity: faDice,
@@ -30,7 +34,7 @@ const MainTabBar = (props) => {
       }}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused }) => {
-          return <FontAwesomeIcon icon={icons[route.name]} size={26} color={focused ? '#58AADA' : 'grey'} />;
+          return <FontAwesomeIcon icon={solidIcons[route.name]} size={26} color={focused ? '#58AADA' : 'grey'} />;
         },
       })}
     >

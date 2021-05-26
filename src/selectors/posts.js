@@ -1,3 +1,3 @@
 export const getPosts = (state) => state.posts.postList;
 
-export const getUploadedImgUrl = (state) => state.posts.uploadedImgUrl;
+export const getCurrentPost = (state) => state.posts.currentPost;
