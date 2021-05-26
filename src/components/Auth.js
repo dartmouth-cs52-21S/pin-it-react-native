@@ -98,11 +98,13 @@ const Auth = (props) => {
         </View>
         <View style={styles.userEntry}>
           <FontAwesomeIcon icon={faLock} size={28} color={bgTertiary} />
-          <TextInput style={styles.textInput}
+          <TextInput
+            style={styles.textInput}
             value={password}
             onChangeText={(text) => setPassword(text)}
             placeholder="Password"
             placeholderTextColor="grey"
+            secureTextEntry
           />
         </View>
         {renderButtons()}

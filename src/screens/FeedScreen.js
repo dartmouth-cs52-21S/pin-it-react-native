@@ -4,6 +4,8 @@ import {
 } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import Card from '../components/Card';
+import TagRow from '../components/TagRow';
+import LocationDisplay from '../components/LocationDisplay';
 import { bgPrimary } from '../constants/colors';
 
 const mockData = [
@@ -40,26 +42,42 @@ const renderItem = ({ item }) => (
 
 const FeedScreen = (props) => {
   const [search, setSearch] = useState('');
+  const [tags, setTags] = useState([]);
 
-  const renderSearchbar = () => (
-    <SearchBar
-      placeholder="Search by location"
-      onChangeText={(text) => setSearch(text)}
-      lightTheme
-      value={search}
-      searchIcon={<Text style={{ fontSize: 10 }}>🔍</Text>}
-      containerStyle={styles.searchContainer}
-      inputStyle={{ backgroundColor: 'white', fontSize: 12 }}
-      inputContainerStyle={{
-        backgroundColor: 'white', borderRadius: 10, height: 35, paddingVertical: 20,
-      }}
-    />
+  const handleTagPressed = (tagValue) => {
+    if (tags.includes(tagValue)) {
+      setTags(tags.filter((x) => x !== tagValue));
+    } else {
+      setTags([...tags, tagValue]);
+    }
+  };
+
+  const renderHeader = () => (
+    <>
+      <SearchBar
+        placeholder="Search by location"
+        onChangeText={(text) => setSearch(text)}
+        lightTheme
+        value={search}
+        searchIcon={<Text style={{ fontSize: 10 }}>🔍</Text>}
+        containerStyle={styles.searchContainer}
+        inputStyle={{ backgroundColor: 'white', fontSize: 12 }}
+        inputContainerStyle={{
+          backgroundColor: 'white', borderRadius: 10, height: 35, paddingVertical: 20,
+        }}
+      />
+      <LocationDisplay containerStyle={styles.locationDisplay} handlePress={() => props.navigation.navigate('ChangeLocationScreen')} />
+      <TagRow
+        active={tags}
+        handleTagPressed={handleTagPressed}
+      />
+    </>
   );
 
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        ListHeaderComponent={renderSearchbar}
+        ListHeaderComponent={renderHeader}
         data={mockData}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
@@ -88,6 +106,11 @@ const styles = StyleSheet.create({
     fontSize: 25,
     color: 'white',
     fontWeight: 'bold',
+  },
+  locationDisplay: {
+    marginBottom: 10,
+    width: '100%',
+    maxWidth: '100%',
   },
 });
 

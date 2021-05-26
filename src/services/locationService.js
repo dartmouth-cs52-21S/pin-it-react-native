@@ -1,4 +1,5 @@
 import axios from 'axios';
+import * as Location from 'expo-location';
 import config from '../../app-config';
 
 const { googleApi, googleApiKey, api } = config;
@@ -8,9 +9,33 @@ export const getLocationInfo = async (lat, long) => {
   const response = await axios.get(req);
   const place = {
     address: response.data.results[0].formatted_address,
-    place_id: response.data.results[0].place_id,
+    placeId: response.data.results[0].place_id,
   };
   return place;
+};
+
+// askPermission - (bool) whether to ask for geolocation permission if not granted
+// callback - on end
+export const getCurrentLocation = async (callback) => {
+  try {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+
+    if (status !== 'granted') {
+      callback(null);
+      return;
+    }
+
+    const geolocationInfo = await Location.getCurrentPositionAsync({ accuracy: 4 });
+    const { latitude, longitude } = geolocationInfo.coords;
+
+    const { address, placeId } = await getLocationInfo(latitude, longitude);
+
+    callback({
+      latitude, longitude, address, placeId,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const createLocation = async (location) => {

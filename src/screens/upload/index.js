@@ -1,4 +1,4 @@
-import PostEditingScreen from './PostEditingScreen';
+import PostCreationScreen from './PostCreationScreen';
 import UploadScreen from './UploadScreen';
 
-export { PostEditingScreen, UploadScreen };
+export { PostCreationScreen, UploadScreen };
