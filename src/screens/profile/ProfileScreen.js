@@ -4,14 +4,14 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import { signOutUser } from '../actions/auth';
-import * as Colors from '../constants/colors';
+import PostsTab from './PostsTab';
+import { signOutUser } from '../../actions/auth';
+import * as Colors from '../../constants/colors';
 
-const instaLogo = require('../assets/instagram.png');
-const youtubeLogo = require('../assets/youtube.png');
+const instaLogo = require('../../assets/instagram.png');
+const youtubeLogo = require('../../assets/youtube.png');
 
 const MissionsTab = () => (<Text style={styles.testText}>Missions</Text>);
-const PostsTab = () => (<Text style={styles.testText}>Posts</Text>);
 const BadgesTab = () => (<Text style={styles.testText}>Badges</Text>);
 const PinsTab = () => (<Text style={styles.testText}>Pins</Text>);
 

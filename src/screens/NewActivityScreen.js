@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { connect } from 'react-redux';
 import MapView, { Marker } from 'react-native-maps';
 import { Modalize } from 'react-native-modalize';
 import { Portal } from 'react-native-portalize';
@@ -7,6 +8,7 @@ import {
 } from 'react-native';
 import { bgPrimary } from '../constants/colors';
 import NewMissionModal from '../components/NewMissionModal';
+import { getLocation } from '../selectors/app';
 
 const NewActivityScreen = (props) => {
   const modalizeRef = useRef(null);
@@ -19,14 +21,25 @@ const NewActivityScreen = (props) => {
     modalizeRef.current?.open();
   };
 
+  const { location } = props;
+  const { latitude, longitude } = location || {};
+
   return (
     <View syle={styles.container}>
       <MapView
-        style={{ width: '100%', height: '100%', zIndex: -1 }}
+        style={styles.mapView}
+        initialRegion={{
+          latitude,
+          longitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
       >
-        <Marker coordinate={{ latitude: 43.7044, longitude: -72.2887 }}
+        {latitude && (
+        <Marker coordinate={{ latitude, longitude }}
           onPress={onMarkerPress}
         />
+        )}
       </MapView>
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.newActivityButton} onPress={onModalPress}>
@@ -49,6 +62,11 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     height: '100%',
+  },
+  mapView: {
+    width: '100%',
+    height: '100%',
+    zIndex: -1,
   },
   buttonContainer: {
     position: 'absolute',
@@ -76,4 +94,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NewActivityScreen;
+const mapStateToProps = (state) => ({
+  location: getLocation(state),
+});
+
+export default connect(mapStateToProps, null)(NewActivityScreen);

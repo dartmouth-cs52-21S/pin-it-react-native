@@ -14,7 +14,6 @@ export const getLocationInfo = async (lat, long) => {
   return place;
 };
 
-// askPermission - (bool) whether to ask for geolocation permission if not granted
 // callback - on end
 export const getCurrentLocation = async (callback) => {
   try {
