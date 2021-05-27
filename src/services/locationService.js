@@ -27,7 +27,7 @@ export const getCurrentLocation = async (callback) => {
     const geolocationInfo = await Location.getCurrentPositionAsync({ accuracy: 4 });
     const { latitude, longitude } = geolocationInfo.coords;
 
-    const { address, placeId } = await getLocationInfo(latitude, longitude);
+    const { address, placeId } = await getLocationInfo(latitude, longitude) || {};
 
     callback({
       latitude, longitude, address, placeId,
