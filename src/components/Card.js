@@ -1,33 +1,59 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useCallback, useRef } from 'react';
 import {
-  View, Text, StyleSheet, Image,
+  View, Text, StyleSheet, Image, Modal, Pressable,
 } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faUtensils, faStar } from '@fortawesome/free-solid-svg-icons';
-import { bgSecondary } from '../constants/colors';
+import { faUtensils } from '@fortawesome/free-solid-svg-icons';
+import { bgPrimary, bgTertiary, accentPink } from '../constants/colors';
+import PostCard from './PostCard';
 
 const Card = (props) => {
   const {
-    title, rating, category, latitude, longitude, images,
+    title, category, latitude, longitude, posts,
   } = props;
 
   const [activeIndex, setActiveIndex] = useState(0);
+  const [modalVisible, setModalVisible] = useState(false);
   const ref = useRef(null);
+
+  const images = [];
+
+  for (let i = 0; i < posts.length; i++) {
+    images.push(
+      posts[i],
+    );
+  }
+
+  console.log(modalVisible);
 
   // Carousel Image
   const renderItem = useCallback(({ item }) => (
-    <View
-      style={{
-        height: 320,
-        width: '100%',
-      }}
-    >
-      <Image
-        style={styles.carouselImage}
-        source={{ uri: item.image }}
-      />
-    </View>
+    <>
+      <View
+        style={{
+          height: 320,
+          width: '100%',
+        }}
+      >
+        <Image
+          style={styles.carouselImage}
+          source={{ uri: item.images[0].image }}
+        />
+      </View>
+      <Text> </Text>
+      <Pressable
+        style={[styles.button, styles.buttonOpen]}
+        onPress={() => setModalVisible(true)}
+      >
+        <Text style={styles.textStyle}>
+          See full post by
+          {' '}
+          {item.username}
+        </Text>
+      </Pressable>
+    </>
   ), []);
 
   // Carousel Pagination
@@ -35,7 +61,7 @@ const Card = (props) => {
     return (
       <Pagination
         containerStyle={{ paddingVertical: 0 }}
-        dotsLength={images.length}
+        dotsLength={posts.length}
         activeDotIndex={activeIndex}
         dotStyle={{
           width: 10,
@@ -62,24 +88,6 @@ const Card = (props) => {
     }
   };
 
-  const renderStars = () => {
-    const stars = [];
-
-    for (let i = 0; i < rating; i++) {
-      stars.push(<FontAwesomeIcon key={i} icon={faStar} size={20} color="#FFD700" />);
-    }
-
-    for (let i = 0; i < 5 - rating; i++) {
-      stars.push(<FontAwesomeIcon key={rating + i} icon={faStar} size={20} color="gray" />);
-    }
-
-    return (
-      <Text style={styles.stars}>
-        {stars}
-      </Text>
-    );
-  };
-
   return (
     <View style={styles.card}>
       <View style={styles.heading}>
@@ -92,7 +100,6 @@ const Card = (props) => {
       </View>
 
       <View style={styles.subheading}>
-        {renderStars()}
         <Text style={styles.detail}>
           Location:
           {' '}
@@ -107,24 +114,45 @@ const Card = (props) => {
           layout="default"
           ref={ref}
           data={images}
-          sliderWidth={330}
-          itemWidth={330}
+          sliderWidth={360}
+          itemWidth={360}
           renderItem={renderItem}
           onSnapToItem={(index) => setActiveIndex(index)}
           margin={10}
         />
         { renderPagination() }
       </View>
+      <Modal
+        animationType="slide"
+        visible={modalVisible}
+        transparent={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <PostCard {... posts[activeIndex]} />
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.textStyle}>Hide Modal</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: bgSecondary,
+    backgroundColor: bgPrimary,
     padding: 15,
     marginTop: 20,
     borderRadius: 5,
+    width: '100%',
   },
   heading: {
     flexDirection: 'row',
@@ -144,8 +172,45 @@ const styles = StyleSheet.create({
   subheading: {
     flexDirection: 'row',
   },
-  stars: {
-    marginRight: 10,
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    padding: 10,
+    borderRadius: 20,
+    backgroundColor: bgTertiary,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: accentPink,
+  },
+  buttonClose: {
+    backgroundColor: accentPink,
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
   },
   carouselImage: {
     width: '100%',
