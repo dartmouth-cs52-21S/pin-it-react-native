@@ -14,6 +14,9 @@ import LeaderboardTab from './LeaderboardTab';
 import ActivityTab from './ActivityTab';
 import UploadTab from './UploadTab';
 import ProfileTab from './ProfileTab';
+import {
+  bgPrimary, bgSecondary, accentPurple,
+} from '../constants/colors';
 
 const Tab = createBottomTabNavigator();
 
@@ -31,10 +34,16 @@ const MainTabBar = (props) => {
       initialRouteName="Search"
       tabBarOptions={{
         showLabel: false,
+        style: {
+          backgroundColor: bgPrimary,
+          borderTopWidth: 0.5,
+          borderTopColor: bgSecondary,
+          height: '10%',
+        },
       }}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused }) => {
-          return <FontAwesomeIcon icon={solidIcons[route.name]} size={26} color={focused ? '#58AADA' : 'grey'} />;
+          return <FontAwesomeIcon icon={solidIcons[route.name]} size={26} color={focused ? accentPurple : 'grey'} />;
         },
       })}
     >
