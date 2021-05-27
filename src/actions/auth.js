@@ -38,7 +38,7 @@ export function signOutUser() {
 export function signInUser(authInfo) {
   return (dispatch) => {
     axios
-      .post(`${api}/signIn`, authInfo)
+      .post(`${api}/signin`, authInfo)
       .then((response) => {
         dispatch({ type: ActionTypes.AUTH_USER });
         storeData(response.data.token);
@@ -53,7 +53,7 @@ export function signInUser(authInfo) {
 export function signUpUser(authInfo) {
   return (dispatch) => {
     axios
-      .post(`${api}/signUp`, authInfo)
+      .post(`${api}/signup`, authInfo)
       .then((response) => {
         dispatch({ type: ActionTypes.AUTH_USER });
         storeData(response.data.token);
