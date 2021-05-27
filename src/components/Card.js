@@ -65,7 +65,7 @@ const Card = (props) => {
     return (
       <Pagination
         containerStyle={{ paddingVertical: 0 }}
-        dotsLength={posts.length}
+        dotsLength={images.length}
         activeDotIndex={activeIndex}
         dotStyle={{
           width: 10,
@@ -99,11 +99,23 @@ const Card = (props) => {
       }}
       >
         <View style={{ flex: 1 }}>
-          <View style={styles.heading}>
-            {renderIcon()}
-            <Text numberOfLines={1} style={styles.title}>
-              {title}
-            </Text>
+          <View style={{ flex: 1, flexDirection: 'row' }}>
+            <View style={styles.heading}>
+              {renderIcon()}
+              <Text numberOfLines={1} style={styles.title}>
+                {title}
+              </Text>
+            </View>
+            <View style={{ alignSelf: 'center' }}>
+              <Text style={{
+                height: 20, backgroundColor: 'rgba(255, 255, 255, 0.2)', fontSize: 16, color: 'white',
+              }}
+              >
+                {posts.length}
+                {' '}
+                <FontAwesomeIcon icon={faChevronRight} size={14} color="white" />
+              </Text>
+            </View>
           </View>
           <View style={styles.subheading}>
             <Text style={styles.detail}>
@@ -116,7 +128,6 @@ const Card = (props) => {
             </Text>
           </View>
         </View>
-        <FontAwesomeIcon icon={faChevronRight} height="100%" color="lightgrey" />
       </View>
       <View style={{ flexDirection: 'column', alignItems: 'center' }}>
         <Carousel
