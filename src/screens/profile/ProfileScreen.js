@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import {
-  SafeAreaView, Button, StyleSheet, Text, Image, View,
+  SafeAreaView, StyleSheet, Text, Image, View,
 } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import PostsTab from './PostsTab';
@@ -24,7 +25,13 @@ const renderScene = SceneMap({
 
 const renderLabel = (labelProps) => (
   <Text style={[
-    { fontSize: 14, textAlign: 'center', width: 70 },
+    {
+      fontSize: 16,
+      textAlign: 'center',
+      width: 'auto',
+      paddingRight: 5, // Let me know how this looks on your screen, for mine, it's needed to offset the bolding
+
+    },
     labelProps.focused ? { color: Colors.accentPurple, fontWeight: 'bold' } : { color: 'white' },
   ]}
   >
@@ -36,9 +43,17 @@ const renderTabBar = (props) => (
   <TabBar
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...props}
+    scrollEnabled
     indicatorStyle={{ backgroundColor: Colors.accentPurple }}
-    style={{ backgroundColor: Colors.bgPrimary, marginLeft: 45, marginRight: 45 }}
-    tabStyle={{ padding: 0 }}
+    style={{
+      backgroundColor: Colors.bgPrimary, marginLeft: '5%', marginRight: '5%',
+    }}
+    tabStyle={{
+      padding: 0,
+      borderLeftWidth: 10,
+      borderRightWidth: 10,
+      width: 'auto',
+    }}
     renderLabel={renderLabel}
   />
 );
@@ -80,6 +95,11 @@ const ProfileScreen = (props) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.bannerContainer}>
+        <TouchableOpacity style={styles.logoutButtonContainer} onPress={() => props.signOutUser()}>
+          <Text style={styles.logoutButton}>Log Out</Text>
+        </TouchableOpacity>
+      </View>
       <View style={styles.profileHeaderContainer}>
         <Image style={styles.profilePhoto} source={{ uri: profileUrl }} />
         <View style={styles.profileHeaderTextContainer}>
@@ -106,9 +126,6 @@ const ProfileScreen = (props) => {
         <Image style={styles.socialsLogo} source={youtubeLogo} />
         <Text style={styles.socialsText}>Youtube</Text>
       </View>
-      <View style={styles.logoutButtonContainer}>
-        <Button style={styles.logoutButton} title="Log Out" onPress={() => props.signOutUser()} />
-      </View>
       <TabView
         style={styles.tabViewContainer}
         navigationState={{ index, routes }}
@@ -126,13 +143,24 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: Colors.bgPrimary,
   },
+  bannerContainer: {
+    height: 40,
+    alignItems: 'flex-end',
+  },
   logoutButtonContainer: {
-    position: 'absolute',
-    top: 50,
-    right: 10,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 20,
+    height: 'auto',
+    width: 'auto',
+  },
+  logoutButton: {
+    color: 'white',
+    fontSize: 16,
   },
   profileHeaderContainer: {
-    marginTop: 30,
+    marginTop: '5%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -151,20 +179,20 @@ const styles = StyleSheet.create({
   },
   usernameText: {
     color: 'white',
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 6,
   },
   userSubtitleText: {
-    color: 'white',
-    fontSize: 16,
+    color: 'lightgrey',
+    fontSize: 14,
     marginBottom: 2,
   },
   bioText: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 14,
     marginLeft: 30,
-    marginRight: 20,
+    marginRight: 30,
     marginTop: 25,
   },
   socialsContainer: {
@@ -181,7 +209,7 @@ const styles = StyleSheet.create({
     color: Colors.accentPurple,
     marginLeft: 8,
     marginRight: 20,
-    fontSize: 16,
+    fontSize: 14,
   },
   testText: {
     marginTop: 50,
