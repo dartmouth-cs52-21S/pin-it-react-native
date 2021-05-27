@@ -65,7 +65,7 @@ const Card = (props) => {
     return (
       <Pagination
         containerStyle={{ paddingVertical: 0 }}
-        dotsLength={images.length}
+        dotsLength={posts.length}
         activeDotIndex={activeIndex}
         dotStyle={{
           width: 10,
