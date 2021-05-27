@@ -5,8 +5,10 @@ import {
 } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faUtensils } from '@fortawesome/free-solid-svg-icons';
-import { bgPrimary, bgTertiary, accentPink } from '../constants/colors';
+import { faUtensils, faImages, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import {
+  bgPrimary, bgSecondary, bgTertiary, accentPink,
+} from '../constants/colors';
 import PostCard from './PostCard';
 
 const Card = (props) => {
@@ -33,26 +35,28 @@ const Card = (props) => {
     <>
       <View
         style={{
-          height: 320,
-          width: '100%',
+          height: 360,
+          width: '96%',
+          flex: 1,
+          alignSelf: 'center',
         }}
       >
         <Image
           style={styles.carouselImage}
           source={{ uri: item.images[0].image }}
         />
-      </View>
-      <Text> </Text>
-      <Pressable
-        style={[styles.button, styles.buttonOpen]}
-        onPress={() => setModalVisible(true)}
-      >
-        <Text style={styles.textStyle}>
-          See full post by
+        <Pressable
+          style={[styles.button, styles.buttonOpen]}
+          onPress={() => setModalVisible(true)}
+        >
+          <FontAwesomeIcon icon={faImages} size={23} color="white" />
+        </Pressable>
+        <Text style={[styles.textStyle, styles.username, { color: 'black' }]}>
+          @
           {' '}
           {item.username}
         </Text>
-      </Pressable>
+      </View>
     </>
   ), []);
 
@@ -90,24 +94,29 @@ const Card = (props) => {
 
   return (
     <View style={styles.card}>
-      <View style={styles.heading}>
-        <Text numberOfLines={1} style={styles.title}>
-          @
-          {' '}
-          {title}
-        </Text>
-        {renderIcon()}
-      </View>
-
-      <View style={styles.subheading}>
-        <Text style={styles.detail}>
-          Location:
-          {' '}
-          {latitude}
-          ,
-          {' '}
-          {longitude}
-        </Text>
+      <View style={{
+        backgroundColor: bgSecondary, padding: '3.5%', borderRadius: 15, flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+      }}
+      >
+        <View style={{ flex: 1 }}>
+          <View style={styles.heading}>
+            {renderIcon()}
+            <Text numberOfLines={1} style={styles.title}>
+              {title}
+            </Text>
+          </View>
+          <View style={styles.subheading}>
+            <Text style={styles.detail}>
+              Location:
+              {' '}
+              {latitude}
+              ,
+              {' '}
+              {longitude}
+            </Text>
+          </View>
+        </View>
+        <FontAwesomeIcon icon={faChevronRight} height="100%" color="lightgrey" />
       </View>
       <View style={{ flexDirection: 'column', alignItems: 'center' }}>
         <Carousel
@@ -149,21 +158,20 @@ const Card = (props) => {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: bgPrimary,
-    padding: 15,
     marginTop: 20,
-    borderRadius: 5,
     width: '100%',
   },
   heading: {
     flexDirection: 'row',
-    flex: 0,
-    justifyContent: 'space-between',
+    flex: 1,
+    marginBottom: '3%',
   },
   title: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 22,
     fontWeight: 'bold',
-    width: '80%',
+    alignSelf: 'center',
+    paddingLeft: 7,
   },
   detail: {
     fontSize: 12,
@@ -195,13 +203,25 @@ const styles = StyleSheet.create({
   button: {
     borderRadius: 20,
     padding: 10,
-    elevation: 2,
+    zIndex: 10,
   },
   buttonOpen: {
-    backgroundColor: accentPink,
+    position: 'absolute',
+    right: 3,
+    top: 3,
   },
   buttonClose: {
     backgroundColor: accentPink,
+  },
+  username: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    backgroundColor: 'rgba(255,255,255,0.75)',
+    padding: 3,
+    paddingRight: 10,
+    borderBottomLeftRadius: 10,
+    borderTopRightRadius: 10,
   },
   textStyle: {
     color: 'white',

@@ -145,7 +145,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
-    paddingHorizontal: 5,
     paddingVertical: 15,
     backgroundColor: bgPrimary,
   },
@@ -155,6 +154,7 @@ const styles = StyleSheet.create({
     borderTopColor: 'transparent',
     margin: 0,
     paddingHorizontal: 10,
+    marginBottom: 5,
   },
   title: {
     fontSize: 25,
@@ -162,9 +162,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   locationDisplay: {
-    marginBottom: 10,
-    width: '100%',
+    marginBottom: 15,
+    alignSelf: 'center',
+    width: '95%',
     maxWidth: '100%',
+    height: 40,
   },
 });
 
