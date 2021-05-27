@@ -30,7 +30,6 @@ const renderLabel = (labelProps) => (
       textAlign: 'center',
       width: 'auto',
       paddingRight: 5, // Let me know how this looks on your screen, for mine, it's needed to offset the bolding
-
     },
     labelProps.focused ? { color: Colors.accentPurple, fontWeight: 'bold' } : { color: 'white' },
   ]}
@@ -52,6 +51,7 @@ const renderTabBar = (props) => (
       padding: 0,
       borderLeftWidth: 10,
       borderRightWidth: 10,
+      borderColor: Colors.bgPrimary,
       width: 'auto',
     }}
     renderLabel={renderLabel}
