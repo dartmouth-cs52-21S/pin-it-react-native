@@ -16,7 +16,7 @@ const PostCreationScreen = (props) => {
   const { post, location, updatePost } = props;
 
   const { latitude, longitude } = location || { };
-  const { imageUrl } = post;
+  const imageUrl = post.imageUrl[0];
 
   if (!imageUrl) {
     return (

@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, SafeAreaView, FlatList } from 'react-native';
-import Card from '../../components/Card';
+import CarouselCard from '../../components/CarouselCard';
 
 const mockData = [
   {
@@ -30,7 +30,7 @@ const mockData = [
 
 const renderItem = ({ item }) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
-  <Card {...item} />
+  <CarouselCard {...item} />
 );
 
 const PostsTab = () => {
@@ -56,7 +56,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 15,
-    paddingVertical: 15,
   },
 });
 

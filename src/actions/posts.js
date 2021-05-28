@@ -29,7 +29,7 @@ export const handleImageUpload = (onSuccess) => async (dispatch) => {
 
   if (photo) {
     const result = await uploadPhoto(photo);
-    dispatch(updateCurrentPost({ imageUrl: result.data.url }));
+    dispatch(updateCurrentPost({ imageUrls: [result.data.url] }));
     onSuccess();
   }
 };
