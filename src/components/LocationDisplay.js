@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     padding: 10,
     color: 'white',
     width: '90%',
-    maxWidth: '90%',
+    maxWidth: '100%',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',

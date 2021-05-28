@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { AsyncStorage } from 'react-native';
-import Toast from 'react-native-toast-message';
+import { displayToast } from './app';
 import config from '../../app-config';
 
 const { api } = config;
@@ -27,12 +27,6 @@ const deleteData = async () => {
   }
 };
 
-const displayToast = (type, text1, text2) => {
-  Toast.show({
-    type, topOffset: 45, text1, text2,
-  });
-};
-
 export function signOutUser() {
   return (dispatch) => {
     deleteData();
@@ -44,7 +38,7 @@ export function signOutUser() {
 export function signInUser(authInfo) {
   return (dispatch) => {
     axios
-      .post(`${api}/signIn`, authInfo)
+      .post(`${api}/signin`, authInfo)
       .then((response) => {
         dispatch({ type: ActionTypes.AUTH_USER });
         storeData(response.data.token);
@@ -59,7 +53,7 @@ export function signInUser(authInfo) {
 export function signUpUser(authInfo) {
   return (dispatch) => {
     axios
-      .post(`${api}/signUp`, authInfo)
+      .post(`${api}/signup`, authInfo)
       .then((response) => {
         dispatch({ type: ActionTypes.AUTH_USER });
         storeData(response.data.token);

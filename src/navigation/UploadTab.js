@@ -41,7 +41,7 @@ const UploadTab = (props) => {
           headerTintColor: '#fff',
           headerTitleStyle: { fontSize: 25 },
           headerTitleAlign: 'center',
-          headerRight: () => (<Button title="Submit" onPress={() => props.createPost(props.post)} />),
+          headerRight: () => (<Button title="Submit" onPress={() => props.createPost(props.post, () => navigation.navigate('UploadScreen'))} />),
         })}
       />
       <Stack.Screen
