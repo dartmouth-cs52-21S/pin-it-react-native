@@ -4,8 +4,8 @@ import {
 } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faUtensils } from '@fortawesome/free-solid-svg-icons';
 import { bgSecondary } from '../constants/colors';
+import categories from '../constants/categories';
 
 const CarouselCard = (props) => {
   const {
@@ -51,16 +51,14 @@ const CarouselCard = (props) => {
   };
 
   const renderIcon = () => {
-    switch (category) {
-      case 'Restaurant':
-        return (
-          <View style={styles.iconContainer}>
-            <FontAwesomeIcon icon={faUtensils} size={23} color="white" />
-          </View>
-        );
-      default:
-        return <Text>Hi</Text>;
-    }
+    const { icon, style } = categories[category] || {};
+
+    if (!icon) return (<></>);
+    return (
+      <View style={[styles.iconContainer, style]}>
+        <FontAwesomeIcon icon={icon} size={23} color="white" />
+      </View>
+    );
   };
 
   return (

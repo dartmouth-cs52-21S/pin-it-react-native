@@ -35,7 +35,6 @@ export function setLocation(location) {
 }
 
 export const updateLocation = (placeId) => async (dispatch) => {
-  const data = await getLocationByPlaceId(placeId);
-  // dispatch(setLocation(null));
-  console.log(data);
+  const location = await getLocationByPlaceId(placeId);
+  dispatch(setLocation(location));
 };

@@ -28,7 +28,7 @@ const PostCreationScreen = (props) => {
 
   return (
     <View style={styles.container}>
-      <KeyboardAwareScrollView>
+      <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
         <Image
           style={styles.uploadedImage}
           source={{
@@ -37,9 +37,9 @@ const PostCreationScreen = (props) => {
         />
         <View style={styles.postDetailsContainer}>
           <TagRow
-            active={[post.tag]}
+            active={[post.category]}
             containerStyle={styles.tagRow}
-            handleTagPressed={(tag) => updatePost({ ...post, tag })}
+            handleTagPressed={(category) => updatePost({ ...post, category })}
           />
           <TextInput
             style={styles.textInput}
@@ -50,7 +50,7 @@ const PostCreationScreen = (props) => {
             multiline
             numberOfLines={3}
           />
-          <LocationDisplay containerStyle={styles.locationDisplay} handlePress={() => props.navigation.navigate('ChangeLocationScreen')} />
+          <LocationDisplay />
           {location && (
           <>
             <MapView
@@ -78,14 +78,11 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: bgPrimary,
   },
   postDetailsContainer: {
     flex: 1,
-    width: '100%',
-    alignItems: 'center',
+    paddingHorizontal: 20,
     marginTop: 45,
   },
   uploadedImage: {
@@ -100,8 +97,9 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
     padding: 10,
     color: 'white',
-    width: '90%',
-    maxWidth: '90%',
+    width: '100%',
+    minWidth: '100%',
+    maxWidth: '100%',
     marginBottom: 15,
   },
   locationDisplay: {
@@ -109,9 +107,10 @@ const styles = StyleSheet.create({
   },
   tagRow: {
     marginBottom: 20,
+    justifyContent: 'space-between',
   },
   mapView: {
-    width: '90%',
+    width: '100%',
     height: 200,
     zIndex: -1,
     marginBottom: 20,
