@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  View, Text, StyleSheet, TextInput, TouchableOpacity,
+  View, Text, StyleSheet, TouchableOpacity,
 } from 'react-native';
 import ButtonGroup from './ButtonGroup';
 import { bgTertiary, accentGreen } from '../constants/colors';
+import LocationDisplay from './LocationDisplay';
 
 const NewMissionModal = (props) => {
-  const [address, onChangeAddress] = useState('1791 Seattle Dr, Houston, TX 77923');
-
-  const { useThis } = props.route.params;
+  const { handleChangeLocation } = props;
 
   const handleSubmit = () => {
     props.onSubmit(25.7617, -80.1918, 5000, 'restaurant');
@@ -31,10 +30,9 @@ const NewMissionModal = (props) => {
       </View>
       <View style={styles.sectionContainer}>
         <Text style={styles.text}>Generating new mission from</Text>
-        <TextInput
-          value={`${address}`}
-          style={styles.address}
-          onChangeText={onChangeAddress}
+        <LocationDisplay
+          containerStyle={styles.locationDisplay}
+          handlePress={handleChangeLocation}
         />
       </View>
       <View style={styles.sectionContainer}>
@@ -83,6 +81,9 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
+  },
+  locationDisplay: {
+    width: '100%',
   },
 });
 

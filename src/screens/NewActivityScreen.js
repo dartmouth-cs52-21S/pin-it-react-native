@@ -1,4 +1,5 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import MapView, { Marker } from 'react-native-maps';
 import { Modalize } from 'react-native-modalize';
 import { Portal } from 'react-native-portalize';
@@ -7,43 +8,87 @@ import {
 } from 'react-native';
 import { bgPrimary } from '../constants/colors';
 import NewMissionModal from '../components/NewMissionModal';
+import MissionFoundModal from '../components/MissionFoundModal';
 import { generateMission } from '../services/missionService';
+import { getLocation } from '../selectors/app';
 
 const NewActivityScreen = (props) => {
-  const modalizeRef = useRef(null);
+  const newMissionRef = useRef(null);
+  const missionFoundRef = useRef(null);
+
+  const [reopen, setReopen] = useState(false);
+  const [missionLocation, setMissionLocation] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      if (reopen) {
+        newMissionRef.current?.open();
+      }
+    });
+    return unsubscribe;
+  },
+  [reopen]);
 
   const onMarkerPress = (e) => {
     console.log('pressed');
   };
 
   const onModalPress = (e) => {
-    modalizeRef.current?.open();
+    newMissionRef.current?.open();
   };
 
   const onSubmit = async (latitude, longitude, radius, query) => {
+    newMissionRef.current?.close();
     const data = await generateMission(latitude, longitude, radius, query);
-    console.log(data);
+    setMissionLocation(data);
+    missionFoundRef.current?.open();
   };
+
+  const handleChangeLocation = () => {
+    newMissionRef.current?.close();
+    setReopen(true);
+    props.navigation.navigate('ChangeLocationScreen');
+  };
+
+  const { location } = props;
+  const { latitude, longitude } = location || {};
+
+  console.log(reopen);
 
   return (
     <View syle={styles.container}>
       <MapView
-        style={{ width: '100%', height: '100%', zIndex: -1 }}
+        style={styles.mapView}
+        initialRegion={{
+          latitude,
+          longitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
       >
-        <Marker coordinate={{ latitude: 43.7044, longitude: -72.2887 }}
+        {latitude && (
+        <Marker coordinate={{ latitude, longitude }}
           onPress={onMarkerPress}
         />
+        )}
       </MapView>
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.newActivityButton} onPress={onModalPress}>
           <Text style={styles.buttonText}>🎲 Generate New Mission</Text>
         </TouchableOpacity>
         <Portal>
-          <Modalize ref={modalizeRef}
+          <Modalize ref={newMissionRef}
             modalHeight={500}
             modalStyle={{ backgroundColor: bgPrimary }}
+            onOpened={() => setReopen(false)}
           >
-            <NewMissionModal onSubmit={onSubmit} />
+            <NewMissionModal handleChangeLocation={handleChangeLocation} onSubmit={onSubmit} />
+          </Modalize>
+          <Modalize ref={missionFoundRef}
+            modalStyle={{ backgroundColor: bgPrimary }}
+            modalHeight={700}
+          >
+            <MissionFoundModal location={missionLocation} />
           </Modalize>
         </Portal>
       </View>
@@ -55,6 +100,11 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     height: '100%',
+  },
+  mapView: {
+    width: '100%',
+    height: '100%',
+    zIndex: -1,
   },
   buttonContainer: {
     position: 'absolute',
@@ -82,4 +132,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NewActivityScreen;
+const mapStateToProps = (state) => ({
+  location: getLocation(state),
+});
+
+export default connect(mapStateToProps, null)(NewActivityScreen);
