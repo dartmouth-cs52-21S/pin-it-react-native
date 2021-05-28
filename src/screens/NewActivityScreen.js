@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
 import MapView, { Marker } from 'react-native-maps';
 import { Modalize } from 'react-native-modalize';
@@ -13,12 +13,34 @@ import { getLocation } from '../selectors/app';
 const NewActivityScreen = (props) => {
   const modalizeRef = useRef(null);
 
+  useEffect(() => console.log(props));
+
+  // eslint-disable-next-line react/destructuring-assignment
+  console.log(props?.route);
+  // eslint-disable-next-line react/destructuring-assignment
+  const { modalOpen } = props?.route?.params || {};
+
+  useEffect(() => {
+    console.log(modalOpen);
+    if (modalOpen) {
+      console.log(modalOpen);
+      modalizeRef.current?.open();
+    }
+  },
+  // eslint-disable-next-line react/destructuring-assignment
+  [props?.route?.params?.modalOpen]);
+
   const onMarkerPress = (e) => {
     console.log('pressed');
   };
 
   const onModalPress = (e) => {
     modalizeRef.current?.open();
+  };
+
+  const handleChangeLocation = () => {
+    modalizeRef.current?.close();
+    props.navigation.navigate('ChangeLocationScreen');
   };
 
   const { location } = props;
@@ -50,7 +72,7 @@ const NewActivityScreen = (props) => {
             modalHeight={500}
             modalStyle={{ backgroundColor: bgPrimary }}
           >
-            <NewMissionModal />
+            <NewMissionModal handleChangeLocation={handleChangeLocation} />
           </Modalize>
         </Portal>
       </View>
