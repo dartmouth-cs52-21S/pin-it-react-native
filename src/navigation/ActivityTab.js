@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStackNavigator, HeaderBackButton } from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import OngoingActivityScreen from '../screens/OngoingActivityScreen';
@@ -25,6 +25,7 @@ const MissionTab = () => {
         },
       }}
     >
+      {/* eslint-disable-next-line react/no-children-prop */}
       <Tab.Screen name="New" component={NewActivityScreen} />
       <Tab.Screen name="Ongoing" component={OngoingActivityScreen} />
     </Tab.Navigator>
@@ -32,17 +33,13 @@ const MissionTab = () => {
 };
 
 const ActivityTab = () => {
-  const handleBackButton = (navigation) => {
-    navigation.navigate('MissionTab', { modalOpen: true });
-  };
-
   return (
     <Stack.Navigator>
-      <Stack.Screen name="MissionTab" component={MissionTab} />
+      <Stack.Screen name="MissionTab" component={MissionTab} options={{ headerShown: false }} />
       <Stack.Screen
         name="ChangeLocationScreen"
         component={ChangeLocationScreen}
-        options={({ navigation }) => ({
+        options={() => ({
           title: '',
           headerStyle: {
             backgroundColor: bgPrimary,
@@ -51,7 +48,6 @@ const ActivityTab = () => {
           headerTintColor: '#fff',
           headerTitleStyle: { fontSize: 25 },
           headerTitleAlign: 'left',
-          headerLeft: () => <HeaderBackButton onPress={() => handleBackButton(navigation)} />,
         })}
       />
     </Stack.Navigator>

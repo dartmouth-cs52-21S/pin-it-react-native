@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import MapView, { Marker } from 'react-native-maps';
 import { Modalize } from 'react-native-modalize';
@@ -12,23 +12,21 @@ import { getLocation } from '../selectors/app';
 
 const NewActivityScreen = (props) => {
   const modalizeRef = useRef(null);
-
-  useEffect(() => console.log(props));
+  const [reopen, setReopen] = useState(false);
 
   // eslint-disable-next-line react/destructuring-assignment
-  console.log(props?.route);
-  // eslint-disable-next-line react/destructuring-assignment
-  const { modalOpen } = props?.route?.params || {};
+  // const { modalOpen } = props;
 
   useEffect(() => {
-    console.log(modalOpen);
-    if (modalOpen) {
-      console.log(modalOpen);
-      modalizeRef.current?.open();
-    }
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      if (reopen) {
+        modalizeRef.current?.open();
+      }
+    });
+    return unsubscribe;
   },
   // eslint-disable-next-line react/destructuring-assignment
-  [props?.route?.params?.modalOpen]);
+  [reopen]);
 
   const onMarkerPress = (e) => {
     console.log('pressed');
@@ -40,12 +38,14 @@ const NewActivityScreen = (props) => {
 
   const handleChangeLocation = () => {
     modalizeRef.current?.close();
+    setReopen(true);
     props.navigation.navigate('ChangeLocationScreen');
   };
 
   const { location } = props;
   const { latitude, longitude } = location || {};
 
+  console.log(reopen);
   return (
     <View syle={styles.container}>
       <MapView
@@ -71,6 +71,7 @@ const NewActivityScreen = (props) => {
           <Modalize ref={modalizeRef}
             modalHeight={500}
             modalStyle={{ backgroundColor: bgPrimary }}
+            onOpened={() => setReopen(false)}
           >
             <NewMissionModal handleChangeLocation={handleChangeLocation} />
           </Modalize>
