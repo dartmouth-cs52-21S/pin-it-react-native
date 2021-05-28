@@ -8,9 +8,12 @@ import { bgTertiary, accentGreen } from '../constants/colors';
 const NewMissionModal = (props) => {
   const [address, onChangeAddress] = useState('1791 Seattle Dr, Houston, TX 77923');
 
+  const { useThis } = props.route.params;
+
   const handleSubmit = () => {
-    console.log('TODO: generate mission');
+    props.onSubmit(25.7617, -80.1918, 5000, 'restaurant');
   };
+
   return (
     <View style={styles.container}>
       <Text style={[styles.title]}>New Mission  🏆</Text>
@@ -29,7 +32,7 @@ const NewMissionModal = (props) => {
       <View style={styles.sectionContainer}>
         <Text style={styles.text}>Generating new mission from</Text>
         <TextInput
-          value={`📍 ${address}`}
+          value={`${address}`}
           style={styles.address}
           onChangeText={onChangeAddress}
         />

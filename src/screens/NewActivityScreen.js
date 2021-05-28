@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { bgPrimary } from '../constants/colors';
 import NewMissionModal from '../components/NewMissionModal';
+import { generateMission } from '../services/missionService';
 
 const NewActivityScreen = (props) => {
   const modalizeRef = useRef(null);
@@ -17,6 +18,11 @@ const NewActivityScreen = (props) => {
 
   const onModalPress = (e) => {
     modalizeRef.current?.open();
+  };
+
+  const onSubmit = async (latitude, longitude, radius, query) => {
+    const data = await generateMission(latitude, longitude, radius, query);
+    console.log(data);
   };
 
   return (
@@ -37,7 +43,7 @@ const NewActivityScreen = (props) => {
             modalHeight={500}
             modalStyle={{ backgroundColor: bgPrimary }}
           >
-            <NewMissionModal />
+            <NewMissionModal onSubmit={onSubmit} />
           </Modalize>
         </Portal>
       </View>
