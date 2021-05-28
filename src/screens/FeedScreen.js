@@ -169,9 +169,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   locationDisplay: {
-    marginBottom: 10,
-    width: '100%',
+    marginBottom: 15,
+    alignSelf: 'center',
+    width: '95%',
     maxWidth: '100%',
+    height: 40,
   },
   searchIcon: {
     width: 20,
