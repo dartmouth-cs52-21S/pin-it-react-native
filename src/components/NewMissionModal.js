@@ -10,7 +10,7 @@ const NewMissionModal = (props) => {
   const { handleChangeLocation } = props;
 
   const handleSubmit = () => {
-    props.onSubmit(25.7617, -80.1918, 5000, 'restaurant');
+    props.onSubmit(25.7617, -80.1918, 5000, 'park');
   };
 
   return (

@@ -44,6 +44,11 @@ const NewActivityScreen = (props) => {
     missionFoundRef.current?.open();
   };
 
+  const onAccept = () => {
+    console.log('accepted');
+    missionFoundRef.current?.close();
+  };
+
   const handleChangeLocation = () => {
     newMissionRef.current?.close();
     setReopen(true);
@@ -52,8 +57,6 @@ const NewActivityScreen = (props) => {
 
   const { location } = props;
   const { latitude, longitude } = location || {};
-
-  console.log(reopen);
 
   return (
     <View syle={styles.container}>
@@ -88,7 +91,7 @@ const NewActivityScreen = (props) => {
             modalStyle={{ backgroundColor: bgPrimary }}
             modalHeight={700}
           >
-            <MissionFoundModal location={missionLocation} />
+            <MissionFoundModal location={missionLocation} onAccept={onAccept} />
           </Modalize>
         </Portal>
       </View>

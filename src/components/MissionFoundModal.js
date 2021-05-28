@@ -3,14 +3,21 @@ import {
   View, Text, Image, StyleSheet, TouchableOpacity,
 } from 'react-native';
 import * as Colors from '../constants/colors';
+import config from '../../app-config';
 
-const MissionFoundModal = ({ location }) => {
+const { googleApiKey } = config;
+
+const MissionFoundModal = ({ location, onAccept }) => {
+  let currUri = 'https://maps.googleapis.com/maps/api/place/photo?maxheight=300&photoreference=';
+  currUri += location.photo;
+  const finalUri = `${currUri}&key=${googleApiKey}`;
+
   return (
     <View style={styles.container}>
       <Text style={styles.titleText}>TAKE A PHOTO AT</Text>
       <Text style={[styles.titleText, { fontWeight: 'bold' }]}>{location ? location.title.toUpperCase() : ''}</Text>
-      <Image style={styles.locationImage} source={{ uri: 'https://res.cloudinary.com/djc5u8rjt/image/upload/v1621833029/ux9xmvmtjl3nf7x7ls2n.png' }} />
-      <TouchableOpacity style={styles.startButton}>
+      <Image style={styles.locationImage} source={{ uri: finalUri }} />
+      <TouchableOpacity style={styles.startButton} onPress={onAccept}>
         <Text style={styles.startButtonText}>Accept</Text>
       </TouchableOpacity>
     </View>
@@ -42,6 +49,7 @@ const styles = StyleSheet.create({
     marginBottom: 50,
     height: 250,
     width: 250,
+    resizeMode: 'contain',
   },
 
   startButton: {
