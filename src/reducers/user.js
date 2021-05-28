@@ -8,7 +8,7 @@ const UserReducer = (state = initialState, action) => {
   const { payload } = action;
   switch (action.type) {
     case ActionTypes.GET_USER:
-        return { ...state, user_data: payload };
+      return { ...state, user_data: payload };
     default:
       return state;
   }
