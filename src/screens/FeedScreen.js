@@ -1,48 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { connect } from 'react-redux';
 import {
-  SafeAreaView, FlatList, StyleSheet, StatusBar, Text,
+  View, SafeAreaView, StyleSheet, StatusBar, Text, RefreshControl, Animated, TouchableOpacity,
 } from 'react-native';
+import { useCollapsibleSubHeader, CollapsibleSubHeaderAnimator } from 'react-navigation-collapsible';
 import { SearchBar } from 'react-native-elements';
-import Card from '../components/Card';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { getLocations } from '../actions/locations';
+import CarouselCard from '../components/CarouselCard';
 import TagRow from '../components/TagRow';
 import LocationDisplay from '../components/LocationDisplay';
-import { bgPrimary } from '../constants/colors';
-
-const mockData = [
-  {
-    id: 'test1',
-    title: 'Dish Society',
-    rating: 4,
-    category: 'Restaurant',
-    latitude: 0,
-    longitude: 0,
-    images: [
-      { image: 'https://images.getbento.com/accounts/fa5a0ad193d9db0f760b62a4b1633afd/media/images/67297Memorial_entrance.jpg' },
-      { image: 'https://images.getbento.com/accounts/fa5a0ad193d9db0f760b62a4b1633afd/media/images/4171table_spread_2.jpg' },
-    ],
-  },
-  {
-    id: 'test2',
-    title: 'Graffiti Alley in Central Square',
-    rating: 2,
-    category: 'Restaurant',
-    latitude: 20,
-    longitude: 20,
-    images: [
-      { image: 'https://images.fineartamerica.com/images/artworkimages/mediumlarge/2/central-square-cambridge-ma-graffiti-alley-cambridge-massachusetts-toby-mcguire.jpg' },
-      { image: 'https://scoutcambridge.com/wp-content/uploads/2018/03/ByDanaForsythe-1.jpg' },
-      { image: 'https://gregcookland.com/wonderland/wp-content/uploads/2020/06/picBlackLivesMatter-GraffitiAlleyCambridge200618_0038w.jpg' }],
-  },
-];
-
-const renderItem = ({ item }) => (
-  // eslint-disable-next-line react/jsx-props-no-spreading
-  <Card {...item} />
-);
+import { bgPrimary, accentPurple } from '../constants/colors';
 
 const FeedScreen = (props) => {
   const [search, setSearch] = useState('');
+  const searchRef = useRef();
+  const [searchFocused, setSearchFocused] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   const [tags, setTags] = useState([]);
+  const { locationsList } = props;
+
+  useEffect(() => {
+    props.getLocations();
+  }, []);
 
   const handleTagPressed = (tagValue) => {
     if (tags.includes(tagValue)) {
@@ -52,37 +33,108 @@ const FeedScreen = (props) => {
     }
   };
 
+  const handleRefresh = async () => {
+    setIsFetching(true);
+    await props.getLocations();
+    setIsFetching(false);
+  };
+
+  const handleCancel = () => {
+    setSearchFocused(false);
+    searchRef?.current?.blur();
+  };
+
+  const renderSearchIcon = () => {
+    if (searchFocused) {
+      return (
+        <TouchableOpacity style={styles.searchIcon} onPress={handleCancel}>
+          <FontAwesomeIcon icon={faArrowLeft} size={15} color={accentPurple} />
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <View style={styles.searchIcon}>
+          <Text style={{ fontSize: 10 }}>🔍</Text>
+        </View>
+      );
+    }
+  };
+
   const renderHeader = () => (
-    <>
-      <SearchBar
-        placeholder="Search by location"
-        onChangeText={(text) => setSearch(text)}
-        lightTheme
-        value={search}
-        searchIcon={<Text style={{ fontSize: 10 }}>🔍</Text>}
-        containerStyle={styles.searchContainer}
-        inputStyle={{ backgroundColor: 'white', fontSize: 12 }}
-        inputContainerStyle={{
-          backgroundColor: 'white', borderRadius: 10, height: 35, paddingVertical: 20,
-        }}
-      />
-      <LocationDisplay containerStyle={styles.locationDisplay} handlePress={() => props.navigation.navigate('ChangeLocationScreen')} />
-      <TagRow
-        active={tags}
-        handleTagPressed={handleTagPressed}
-      />
-    </>
+    <View style={styles.header}>
+      <View style={styles.searchBarContainer}>
+        <SearchBar
+          ref={searchRef}
+          placeholder="Search by location"
+          onChangeText={(text) => setSearch(text)}
+          lightTheme
+          value={search}
+          searchIcon={renderSearchIcon()}
+          containerStyle={styles.searchContainer}
+          inputStyle={{ backgroundColor: 'white', fontSize: 16 }}
+          inputContainerStyle={{
+            backgroundColor: 'white', borderRadius: 10, height: 35, paddingVertical: 20,
+          }}
+          onFocus={() => setSearchFocused(true)}
+        />
+        {/* {searchFocused
+        && (
+        <TouchableOpacity style={styles.doneButton} onPress={handleCancel}>
+          <Text style={styles.doneText}>Done</Text>
+        </TouchableOpacity>
+        )} */}
+      </View>
+
+      {searchFocused && <LocationDisplay />}
+      {!searchFocused && (
+        <TagRow
+          active={tags}
+          handleTagPressed={handleTagPressed}
+        />
+      )}
+    </View>
   );
+
+  const renderItem = ({ item }) => (
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    <CarouselCard {...item} />
+  );
+
+  const {
+    onScroll /* Event handler */,
+    containerPaddingTop /* number */,
+    scrollIndicatorInsetTop /* number */,
+    translateY,
+  } = useCollapsibleSubHeader();
 
   return (
     <SafeAreaView style={styles.container}>
-      <FlatList
-        ListHeaderComponent={renderHeader}
-        data={mockData}
+      {!searchFocused && (
+      <Animated.FlatList
+        onScroll={onScroll}
+        contentContainerStyle={{ paddingTop: containerPaddingTop }}
+        scrollIndicatorInsets={{ top: scrollIndicatorInsetTop }}
+        style={styles.postList}
+        data={locationsList}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
+        onRefresh={handleRefresh}
+        refreshing={isFetching}
+        refreshControl={(
+          <RefreshControl
+            refreshing={isFetching}
+            onRefresh={handleRefresh}
+            tintColor="white"
+            colors={['white']}
+            size={RefreshControl.SIZE.LARGE}
+          />
+        )}
       />
+      )}
+      <CollapsibleSubHeaderAnimator translateY={translateY}>
+        {renderHeader()}
+      </CollapsibleSubHeaderAnimator>
     </SafeAreaView>
   );
 };
@@ -91,8 +143,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
-    paddingHorizontal: 15,
     backgroundColor: bgPrimary,
+  },
+  header: {
+    backgroundColor: bgPrimary,
+    paddingBottom: 10,
+    width: '100%',
+    paddingHorizontal: 15,
+  },
+  searchBarContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
   },
   searchContainer: {
     backgroundColor: 'transparent',
@@ -100,6 +161,7 @@ const styles = StyleSheet.create({
     borderTopColor: 'transparent',
     margin: 0,
     paddingHorizontal: 0,
+    flexGrow: 1,
   },
   title: {
     fontSize: 25,
@@ -107,10 +169,19 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   locationDisplay: {
-    marginBottom: 10,
-    width: '100%',
+    marginBottom: 15,
+    alignSelf: 'center',
+    width: '95%',
     maxWidth: '100%',
+    height: 40,
+  },
+  searchIcon: {
+    width: 20,
   },
 });
 
-export default FeedScreen;
+const mapStateToProps = (state) => ({
+  locationsList: state.locations.locationsList,
+});
+
+export default connect(mapStateToProps, { getLocations })(FeedScreen);

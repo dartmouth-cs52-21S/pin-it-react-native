@@ -29,24 +29,21 @@ export const handleImageUpload = (onSuccess) => async (dispatch) => {
 
   if (photo) {
     const result = await uploadPhoto(photo);
-    dispatch(updateCurrentPost({ imageUrl: result.data.url }));
+    dispatch(updateCurrentPost({ imageUrls: [result.data.url] }));
     onSuccess();
   }
 };
 
 export const createPost = (newPost, onSuccess) => async (dispatch) => {
   const token = await AsyncStorage.getItem('token');
-
   axios
     .post(`${api}/posts`, newPost, { headers: { authorization: token } })
     .then((response) => {
-      console.log(response.data);
       onSuccess();
       displayToast('success', 'Post successfully created');
     })
     .catch((error) => {
-      console.log(error);
-      dispatch(setError(`Posting failed: ${error.response.data.error}`));
+      dispatch(setError(`Posting failed: ${error.response.data}`));
     });
 };
 

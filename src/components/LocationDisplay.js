@@ -1,48 +1,68 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
-import {
-  Text, View, StyleSheet, TouchableOpacity,
-} from 'react-native';
-import { bgTertiary } from '../constants/colors';
+import { StyleSheet, View, Text } from 'react-native';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { getLocation } from '../selectors/app';
+import { updateLocation } from '../actions/app';
+import config from '../../app-config';
+import { accentPurple } from '../constants/colors';
+
+const { googleApiKey } = config;
 
 const LocationDisplay = (props) => {
-  const { address, handlePress, containerStyle } = props;
+  const locationInputRef = useRef();
+  const { address } = props;
+  const { textInputContainer, textInput } = styles;
+
+  useEffect(() => {
+    locationInputRef.current?.setAddressText(address || '');
+  }, []);
+
   return (
-    <TouchableOpacity style={[styles.container, containerStyle]} onPress={handlePress}>
-      <View style={styles.icon}>
-        <Text>📍</Text>
-      </View>
-      <Text style={styles.text} numberOfLines={1}>{address || 'No location available'}</Text>
-    </TouchableOpacity>
+    <GooglePlacesAutocomplete
+      ref={locationInputRef}
+      placeholder={address || 'No location found'}
+      fetchDetails
+      onPress={(data, details = null) => {
+        props.updateLocation(data.place_id);
+      }}
+      currentLocation
+      query={{
+        key: googleApiKey,
+        language: 'en',
+      }}
+      isRowScrollable={false}
+      renderLeftButton={() => (
+        <View style={styles.icon}>
+          <Text>📍</Text>
+        </View>
+      )}
+      styles={{ textInputContainer, textInput }}
+    />
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: bgTertiary,
-    borderRadius: 10,
-    paddingTop: 8,
-    paddingBottom: 8,
-    padding: 10,
-    color: 'white',
-    width: '90%',
-    maxWidth: '100%',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   icon: {
-    width: '8%',
-    display: 'flex',
-    flexDirection: 'row',
+    backgroundColor: 'white',
+    borderTopLeftRadius: 10,
+    borderBottomLeftRadius: 10,
+    paddingHorizontal: 5,
+    marginBottom: 5,
+    flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center',
   },
-  text: {
-    color: 'white',
-    width: '92%',
+  textInputContainer: {
+    width: '100%',
+  },
+  textInput: {
+    borderRadius: 10,
+    borderBottomLeftRadius: 0,
+    borderTopLeftRadius: 0,
+    fontSize: 16,
+    height: 40,
+    paddingVertical: 5,
+    color: accentPurple,
   },
 });
 
@@ -50,4 +70,4 @@ const mapStateToProps = (state) => ({
   address: getLocation(state)?.address,
 });
 
-export default connect(mapStateToProps, null)(LocationDisplay);
+export default connect(mapStateToProps, { updateLocation })(LocationDisplay);

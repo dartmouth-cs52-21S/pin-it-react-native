@@ -14,7 +14,7 @@ const NewMissionModal = (props) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} keyboardShouldPersistTaps="handled">
       <Text style={[styles.title]}>New Mission  🏆</Text>
       <View style={styles.sectionContainer}>
         <Text style={styles.text}>I want to visit...</Text>

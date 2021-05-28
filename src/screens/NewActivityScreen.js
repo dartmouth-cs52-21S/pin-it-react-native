@@ -37,9 +37,9 @@ const NewActivityScreen = (props) => {
     newMissionRef.current?.open();
   };
 
-  const onSubmit = async (latitude, longitude, radius, query) => {
+  const onSubmit = async (lat, lng, radius, query) => {
     newMissionRef.current?.close();
-    const data = await generateMission(latitude, longitude, radius, query);
+    const data = await generateMission(lat, lng, radius, query);
     setMissionLocation(data);
     missionFoundRef.current?.open();
   };

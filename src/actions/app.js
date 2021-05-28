@@ -1,4 +1,5 @@
 import Toast from 'react-native-toast-message';
+import { getLocationByPlaceId } from '../services/locationService';
 
 export const ActionTypes = {
   SET_ERROR: 'SET_ERROR',
@@ -32,3 +33,8 @@ export function setLocation(location) {
     payload: location,
   };
 }
+
+export const updateLocation = (placeId) => async (dispatch) => {
+  const location = await getLocationByPlaceId(placeId);
+  dispatch(setLocation(location));
+};
