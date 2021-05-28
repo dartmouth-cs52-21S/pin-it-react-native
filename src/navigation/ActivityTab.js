@@ -25,7 +25,6 @@ const MissionTab = () => {
         },
       }}
     >
-      {/* eslint-disable-next-line react/no-children-prop */}
       <Tab.Screen name="New" component={NewActivityScreen} />
       <Tab.Screen name="Ongoing" component={OngoingActivityScreen} />
     </Tab.Navigator>

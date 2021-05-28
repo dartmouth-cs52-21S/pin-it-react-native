@@ -14,9 +14,6 @@ const NewActivityScreen = (props) => {
   const modalizeRef = useRef(null);
   const [reopen, setReopen] = useState(false);
 
-  // eslint-disable-next-line react/destructuring-assignment
-  // const { modalOpen } = props;
-
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
       if (reopen) {
@@ -25,7 +22,6 @@ const NewActivityScreen = (props) => {
     });
     return unsubscribe;
   },
-  // eslint-disable-next-line react/destructuring-assignment
   [reopen]);
 
   const onMarkerPress = (e) => {
