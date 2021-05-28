@@ -23,15 +23,16 @@ const ChangeLocationScreen = (props) => {
         />
         <GooglePlacesAutocomplete
           placeholder="Search"
-          onPress={(data, details = true) => {
-          // 'details' is provided when fetchDetails = true
-            console.log(data, details);
+          fetchDetails
+          onPress={(data, details = null) => {
+            // 'details' is provided when fetchDetails = true
+
           }}
+          currentLocation={false}
           query={{
             key: googleApiKey,
             language: 'en',
           }}
-          currentLocation
         />
       </MapView>
 

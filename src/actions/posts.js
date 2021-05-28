@@ -46,7 +46,7 @@ export const createPost = (newPost, onSuccess) => async (dispatch) => {
     })
     .catch((error) => {
       console.log(error);
-      dispatch(setError(`Posting failed: ${error.response.data.error}`));
+      dispatch(setError(`Posting failed: ${error.response.data}`));
     });
 };
 

@@ -23,10 +23,13 @@ const Auth = (props) => {
       return (
         <View style={styles.userEntry}>
           <FontAwesomeIcon icon={faUser} size={26} color={bgTertiary} />
-          <TextInput style={styles.textInput}
+          <TextInput
+            style={styles.textInput}
+            autoCapitalize="none"
             value={username}
             onChangeText={(text) => setUsername(text)}
             placeholder="Username"
+            type="username"
             placeholderTextColor="grey"
           />
         </View>
@@ -89,11 +92,14 @@ const Auth = (props) => {
         {renderUsername()}
         <View style={styles.userEntry}>
           <FontAwesomeIcon icon={faEnvelope} size={28} color={bgTertiary} />
-          <TextInput style={styles.textInput}
+          <TextInput
+            style={styles.textInput}
             value={email}
             onChangeText={(text) => setEmail(text)}
             placeholder="Email"
+            type="email"
             placeholderTextColor="grey"
+            autoCapitalize="none"
           />
         </View>
         <View style={styles.userEntry}>
@@ -103,6 +109,8 @@ const Auth = (props) => {
             value={password}
             onChangeText={(text) => setPassword(text)}
             placeholder="Password"
+            type="password"
+            autoCapitalize="none"
             placeholderTextColor="grey"
             secureTextEntry
           />

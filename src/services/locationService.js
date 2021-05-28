@@ -14,6 +14,11 @@ export const getLocationInfo = async (lat, long) => {
   return place;
 };
 
+export const getLocationByPlaceId = async (placeId) => {
+  const req = `${googleApi}/place/details/json?placeid=${placeId}&key=${googleApiKey}`;
+  return req;
+};
+
 // callback - on end
 export const getCurrentLocation = async (callback) => {
   try {
