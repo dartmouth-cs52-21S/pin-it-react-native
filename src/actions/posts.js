@@ -40,12 +40,10 @@ export const createPost = (newPost, onSuccess) => async (dispatch) => {
   axios
     .post(`${api}/posts`, newPost, { headers: { authorization: token } })
     .then((response) => {
-      console.log(response.data);
       onSuccess();
       displayToast('success', 'Post successfully created');
     })
     .catch((error) => {
-      console.log(error);
       dispatch(setError(`Posting failed: ${error.response.data}`));
     });
 };

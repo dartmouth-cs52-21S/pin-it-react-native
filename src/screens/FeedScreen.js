@@ -1,18 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import {
-  View, SafeAreaView, StyleSheet, StatusBar, Text, RefreshControl, Animated,
+  View, SafeAreaView, StyleSheet, StatusBar, Text, RefreshControl, Animated, TouchableOpacity,
 } from 'react-native';
 import { useCollapsibleSubHeader, CollapsibleSubHeaderAnimator } from 'react-navigation-collapsible';
 import { SearchBar } from 'react-native-elements';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { getLocations } from '../actions/locations';
 import CarouselCard from '../components/CarouselCard';
 import TagRow from '../components/TagRow';
 import LocationDisplay from '../components/LocationDisplay';
-import { bgPrimary } from '../constants/colors';
+import { bgPrimary, accentPurple } from '../constants/colors';
 
 const FeedScreen = (props) => {
   const [search, setSearch] = useState('');
+  const searchRef = useRef();
+  const [searchFocused, setSearchFocused] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [tags, setTags] = useState([]);
   const { locationsList } = props;
@@ -35,25 +39,59 @@ const FeedScreen = (props) => {
     setIsFetching(false);
   };
 
+  const handleCancel = () => {
+    setSearchFocused(false);
+    searchRef?.current?.blur();
+  };
+
+  const renderSearchIcon = () => {
+    if (searchFocused) {
+      return (
+        <TouchableOpacity style={styles.searchIcon} onPress={handleCancel}>
+          <FontAwesomeIcon icon={faArrowLeft} size={15} color={accentPurple} />
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <View style={styles.searchIcon}>
+          <Text style={{ fontSize: 10 }}>🔍</Text>
+        </View>
+      );
+    }
+  };
+
   const renderHeader = () => (
     <View style={styles.header}>
-      <SearchBar
-        placeholder="Search by location"
-        onChangeText={(text) => setSearch(text)}
-        lightTheme
-        value={search}
-        searchIcon={<Text style={{ fontSize: 10 }}>🔍</Text>}
-        containerStyle={styles.searchContainer}
-        inputStyle={{ backgroundColor: 'white', fontSize: 12 }}
-        inputContainerStyle={{
-          backgroundColor: 'white', borderRadius: 10, height: 35, paddingVertical: 20,
-        }}
-      />
-      <LocationDisplay containerStyle={styles.locationDisplay} handlePress={() => props.navigation.navigate('ChangeLocationScreen')} />
-      <TagRow
-        active={tags}
-        handleTagPressed={handleTagPressed}
-      />
+      <View style={styles.searchBarContainer}>
+        <SearchBar
+          ref={searchRef}
+          placeholder="Search by location"
+          onChangeText={(text) => setSearch(text)}
+          lightTheme
+          value={search}
+          searchIcon={renderSearchIcon()}
+          containerStyle={styles.searchContainer}
+          inputStyle={{ backgroundColor: 'white', fontSize: 16 }}
+          inputContainerStyle={{
+            backgroundColor: 'white', borderRadius: 10, height: 35, paddingVertical: 20,
+          }}
+          onFocus={() => setSearchFocused(true)}
+        />
+        {/* {searchFocused
+        && (
+        <TouchableOpacity style={styles.doneButton} onPress={handleCancel}>
+          <Text style={styles.doneText}>Done</Text>
+        </TouchableOpacity>
+        )} */}
+      </View>
+
+      {searchFocused && <LocationDisplay />}
+      {!searchFocused && (
+        <TagRow
+          active={tags}
+          handleTagPressed={handleTagPressed}
+        />
+      )}
     </View>
   );
 
@@ -71,11 +109,12 @@ const FeedScreen = (props) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      {!searchFocused && (
       <Animated.FlatList
         onScroll={onScroll}
         contentContainerStyle={{ paddingTop: containerPaddingTop }}
         scrollIndicatorInsets={{ top: scrollIndicatorInsetTop }}
-        // ListHeaderComponent={renderHeader}
+        style={styles.postList}
         data={locationsList}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
@@ -92,6 +131,7 @@ const FeedScreen = (props) => {
           />
         )}
       />
+      )}
       <CollapsibleSubHeaderAnimator translateY={translateY}>
         {renderHeader()}
       </CollapsibleSubHeaderAnimator>
@@ -103,11 +143,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
-    paddingHorizontal: 15,
     backgroundColor: bgPrimary,
   },
   header: {
     backgroundColor: bgPrimary,
+    paddingBottom: 10,
+    width: '100%',
+    paddingHorizontal: 15,
+  },
+  searchBarContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
   },
   searchContainer: {
     backgroundColor: 'transparent',
@@ -115,6 +161,10 @@ const styles = StyleSheet.create({
     borderTopColor: 'transparent',
     margin: 0,
     paddingHorizontal: 0,
+    flexGrow: 1,
+  },
+  postList: {
+    paddingHorizontal: 14,
   },
   title: {
     fontSize: 25,
@@ -125,6 +175,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     width: '100%',
     maxWidth: '100%',
+  },
+  searchIcon: {
+    width: 20,
   },
 });
 

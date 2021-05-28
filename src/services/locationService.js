@@ -4,19 +4,29 @@ import config from '../../app-config';
 
 const { googleApi, googleApiKey, api } = config;
 
-export const getLocationInfo = async (lat, long) => {
-  const req = `${googleApi}/geocode/json?latlng=${lat},${long}&key=${googleApiKey}`;
+export const getLocationByPlaceId = async (placeId) => {
+  const req = `${googleApi}/place/details/json?placeid=${placeId}&fields=name,formatted_address,geometry&key=${googleApiKey}`;
   const response = await axios.get(req);
+  const { result } = response.data;
+
+  const { lat: latitude, lng: longitude } = result.geometry?.location || {};
+
   const place = {
-    address: response.data.results[0].formatted_address,
-    placeId: response.data.results[0].place_id,
+    placeId,
+    latitude,
+    longitude,
+    title: result.name,
+    address: result.formatted_address,
   };
+
   return place;
 };
 
-export const getLocationByPlaceId = async (placeId) => {
-  const req = `${googleApi}/place/details/json?placeid=${placeId}&key=${googleApiKey}`;
-  return req;
+export const getLocationInfo = async (lat, long) => {
+  const req = `${googleApi}/geocode/json?latlng=${lat},${long}&key=${googleApiKey}`;
+  const response = await axios.get(req);
+  const placeId = response.data.results[0].place_id;
+  return getLocationByPlaceId(placeId);
 };
 
 // callback - on end
@@ -31,12 +41,9 @@ export const getCurrentLocation = async (callback) => {
 
     const geolocationInfo = await Location.getCurrentPositionAsync({ accuracy: 4 });
     const { latitude, longitude } = geolocationInfo.coords;
+    const place = await getLocationInfo(latitude, longitude) || {};
 
-    const { address, placeId } = await getLocationInfo(latitude, longitude) || {};
-
-    callback({
-      latitude, longitude, address, placeId,
-    });
+    callback(place);
   } catch (error) {
     console.log(error);
   }

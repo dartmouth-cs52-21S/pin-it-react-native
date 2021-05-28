@@ -32,16 +32,9 @@ const NewActivityScreen = (props) => {
     modalizeRef.current?.open();
   };
 
-  const handleChangeLocation = () => {
-    modalizeRef.current?.close();
-    setReopen(true);
-    props.navigation.navigate('ChangeLocationScreen');
-  };
-
   const { location } = props;
   const { latitude, longitude } = location || {};
 
-  console.log(reopen);
   return (
     <View syle={styles.container}>
       <MapView
@@ -69,7 +62,7 @@ const NewActivityScreen = (props) => {
             modalStyle={{ backgroundColor: bgPrimary }}
             onOpened={() => setReopen(false)}
           >
-            <NewMissionModal handleChangeLocation={handleChangeLocation} />
+            <NewMissionModal />
           </Modalize>
         </Portal>
       </View>
