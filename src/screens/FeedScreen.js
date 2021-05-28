@@ -163,9 +163,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     flexGrow: 1,
   },
-  postList: {
-    paddingHorizontal: 14,
-  },
   title: {
     fontSize: 25,
     color: 'white',
