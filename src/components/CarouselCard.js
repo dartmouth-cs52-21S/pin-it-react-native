@@ -4,12 +4,12 @@ import {
 } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faUtensils, faStar } from '@fortawesome/free-solid-svg-icons';
+import { faUtensils } from '@fortawesome/free-solid-svg-icons';
 import { bgSecondary } from '../constants/colors';
 
-const Card = (props) => {
+const CarouselCard = (props) => {
   const {
-    title, rating, category, latitude, longitude, images,
+    title, category, latitude, longitude, posts, images,
   } = props;
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -25,7 +25,8 @@ const Card = (props) => {
     >
       <Image
         style={styles.carouselImage}
-        source={{ uri: item.image }}
+        source={posts ? { uri: item.displayImageUrls[0] }
+          : { uri: item.image }}
       />
     </View>
   ), []);
@@ -35,7 +36,7 @@ const Card = (props) => {
     return (
       <Pagination
         containerStyle={{ paddingVertical: 0 }}
-        dotsLength={images.length}
+        dotsLength={posts ? posts.length : images.length}
         activeDotIndex={activeIndex}
         dotStyle={{
           width: 10,
@@ -62,24 +63,6 @@ const Card = (props) => {
     }
   };
 
-  const renderStars = () => {
-    const stars = [];
-
-    for (let i = 0; i < rating; i++) {
-      stars.push(<FontAwesomeIcon key={i} icon={faStar} size={20} color="#FFD700" />);
-    }
-
-    for (let i = 0; i < 5 - rating; i++) {
-      stars.push(<FontAwesomeIcon key={rating + i} icon={faStar} size={20} color="gray" />);
-    }
-
-    return (
-      <Text style={styles.stars}>
-        {stars}
-      </Text>
-    );
-  };
-
   return (
     <View style={styles.card}>
       <View style={styles.heading}>
@@ -92,7 +75,6 @@ const Card = (props) => {
       </View>
 
       <View style={styles.subheading}>
-        {renderStars()}
         <Text style={styles.detail}>
           Location:
           {' '}
@@ -106,7 +88,7 @@ const Card = (props) => {
         <Carousel
           layout="default"
           ref={ref}
-          data={images}
+          data={posts || images}
           sliderWidth={330}
           itemWidth={330}
           renderItem={renderItem}
@@ -161,4 +143,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Card;
+export default CarouselCard;
