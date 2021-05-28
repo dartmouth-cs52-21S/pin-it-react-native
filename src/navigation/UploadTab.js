@@ -66,11 +66,11 @@ const mapStateToProps = (state) => {
   const {
     address, latitude, longitude, placeId,
   } = getLocation(state);
-  const { imageUrl, caption, category } = getCurrentPost(state);
+  const { imageUrls, caption, category } = getCurrentPost(state);
 
   return {
     post: {
-      imageUrl,
+      imageUrls,
       caption,
       location: {
         title: address,

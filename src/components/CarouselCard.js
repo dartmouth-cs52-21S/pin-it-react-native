@@ -25,7 +25,7 @@ const CarouselCard = (props) => {
     >
       <Image
         style={styles.carouselImage}
-        source={posts ? { uri: item.displayImageUrls[0] }
+        source={posts ? { uri: item.imageUrls[0] }
           : { uri: item.image }}
       />
     </View>

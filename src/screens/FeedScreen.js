@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import {
-  SafeAreaView, FlatList, StyleSheet, StatusBar, Text,
+  View, SafeAreaView, StyleSheet, StatusBar, Text, RefreshControl, Animated,
 } from 'react-native';
+import { useCollapsibleSubHeader, CollapsibleSubHeaderAnimator } from 'react-navigation-collapsible';
 import { SearchBar } from 'react-native-elements';
 import { getLocations } from '../actions/locations';
 import CarouselCard from '../components/CarouselCard';
@@ -12,6 +13,7 @@ import { bgPrimary } from '../constants/colors';
 
 const FeedScreen = (props) => {
   const [search, setSearch] = useState('');
+  const [isFetching, setIsFetching] = useState(false);
   const [tags, setTags] = useState([]);
   const { locationsList } = props;
 
@@ -27,8 +29,14 @@ const FeedScreen = (props) => {
     }
   };
 
+  const handleRefresh = async () => {
+    setIsFetching(true);
+    await props.getLocations();
+    setIsFetching(false);
+  };
+
   const renderHeader = () => (
-    <>
+    <View style={styles.header}>
       <SearchBar
         placeholder="Search by location"
         onChangeText={(text) => setSearch(text)}
@@ -46,7 +54,7 @@ const FeedScreen = (props) => {
         active={tags}
         handleTagPressed={handleTagPressed}
       />
-    </>
+    </View>
   );
 
   const renderItem = ({ item }) => (
@@ -54,15 +62,39 @@ const FeedScreen = (props) => {
     <CarouselCard {...item} />
   );
 
+  const {
+    onScroll /* Event handler */,
+    containerPaddingTop /* number */,
+    scrollIndicatorInsetTop /* number */,
+    translateY,
+  } = useCollapsibleSubHeader();
+
   return (
     <SafeAreaView style={styles.container}>
-      <FlatList
-        ListHeaderComponent={renderHeader}
+      <Animated.FlatList
+        onScroll={onScroll}
+        contentContainerStyle={{ paddingTop: containerPaddingTop }}
+        scrollIndicatorInsets={{ top: scrollIndicatorInsetTop }}
+        // ListHeaderComponent={renderHeader}
         data={locationsList}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
+        onRefresh={handleRefresh}
+        refreshing={isFetching}
+        refreshControl={(
+          <RefreshControl
+            refreshing={isFetching}
+            onRefresh={handleRefresh}
+            tintColor="red"
+            colors={['red', 'green']}
+            size={RefreshControl.SIZE.LARGE}
+          />
+        )}
       />
+      <CollapsibleSubHeaderAnimator translateY={translateY}>
+        {renderHeader()}
+      </CollapsibleSubHeaderAnimator>
     </SafeAreaView>
   );
 };
@@ -72,6 +104,9 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
     paddingHorizontal: 15,
+    backgroundColor: bgPrimary,
+  },
+  header: {
     backgroundColor: bgPrimary,
   },
   searchContainer: {
