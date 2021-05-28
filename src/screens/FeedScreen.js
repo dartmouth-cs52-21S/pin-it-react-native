@@ -125,8 +125,8 @@ const FeedScreen = (props) => {
           <RefreshControl
             refreshing={isFetching}
             onRefresh={handleRefresh}
-            tintColor="red"
-            colors={['red', 'green']}
+            tintColor="white"
+            colors={['white']}
             size={RefreshControl.SIZE.LARGE}
           />
         )}
