@@ -36,7 +36,6 @@ export const handleImageUpload = (onSuccess) => async (dispatch) => {
 
 export const createPost = (newPost, onSuccess) => async (dispatch) => {
   const token = await AsyncStorage.getItem('token');
-
   axios
     .post(`${api}/posts`, newPost, { headers: { authorization: token } })
     .then((response) => {

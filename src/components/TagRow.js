@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flexDirection: 'row',
+    alignSelf: 'center',
   },
   icon: {
     color: 'white',

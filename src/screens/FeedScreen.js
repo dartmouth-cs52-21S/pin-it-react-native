@@ -163,18 +163,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     flexGrow: 1,
   },
-  postList: {
-    paddingHorizontal: 14,
-  },
   title: {
     fontSize: 25,
     color: 'white',
     fontWeight: 'bold',
   },
   locationDisplay: {
-    marginBottom: 10,
-    width: '100%',
+    marginBottom: 15,
+    alignSelf: 'center',
+    width: '95%',
     maxWidth: '100%',
+    height: 40,
   },
   searchIcon: {
     width: 20,
