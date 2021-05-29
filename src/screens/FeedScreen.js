@@ -97,7 +97,7 @@ const FeedScreen = (props) => {
 
   const renderItem = ({ item }) => (
     // eslint-disable-next-line react/jsx-props-no-spreading
-    <CarouselCard {...item} />
+    <CarouselCard {...item} navigation={props.navigation} />
   );
 
   const {

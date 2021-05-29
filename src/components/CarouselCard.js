@@ -92,7 +92,11 @@ const CarouselCard = (props) => {
           <View style={{ flex: 1, flexDirection: 'row' }}>
             <View style={styles.heading}>
               {renderIcon()}
-              <Text numberOfLines={1} style={styles.title}>
+              <Text
+                numberOfLines={1}
+                style={styles.title}
+                onPress={() => props.navigation.navigate('GridScreen')}
+              >
                 {title}
               </Text>
             </View>
