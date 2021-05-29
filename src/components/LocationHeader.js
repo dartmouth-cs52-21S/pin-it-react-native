@@ -16,7 +16,7 @@ const LocationHeader = (props) => {
   const renderIcon = () => {
     const { icon, style } = categories[category] || {};
 
-    if (!icon) return (<></>);
+    if (!icon) return (null);
     return (
       <View style={[styles.iconContainer, style]}>
         <FontAwesomeIcon icon={icon} size={23} color="white" />

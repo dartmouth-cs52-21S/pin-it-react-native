@@ -1,9 +1,10 @@
 import React, { useCallback } from 'react';
 import {
-  View, SafeAreaView, StyleSheet, FlatList, Image, TouchableOpacity,
+  View, SafeAreaView, StyleSheet, FlatList,
 } from 'react-native';
 import { bgPrimary } from '../constants/colors';
 import LocationHeader from '../components/LocationHeader';
+import PostCard from '../components/PostCard';
 
 const GridScreen = ({ route }) => {
   const { location, posts } = route.params;
@@ -12,17 +13,7 @@ const GridScreen = ({ route }) => {
     https://stackoverflow.com/questions/54039345/display-images-in-flatlist/54042860
   */
   const renderItem = useCallback(({ item }) => (
-    <TouchableOpacity
-      style={{
-        flex: 1, // here you can use flex:1 also
-        aspectRatio: 1,
-      }}
-    >
-      <Image style={styles.gridItem}
-        resizeMode="cover"
-        source={{ uri: item.imageUrls[0] }}
-      />
-    </TouchableOpacity>
+    <PostCard location={location} item={item} post={item} />
   ));
 
   return (
@@ -47,11 +38,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: bgPrimary,
     paddingVertical: 30,
-    paddingHorizontal: 10,
   },
   gridItem: {
     flex: 1,
-    margin: 5,
+    margin: 1,
   },
 });
 

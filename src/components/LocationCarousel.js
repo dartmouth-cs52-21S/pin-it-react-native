@@ -1,55 +1,32 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useCallback, useRef } from 'react';
 import {
-  View, Text, StyleSheet, Image, Modal, Pressable,
+  View, Text, StyleSheet,
 } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faImages, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import {
-  bgPrimary, bgTertiary, bgSecondary, accentPink,
+  bgPrimary, bgSecondary,
 } from '../constants/colors';
-import PostCard from './PostCard';
 import categories from '../constants/categories';
+import PostCard from './PostCard';
 
-const CarouselCard = (props) => {
+const LocationCarousel = (props) => {
   const {
     title, category, latitude, longitude, address, posts,
   } = props;
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const [modalVisible, setModalVisible] = useState(false);
   const ref = useRef(null);
 
   // Carousel Image
   const renderItem = useCallback(({ item }) => (
-    <>
-      <View
-        style={{
-          height: 360,
-          width: '96%',
-          flex: 1,
-          alignSelf: 'center',
-        }}
-      >
-        <Image
-          style={styles.carouselImage}
-          source={posts ? { uri: item.imageUrls[0] }
-            : { uri: item.image }}
-        />
-        <Pressable
-          style={[styles.button, styles.buttonOpen]}
-          onPress={() => setModalVisible(true)}
-        >
-          <FontAwesomeIcon icon={faImages} size={23} color="white" />
-        </Pressable>
-        <Text style={[styles.textStyle, styles.username, { color: 'black' }]}>
-          @
-          {' '}
-          {item.username}
-        </Text>
-      </View>
-    </>
+    <PostCard item={item}
+      location={{
+        title, category, latitude, longitude, address,
+      }}
+    />
   ), []);
 
   // Carousel Pagination
@@ -74,7 +51,7 @@ const CarouselCard = (props) => {
   const renderIcon = () => {
     const { icon, style } = categories[category] || {};
 
-    if (!icon) return (<></>);
+    if (!icon) return (null);
     return (
       <View style={[styles.iconContainer, style]}>
         <FontAwesomeIcon icon={icon} size={23} color="white" />
@@ -141,30 +118,6 @@ const CarouselCard = (props) => {
         />
         { renderPagination() }
       </View>
-      <Modal
-        animationType="slide"
-        visible={modalVisible}
-        transparent={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <PostCard {...posts[activeIndex]}
-              location={{
-                title, category, latitude, longitude, address,
-              }}
-            />
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}
-            >
-              <Text style={styles.textStyle}>Hide Modal</Text>
-            </Pressable>
-          </View>
-        </View>
-      </Modal>
     </View>
   );
 };
@@ -194,64 +147,6 @@ const styles = StyleSheet.create({
   subheading: {
     flexDirection: 'row',
   },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
-  modalView: {
-    padding: 10,
-    borderRadius: 20,
-    backgroundColor: bgTertiary,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    zIndex: 10,
-  },
-  buttonOpen: {
-    position: 'absolute',
-    right: 3,
-    top: 3,
-  },
-  buttonClose: {
-    backgroundColor: accentPink,
-  },
-  username: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    backgroundColor: 'rgba(255,255,255,0.75)',
-    padding: 3,
-    paddingRight: 10,
-    borderBottomLeftRadius: 10,
-    borderTopRightRadius: 10,
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-  carouselImage: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-    borderRadius: 5,
-  },
   iconContainer: {
     backgroundColor: '#2CA8C7',
     paddingHorizontal: 13,
@@ -260,4 +155,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CarouselCard;
+export default LocationCarousel;
