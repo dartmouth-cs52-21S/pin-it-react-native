@@ -1,8 +1,13 @@
 import React, { useRef, useEffect } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import {
+  StyleSheet, View, Text, LogBox,
+} from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import config from '../../app-config';
 import { accentPurple } from '../constants/colors';
+
+// Ignores issue tied to GooglePlacesAutocomplete component
+LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
 
 const { googleApiKey } = config;
 
