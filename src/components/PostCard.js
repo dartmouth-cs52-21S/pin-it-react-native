@@ -18,6 +18,9 @@ const PostCard = (props) => {
 
   return (
     <>
+      {/* Code for displaying images evenly in grid view
+      https://stackoverflow.com/questions/54039345/display-images-in-flatlist/54042860
+      */}
       <TouchableOpacity
         style={{
           flex: 1,
@@ -66,10 +69,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
   },
   modalView: {
-    padding: 10,
+    padding: 20,
     borderRadius: 20,
     backgroundColor: bgTertiary,
     alignItems: 'center',
@@ -100,15 +102,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-  },
   carouselImage: {
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
-    borderRadius: 5,
   },
 });
 

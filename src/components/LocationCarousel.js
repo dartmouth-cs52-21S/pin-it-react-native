@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useCallback, useRef } from 'react';
 import {
-  View, Text, StyleSheet,
+  View, Text, StyleSheet, Dimensions,
 } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -11,6 +11,8 @@ import {
 } from '../constants/colors';
 import categories from '../constants/categories';
 import PostCard from './PostCard';
+
+const { width: viewportWidth } = Dimensions.get('window');
 
 const LocationCarousel = (props) => {
   const {
@@ -61,10 +63,7 @@ const LocationCarousel = (props) => {
 
   return (
     <View style={styles.card}>
-      <View style={{
-        backgroundColor: bgSecondary, padding: '3.5%', borderRadius: 15, flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-      }}
-      >
+      <View style={styles.locationHeader}>
         <View style={{ flex: 1 }}>
           <View style={{ flex: 1, flexDirection: 'row' }}>
             <View style={styles.heading}>
@@ -110,11 +109,10 @@ const LocationCarousel = (props) => {
           layout="default"
           ref={ref}
           data={posts}
-          sliderWidth={360}
-          itemWidth={360}
+          sliderWidth={viewportWidth}
+          itemWidth={viewportWidth}
           renderItem={renderItem}
           onSnapToItem={(index) => setActiveIndex(index)}
-          margin={10}
         />
         { renderPagination() }
       </View>
@@ -125,7 +123,7 @@ const LocationCarousel = (props) => {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: bgPrimary,
-    marginTop: 20,
+    marginBottom: 20,
     width: '100%',
   },
   heading: {
@@ -152,6 +150,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 13,
     paddingVertical: 6,
     borderRadius: 10,
+  },
+  locationHeader: {
+    backgroundColor: bgSecondary,
+    padding: '4%',
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 });
 
