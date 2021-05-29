@@ -43,6 +43,7 @@ const LocationCarousel = (props) => {
           height: 10,
           borderRadius: 5,
           backgroundColor: 'rgba(255, 255, 255, 0.92)',
+          marginVertical: 20,
         }}
         inactiveDotOpacity={0.4}
         inactiveDotScale={0.6}
@@ -123,7 +124,6 @@ const LocationCarousel = (props) => {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: bgPrimary,
-    marginBottom: 20,
     width: '100%',
   },
   heading: {

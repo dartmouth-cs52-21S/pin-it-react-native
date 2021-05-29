@@ -23,7 +23,7 @@ const PostCard = (props) => {
       */}
       <TouchableOpacity
         style={{
-          flex: 1,
+          flex: 1 / 3,
           aspectRatio: 1,
         }}
         onPress={() => setModalVisible(true)}
@@ -32,11 +32,11 @@ const PostCard = (props) => {
           style={styles.carouselImage}
           source={{ uri: item.imageUrls[0] }}
         />
-        <Pressable
-          style={[styles.button, styles.buttonOpen]}
-        >
+        {item.imageUrls.length > 1 && (
+        <View style={styles.imagesIcon}>
           <FontAwesomeIcon icon={faImages} size={23} color="white" />
-        </Pressable>
+        </View>
+        )}
       </TouchableOpacity>
       <Modal
         animationType="slide"
@@ -89,10 +89,10 @@ const styles = StyleSheet.create({
     padding: 10,
     zIndex: 10,
   },
-  buttonOpen: {
+  imagesIcon: {
     position: 'absolute',
-    right: 3,
-    top: 3,
+    right: '5%',
+    top: '5%',
   },
   buttonClose: {
     backgroundColor: accentPink,
