@@ -2,12 +2,12 @@ import React from 'react';
 import {
   SafeAreaView, FlatList, StyleSheet, StatusBar,
 } from 'react-native';
-import PostCard from './PostCard';
+import PostCarousel from './PostCarousel';
 import { bgPrimary } from '../constants/colors';
 
 const renderItem = ({ item }) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
-  <PostCard {...item} />
+  <PostCarousel {...item} />
 );
 
 const PostsTab = (props) => {

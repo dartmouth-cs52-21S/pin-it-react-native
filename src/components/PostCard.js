@@ -1,157 +1,111 @@
-import React, { useState, useCallback, useRef } from 'react';
+/* eslint-disable react/jsx-props-no-spreading */
+import React, { useState } from 'react';
 import {
-  View, Text, StyleSheet, Image,
+  View, Text, StyleSheet, Image, Modal, Pressable, TouchableOpacity,
 } from 'react-native';
-import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { bgTertiary } from '../constants/colors';
-import categories from '../constants/categories';
+import { faImages } from '@fortawesome/free-solid-svg-icons';
+import {
+  bgTertiary, accentPink,
+} from '../constants/colors';
+import PostCarousel from './PostCarousel';
 
 const PostCard = (props) => {
   const {
-    caption, location, imageUrls,
-  // eslint-disable-next-line react/destructuring-assignment
+    location, item,
   } = props;
-
-  const [activeIndex, setActiveIndex] = useState(0);
-  const ref = useRef(null);
-
-  // Carousel Image
-  const renderItem = useCallback(({ item }) => (
-    <View
-      style={{
-        height: 320,
-        width: '100%',
-      }}
-    >
-      <Image
-        style={styles.carouselImage}
-        source={{ uri: item }}
-      />
-    </View>
-  ), []);
-
-  // Carousel Pagination
-  const renderPagination = () => {
-    return (
-      <Pagination
-        containerStyle={{ paddingVertical: 0 }}
-        dotsLength={imageUrls.length}
-        activeDotIndex={activeIndex}
-        dotStyle={{
-          width: 10,
-          height: 10,
-          borderRadius: 5,
-          backgroundColor: 'rgba(255, 255, 255, 0.92)',
-        }}
-        inactiveDotOpacity={0.4}
-        inactiveDotScale={0.6}
-      />
-    );
-  };
-
-  const renderIcon = () => {
-    const { icon, style } = categories[location.category] || {};
-
-    if (!icon) return (<></>);
-    return (
-      <View style={[styles.iconContainer, style]}>
-        <FontAwesomeIcon icon={icon} size={23} color="white" />
-      </View>
-    );
-  };
+  const [modalVisible, setModalVisible] = useState(false);
 
   return (
-    <View>
-      <View style={styles.card}>
-        <View style={styles.heading}>
-          <Text numberOfLines={1} style={styles.title}>
-            @
-            {' '}
-            {location.title}
-          </Text>
-          {renderIcon()}
+    <>
+      {/* Code for displaying images evenly in grid view
+      https://stackoverflow.com/questions/54039345/display-images-in-flatlist/54042860
+      */}
+      <TouchableOpacity
+        style={{
+          flex: 1 / 3,
+          aspectRatio: 1,
+        }}
+        onPress={() => setModalVisible(true)}
+      >
+        <Image
+          style={styles.carouselImage}
+          source={{ uri: item.imageUrls[0] }}
+        />
+        {item.imageUrls.length > 1 && (
+        <View style={styles.imagesIcon}>
+          <FontAwesomeIcon icon={faImages} size={23} color="white" />
         </View>
-
-        <View style={styles.subheading}>
-          <Text style={styles.detail}>
-            Location:
-            {' '}
-            {location.latitude}
-            ,
-            {' '}
-            {location.longitude}
-          </Text>
+        )}
+      </TouchableOpacity>
+      <Modal
+        animationType="slide"
+        visible={modalVisible}
+        transparent={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <PostCarousel {...item}
+              location={location}
+            />
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.textStyle}>Hide Modal</Text>
+            </Pressable>
+          </View>
         </View>
-        <View style={{ height: 350, flexDirection: 'column', alignItems: 'center' }}>
-          <Carousel
-            layout="default"
-            ref={ref}
-            data={imageUrls}
-            sliderWidth={330}
-            itemWidth={330}
-            renderItem={renderItem}
-            onSnapToItem={(index) => setActiveIndex(index)}
-            margin={10}
-          />
-          { renderPagination() }
-        </View>
-
-        <View style={styles.heading}>
-          <Text style={styles.caption}>
-            {caption}
-          </Text>
-        </View>
-      </View>
-    </View>
+      </Modal>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  card: {
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalView: {
+    padding: 20,
+    borderRadius: 20,
     backgroundColor: bgTertiary,
-    padding: 15,
-    marginTop: 20,
-    borderRadius: 5,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
-  heading: {
-    flexDirection: 'row',
-    flex: 0,
-    justifyContent: 'space-between',
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    zIndex: 10,
   },
-  title: {
+  imagesIcon: {
+    position: 'absolute',
+    right: '5%',
+    top: '5%',
+  },
+  buttonClose: {
+    backgroundColor: accentPink,
+  },
+  textStyle: {
     color: 'white',
-    fontSize: 16,
     fontWeight: 'bold',
-    width: '80%',
-  },
-  caption: {
-    color: 'white',
-    fontSize: 16,
-    width: '95%',
-    margin: 10,
-  },
-  detail: {
-    fontSize: 12,
-    color: 'white',
-  },
-  subheading: {
-    flexDirection: 'row',
-  },
-  stars: {
-    marginRight: 10,
+    textAlign: 'center',
   },
   carouselImage: {
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
-    borderRadius: 5,
-  },
-  iconContainer: {
-    backgroundColor: '#2CA8C7',
-    paddingHorizontal: 13,
-    paddingVertical: 6,
-    borderRadius: 10,
   },
 });
 

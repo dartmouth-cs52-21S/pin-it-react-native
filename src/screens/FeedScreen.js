@@ -8,7 +8,7 @@ import { SearchBar } from 'react-native-elements';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { getLocations } from '../actions/locations';
-import CarouselCard from '../components/CarouselCard';
+import LocationCarousel from '../components/LocationCarousel';
 import TagRow from '../components/TagRow';
 import LocationDisplay from '../components/LocationDisplay';
 import { bgPrimary, accentPurple } from '../constants/colors';
@@ -97,7 +97,7 @@ const FeedScreen = (props) => {
 
   const renderItem = ({ item }) => (
     // eslint-disable-next-line react/jsx-props-no-spreading
-    <CarouselCard {...item} />
+    <LocationCarousel {...item} navigation={props.navigation} />
   );
 
   const {
