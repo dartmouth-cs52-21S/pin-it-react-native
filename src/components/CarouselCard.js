@@ -99,6 +99,7 @@ const CarouselCard = (props) => {
                   location: {
                     title, category, latitude, longitude,
                   },
+                  posts,
                 })}
               >
                 {title}
