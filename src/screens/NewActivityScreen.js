@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import MapView, { Marker } from 'react-native-maps';
 import { Modalize } from 'react-native-modalize';
@@ -16,18 +16,7 @@ const NewActivityScreen = (props) => {
   const newMissionRef = useRef(null);
   const missionFoundRef = useRef(null);
 
-  const [reopen, setReopen] = useState(false);
   const [missionLocation, setMissionLocation] = useState(null);
-
-  useEffect(() => {
-    const unsubscribe = props.navigation.addListener('focus', () => {
-      if (reopen) {
-        newMissionRef.current?.open();
-      }
-    });
-    return unsubscribe;
-  },
-  [reopen]);
 
   const onMarkerPress = (e) => {
     console.log('pressed');
@@ -47,12 +36,6 @@ const NewActivityScreen = (props) => {
   const onAccept = () => {
     console.log('accepted');
     missionFoundRef.current?.close();
-  };
-
-  const handleChangeLocation = () => {
-    newMissionRef.current?.close();
-    setReopen(true);
-    props.navigation.navigate('ChangeLocationScreen');
   };
 
   const { location } = props;
@@ -83,9 +66,9 @@ const NewActivityScreen = (props) => {
           <Modalize ref={newMissionRef}
             modalHeight={500}
             modalStyle={{ backgroundColor: bgPrimary }}
-            onOpened={() => setReopen(false)}
+            scrollViewProps={{ keyboardShouldPersistTaps: 'always' }}
           >
-            <NewMissionModal handleChangeLocation={handleChangeLocation} onSubmit={onSubmit} />
+            <NewMissionModal onSubmit={onSubmit} initialLocation={location} />
           </Modalize>
           <Modalize ref={missionFoundRef}
             modalStyle={{ backgroundColor: bgPrimary }}

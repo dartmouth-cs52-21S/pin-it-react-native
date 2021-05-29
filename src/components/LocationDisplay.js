@@ -1,9 +1,6 @@
 import React, { useRef, useEffect } from 'react';
-import { connect } from 'react-redux';
 import { StyleSheet, View, Text } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import { getLocation } from '../selectors/app';
-import { updateLocation } from '../actions/app';
 import config from '../../app-config';
 import { accentPurple } from '../constants/colors';
 
@@ -24,7 +21,7 @@ const LocationDisplay = (props) => {
       placeholder={address || 'No location found'}
       fetchDetails
       onPress={(data, details = null) => {
-        props.updateLocation(data.place_id);
+        props.onPress(data, details);
       }}
       currentLocation
       query={{
@@ -66,8 +63,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => ({
-  address: getLocation(state)?.address,
-});
-
-export default connect(mapStateToProps, { updateLocation })(LocationDisplay);
+export default LocationDisplay;

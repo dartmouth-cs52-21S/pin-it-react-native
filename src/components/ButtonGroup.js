@@ -1,23 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity,
 } from 'react-native';
 import { accentPink, bgTertiary } from '../constants/colors';
 
 const ButtonGroup = (props) => {
-  const [selected, setSelected] = useState([]);
+  const { selected, setSelected } = props;
   const { choices } = props;
-  const handlePress = (choice) => (selected.includes(choice)
-    ? setSelected(selected.filter((x) => x !== choice)) // Handle Deselection
-    : setSelected([...selected, choice])); // Handle Selection
+  const handlePress = (index) => (selected.includes(index)
+    ? setSelected(selected.filter((x) => x !== index)) // Handle Deselection
+    : setSelected([...selected, index])); // Handle Selection
   return (
     <View style={styles.buttonGroupContainer}>
-      {choices.map((choice) => (
+      {choices.map((choice, index) => (
         <TouchableOpacity
           key={choice}
-          onPress={() => handlePress(choice)}
+          onPress={() => handlePress(index)}
           style={[styles.button, {
-            backgroundColor: selected.includes(choice)
+            backgroundColor: selected.includes(index)
               ? accentPink
               : bgTertiary,
           }]}

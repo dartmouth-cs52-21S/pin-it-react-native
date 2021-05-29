@@ -1,16 +1,46 @@
-import React from 'react';
+/* eslint-disable react/destructuring-assignment */
+import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity,
 } from 'react-native';
 import ButtonGroup from './ButtonGroup';
 import { bgTertiary, accentGreen } from '../constants/colors';
 import LocationDisplay from './LocationDisplay';
+import { getLocationByPlaceId } from '../services/locationService';
 
 const NewMissionModal = (props) => {
-  const { handleChangeLocation } = props;
+  const [places, setPlaces] = useState([]);
+  const [distances, setDistances] = useState([]);
+  const [start, setStart] = useState(props.initialLocation);
+
+  const milesToMeters = 1609.34;
+
+  const placeChoices = ['Restaurants', 'Bars', 'Museums', 'Parks', 'Landmarks'];
+  const distChoices = ['<1 mile', '5-10 miles', '10-25 miles', '25+ miles'];
+
+  let distValues = [1, 10, 25, 50];
+  distValues = distValues.map((num) => num * milesToMeters);
+
+  const onLocationSelect = async (data) => {
+    const placeId = data.place_id;
+    const { latitude, longitude } = await getLocationByPlaceId(placeId);
+    console.log(latitude, longitude);
+    setStart({ latitude, longitude });
+  };
 
   const handleSubmit = () => {
-    props.onSubmit(25.7617, -80.1918, 5000, 'park');
+    if (places.length === 0 || distances.length === 0) return;
+
+    const randomPlaceNum = Math.floor(Math.random() * places.length);
+    const placeToSearch = places[randomPlaceNum];
+
+    const randomDistNum = Math.floor(Math.random() * distances.length);
+    const distToSearch = distances[randomDistNum];
+
+    if (!start) return;
+
+    const { latitude, longitude } = start;
+    props.onSubmit(latitude, longitude, distValues[distToSearch], placeChoices[placeToSearch]);
   };
 
   return (
@@ -19,20 +49,24 @@ const NewMissionModal = (props) => {
       <View style={styles.sectionContainer}>
         <Text style={styles.text}>I want to visit...</Text>
         <ButtonGroup
-          choices={['Restaurants', 'Bars', 'Museums', 'Public Art', 'Outdoor Spaces', 'Photo Spots']}
+          choices={placeChoices}
+          selected={places}
+          setSelected={setPlaces}
         />
       </View>
       <View style={styles.sectionContainer}>
         <Text style={styles.text}>I am willing to travel...</Text>
         <ButtonGroup
-          choices={['<1 mile', '5-10 miles', '10-25 miles', '25+ miles']}
+          choices={distChoices}
+          selected={distances}
+          setSelected={setDistances}
         />
       </View>
       <View style={styles.sectionContainer}>
         <Text style={styles.text}>Generating new mission from</Text>
         <LocationDisplay
           containerStyle={styles.locationDisplay}
-          handlePress={handleChangeLocation}
+          onPress={onLocationSelect}
         />
       </View>
       <View style={styles.sectionContainer}>
