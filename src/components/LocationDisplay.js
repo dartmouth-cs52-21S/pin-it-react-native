@@ -9,6 +9,7 @@ const { googleApiKey } = config;
 const LocationDisplay = (props) => {
   const locationInputRef = useRef();
   const { address } = props;
+  const { onFocus, onBlur } = props;
   const { textInputContainer, textInput } = styles;
 
   useEffect(() => {
@@ -35,6 +36,7 @@ const LocationDisplay = (props) => {
         </View>
       )}
       styles={{ textInputContainer, textInput }}
+      textInputProps={{ onFocus, onBlur }}
     />
   );
 };

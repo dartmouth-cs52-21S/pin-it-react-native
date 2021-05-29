@@ -9,22 +9,23 @@ import LocationDisplay from './LocationDisplay';
 import { getLocationByPlaceId } from '../services/locationService';
 
 const NewMissionModal = (props) => {
+  const milesToMeters = 1609.34;
+  const { onFocus, onBlur } = props;
+
   const [places, setPlaces] = useState([]);
   const [distances, setDistances] = useState([]);
   const [start, setStart] = useState(props.initialLocation);
 
-  const milesToMeters = 1609.34;
-
-  const placeChoices = ['Restaurants', 'Bars', 'Museums', 'Parks', 'Landmarks'];
+  const placeChoices = ['Restaurants', 'Bars', 'Museums', 'Parks', 'Landmarks', 'Stores'];
   const distChoices = ['<1 mile', '5-10 miles', '10-25 miles', '25+ miles'];
 
   let distValues = [1, 10, 25, 50];
   distValues = distValues.map((num) => num * milesToMeters);
 
   const onLocationSelect = async (data) => {
+    console.log('selecting');
     const placeId = data.place_id;
     const { latitude, longitude } = await getLocationByPlaceId(placeId);
-    console.log(latitude, longitude);
     setStart({ latitude, longitude });
   };
 
@@ -67,6 +68,8 @@ const NewMissionModal = (props) => {
         <LocationDisplay
           containerStyle={styles.locationDisplay}
           onPress={onLocationSelect}
+          onFocus={onFocus}
+          onBlur={onBlur}
         />
       </View>
       <View style={styles.sectionContainer}>

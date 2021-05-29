@@ -17,6 +17,7 @@ const NewActivityScreen = (props) => {
   const missionFoundRef = useRef(null);
 
   const [missionLocation, setMissionLocation] = useState(null);
+  const [raiseModal, setRaiseModal] = useState(false);
 
   const onMarkerPress = (e) => {
     console.log('pressed');
@@ -27,6 +28,7 @@ const NewActivityScreen = (props) => {
   };
 
   const onSubmit = async (lat, lng, radius, query) => {
+    setRaiseModal(false);
     newMissionRef.current?.close();
     const data = await generateMission(lat, lng, radius, query);
     setMissionLocation(data);
@@ -64,11 +66,15 @@ const NewActivityScreen = (props) => {
         </TouchableOpacity>
         <Portal>
           <Modalize ref={newMissionRef}
-            modalHeight={500}
+            modalHeight={raiseModal ? 800 : 500}
             modalStyle={{ backgroundColor: bgPrimary }}
             scrollViewProps={{ keyboardShouldPersistTaps: 'always' }}
           >
-            <NewMissionModal onSubmit={onSubmit} initialLocation={location} />
+            <NewMissionModal onSubmit={onSubmit}
+              initialLocation={location}
+              onFocus={() => setRaiseModal(true)}
+              onBlur={() => setRaiseModal(false)}
+            />
           </Modalize>
           <Modalize ref={missionFoundRef}
             modalStyle={{ backgroundColor: bgPrimary }}
