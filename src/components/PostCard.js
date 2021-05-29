@@ -3,13 +3,12 @@ import {
   View, Text, StyleSheet, Image,
 } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { bgTertiary } from '../constants/colors';
-import categories from '../constants/categories';
+import LocationHeader from './LocationHeader';
 
 const PostCard = (props) => {
   const {
-    caption, location, imageUrls,
+    caption, imageUrls, location,
   // eslint-disable-next-line react/destructuring-assignment
   } = props;
 
@@ -50,39 +49,10 @@ const PostCard = (props) => {
     );
   };
 
-  const renderIcon = () => {
-    const { icon, style } = categories[location.category] || {};
-
-    if (!icon) return (<></>);
-    return (
-      <View style={[styles.iconContainer, style]}>
-        <FontAwesomeIcon icon={icon} size={23} color="white" />
-      </View>
-    );
-  };
-
   return (
     <View>
       <View style={styles.card}>
-        <View style={styles.heading}>
-          <Text numberOfLines={1} style={styles.title}>
-            @
-            {' '}
-            {location.title}
-          </Text>
-          {renderIcon()}
-        </View>
-
-        <View style={styles.subheading}>
-          <Text style={styles.detail}>
-            Location:
-            {' '}
-            {location.latitude}
-            ,
-            {' '}
-            {location.longitude}
-          </Text>
-        </View>
+        <LocationHeader location={location} />
         <View style={{ height: 350, flexDirection: 'column', alignItems: 'center' }}>
           <Carousel
             layout="default"
@@ -119,39 +89,17 @@ const styles = StyleSheet.create({
     flex: 0,
     justifyContent: 'space-between',
   },
-  title: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-    width: '80%',
-  },
   caption: {
     color: 'white',
     fontSize: 16,
     width: '95%',
     margin: 10,
   },
-  detail: {
-    fontSize: 12,
-    color: 'white',
-  },
-  subheading: {
-    flexDirection: 'row',
-  },
-  stars: {
-    marginRight: 10,
-  },
   carouselImage: {
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
     borderRadius: 5,
-  },
-  iconContainer: {
-    backgroundColor: '#2CA8C7',
-    paddingHorizontal: 13,
-    paddingVertical: 6,
-    borderRadius: 10,
   },
 });
 

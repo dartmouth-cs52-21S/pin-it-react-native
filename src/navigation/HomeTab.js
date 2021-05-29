@@ -29,7 +29,7 @@ const HomeTab = () => {
         name="GridScreen"
         component={GridScreen}
         options={{
-          title: 'Grid',
+          title: '',
           headerStyle: {
             backgroundColor: bgPrimary,
             shadowOffset: { height: 0, width: 0 }, // Gets rid of white line underneath

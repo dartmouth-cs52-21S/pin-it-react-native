@@ -95,7 +95,11 @@ const CarouselCard = (props) => {
               <Text
                 numberOfLines={1}
                 style={styles.title}
-                onPress={() => props.navigation.navigate('GridScreen')}
+                onPress={() => props.navigation.navigate('GridScreen', {
+                  location: {
+                    title, category, latitude, longitude,
+                  },
+                })}
               >
                 {title}
               </Text>
