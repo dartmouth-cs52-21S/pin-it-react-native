@@ -28,7 +28,6 @@ const LocationHeader = (props) => {
     <View>
       <View style={styles.heading}>
         <Text numberOfLines={1} style={styles.title}>
-          @
           {' '}
           {title}
         </Text>
