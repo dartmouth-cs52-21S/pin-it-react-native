@@ -31,7 +31,7 @@ const LocationDisplay = (props) => {
       fetchDetails
       onPress={(data, details = null) => {
         props.updateLocation(data.place_id);
-        props.onPress(data, details);
+        if (props.onPress) props.onPress(data, details);
       }}
       currentLocation
       query={{

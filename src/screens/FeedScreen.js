@@ -19,11 +19,20 @@ const FeedScreen = (props) => {
   const [searchFocused, setSearchFocused] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [tags, setTags] = useState([]);
-  const { locationsList } = props;
+  const { locationsList, location } = props;
 
+  /* Show all locations (no search query) on first render; referenced:
+  https://stackoverflow.com/questions/53253940/make-react-useeffect-hook-not-run-on-initial-render
+  */
+  const firstUpdate = useRef(true);
   useEffect(() => {
-    props.getLocations();
-  }, []);
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+      props.getLocations('', '');
+    } else {
+      props.getLocations(search, location ? location.title : '');
+    }
+  }, [location]);
 
   const handleTagPressed = (tagValue) => {
     if (tags.includes(tagValue)) {
@@ -35,7 +44,7 @@ const FeedScreen = (props) => {
 
   const handleRefresh = async () => {
     setIsFetching(true);
-    await props.getLocations();
+    await props.getLocations(search, location ? location.title : '');
     setIsFetching(false);
   };
 
@@ -60,6 +69,12 @@ const FeedScreen = (props) => {
     }
   };
 
+  const handleSubmitEditing = () => {
+    props
+      .getLocations(search, location ? location.title : '')
+      .finally(() => setSearchFocused(false));
+  };
+
   const renderHeader = () => (
     <View style={styles.header}>
       <View style={styles.searchBarContainer}>
@@ -67,6 +82,7 @@ const FeedScreen = (props) => {
           ref={searchRef}
           placeholder="Search by location"
           onChangeText={(text) => setSearch(text)}
+          onSubmitEditing={handleSubmitEditing}
           lightTheme
           value={search}
           searchIcon={renderSearchIcon()}
@@ -182,6 +198,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   locationsList: state.locations.locationsList,
+  location: state.app.location,
 });
 
 export default connect(mapStateToProps, { getLocations })(FeedScreen);
