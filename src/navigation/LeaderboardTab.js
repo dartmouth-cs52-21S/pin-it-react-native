@@ -2,6 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import LeaderboardScreen from '../screens/LeaderboardScreen';
 import { bgPrimary } from '../constants/colors';
+import fontStyles from '../constants/fonts';
 
 const Stack = createStackNavigator();
 
@@ -18,7 +19,7 @@ const LeaderboardTab = () => {
             shadowOffset: { height: 0, width: 0 }, // Gets rid of white line underneath
           },
           headerTintColor: '#fff',
-          headerTitleStyle: { fontSize: 25 },
+          headerTitleStyle: fontStyles.smallHeaderTitle,
           headerTitleAlign: 'left',
         }}
       />

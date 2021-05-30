@@ -7,6 +7,7 @@ import { bgPrimary } from '../constants/colors';
 import { createPost } from '../actions/posts';
 import { getLocation } from '../selectors/app';
 import { getCurrentPost } from '../selectors/posts';
+import fontStyles from '../constants/fonts';
 
 const Stack = createStackNavigator();
 
@@ -23,7 +24,7 @@ const UploadTab = (props) => {
             shadowOffset: { height: 0, width: 0 }, // Gets rid of white line underneath
           },
           headerTintColor: '#fff',
-          headerTitleStyle: { fontSize: 25 },
+          headerTitleStyle: fontStyles.smallHeaderTitle,
           headerTitleAlign: 'left',
         }}
       />

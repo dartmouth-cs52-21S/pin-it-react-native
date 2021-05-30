@@ -69,6 +69,12 @@ const FeedScreen = (props) => {
     }
   };
 
+  const handleSubmitEditing = () => {
+    props
+      .getLocations(search, location ? location.title : '')
+      .finally(() => setSearchFocused(false));
+  };
+
   const renderHeader = () => (
     <View style={styles.header}>
       <View style={styles.searchBarContainer}>
@@ -76,7 +82,7 @@ const FeedScreen = (props) => {
           ref={searchRef}
           placeholder="Search by location"
           onChangeText={(text) => setSearch(text)}
-          onSubmitEditing={() => props.getLocations(search, location ? location.title : '')}
+          onSubmitEditing={handleSubmitEditing}
           lightTheme
           value={search}
           searchIcon={renderSearchIcon()}
