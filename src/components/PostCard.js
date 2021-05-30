@@ -6,9 +6,10 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faImages } from '@fortawesome/free-solid-svg-icons';
 import {
-  bgTertiary, accentPink,
+  bgTertiary, bgSecondary,
 } from '../constants/colors';
-import PostCarousel from './PostCarousel';
+import ModalCard from './ModalCard';
+// import fontStyles from '../constants/fonts';
 
 const PostCard = (props) => {
   const {
@@ -48,15 +49,30 @@ const PostCard = (props) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <PostCarousel {...item}
+            <View style={styles.header}>
+              <View>
+                <Text>
+                  {item.username}
+                  {' '}
+                  @
+                </Text>
+                <Text>
+                  {location.title}
+                </Text>
+                <Text>
+                  {location.category}
+                </Text>
+              </View>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={styles.textStyle}>X</Text>
+              </Pressable>
+            </View>
+            <ModalCard {...item}
               location={location}
             />
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}
-            >
-              <Text style={styles.textStyle}>Hide Modal</Text>
-            </Pressable>
           </View>
         </View>
       </Modal>
@@ -65,17 +81,27 @@ const PostCard = (props) => {
 };
 
 const styles = StyleSheet.create({
+  header: {
+    backgroundColor: bgSecondary,
+    width: '100%',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 15,
+    paddingBottom: 5,
+  },
   centeredView: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   modalView: {
-    padding: 20,
     borderRadius: 20,
     backgroundColor: bgTertiary,
     alignItems: 'center',
     shadowColor: '#000',
+    width: '100%',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -93,9 +119,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: '5%',
     top: '5%',
-  },
-  buttonClose: {
-    backgroundColor: accentPink,
   },
   textStyle: {
     color: 'white',
