@@ -1,12 +1,12 @@
 import React, { useRef, useEffect } from 'react';
-import { connect } from 'react-redux';
 import {
   StyleSheet, View, Text, LogBox,
 } from 'react-native';
+import { connect } from 'react-redux';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import config from '../../app-config';
 import { getLocation } from '../selectors/app';
 import { updateLocation } from '../actions/app';
-import config from '../../app-config';
 import { accentPurple } from '../constants/colors';
 
 // Ignores issue tied to GooglePlacesAutocomplete component
@@ -17,6 +17,7 @@ const { googleApiKey } = config;
 const LocationDisplay = (props) => {
   const locationInputRef = useRef();
   const { address } = props;
+  const { onFocus, onBlur } = props;
   const { textInputContainer, textInput } = styles;
 
   useEffect(() => {
@@ -30,6 +31,7 @@ const LocationDisplay = (props) => {
       fetchDetails
       onPress={(data, details = null) => {
         props.updateLocation(data.place_id);
+        props.onPress(data, details);
       }}
       currentLocation
       query={{
@@ -43,6 +45,7 @@ const LocationDisplay = (props) => {
         </View>
       )}
       styles={{ textInputContainer, textInput }}
+      textInputProps={{ onFocus, onBlur }}
     />
   );
 };

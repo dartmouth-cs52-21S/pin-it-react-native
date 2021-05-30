@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import MapView, { Marker } from 'react-native-maps';
 import { Modalize } from 'react-native-modalize';
@@ -8,28 +8,36 @@ import {
 } from 'react-native';
 import { bgPrimary } from '../constants/colors';
 import NewMissionModal from '../components/NewMissionModal';
+import MissionFoundModal from '../components/MissionFoundModal';
+import { generateMission } from '../services/missionService';
 import { getLocation } from '../selectors/app';
 
 const NewActivityScreen = (props) => {
-  const modalizeRef = useRef(null);
-  const [reopen, setReopen] = useState(false);
+  const newMissionRef = useRef(null);
+  const missionFoundRef = useRef(null);
 
-  useEffect(() => {
-    const unsubscribe = props.navigation.addListener('focus', () => {
-      if (reopen) {
-        modalizeRef.current?.open();
-      }
-    });
-    return unsubscribe;
-  },
-  [reopen]);
+  const [missionLocation, setMissionLocation] = useState(null);
+  const [raiseModal, setRaiseModal] = useState(false);
 
   const onMarkerPress = (e) => {
     console.log('pressed');
   };
 
   const onModalPress = (e) => {
-    modalizeRef.current?.open();
+    newMissionRef.current?.open();
+  };
+
+  const onSubmit = async (lat, lng, radius, query) => {
+    setRaiseModal(false);
+    newMissionRef.current?.close();
+    const data = await generateMission(lat, lng, radius, query);
+    setMissionLocation(data);
+    missionFoundRef.current?.open();
+  };
+
+  const onAccept = () => {
+    console.log('accepted');
+    missionFoundRef.current?.close();
   };
 
   const { location } = props;
@@ -57,12 +65,22 @@ const NewActivityScreen = (props) => {
           <Text style={styles.buttonText}>🎲 Generate New Mission</Text>
         </TouchableOpacity>
         <Portal>
-          <Modalize ref={modalizeRef}
-            modalHeight={500}
+          <Modalize ref={newMissionRef}
+            modalHeight={raiseModal ? 800 : 500}
             modalStyle={{ backgroundColor: bgPrimary }}
-            onOpened={() => setReopen(false)}
+            scrollViewProps={{ keyboardShouldPersistTaps: 'always' }}
           >
-            <NewMissionModal />
+            <NewMissionModal onSubmit={onSubmit}
+              initialLocation={location}
+              onFocus={() => setRaiseModal(true)}
+              onBlur={() => setRaiseModal(false)}
+            />
+          </Modalize>
+          <Modalize ref={missionFoundRef}
+            modalStyle={{ backgroundColor: bgPrimary }}
+            modalHeight={700}
+          >
+            <MissionFoundModal location={missionLocation} onAccept={onAccept} />
           </Modalize>
         </Portal>
       </View>
