@@ -9,7 +9,7 @@ import {
   bgTertiary, bgSecondary,
 } from '../constants/colors';
 import ModalCard from './ModalCard';
-import fontStyles from '../constants/fonts';
+// import fontStyles from '../constants/fonts';
 
 const PostCard = (props) => {
   const {

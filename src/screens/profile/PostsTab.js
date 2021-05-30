@@ -14,7 +14,6 @@ const renderItem = ({ item }) => (
 const PostsTab = (props) => {
   const { user } = props;
   const { posts } = user;
-  console.log(posts);
 
   return (
     <SafeAreaView style={styles.container}>
