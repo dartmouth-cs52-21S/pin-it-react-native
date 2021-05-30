@@ -31,13 +31,14 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignSelf: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
   },
   icon: {
     color: 'white',
-    paddingHorizontal: 15,
+    paddingHorizontal: 20,
     paddingVertical: 6,
     borderRadius: 12,
-    marginRight: 15,
   },
   inactiveStyle: {
     opacity: 0.6,

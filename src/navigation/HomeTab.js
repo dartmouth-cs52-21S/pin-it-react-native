@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import FeedScreen from '../screens/FeedScreen';
 import GridScreen from '../screens/GridScreen';
 import { bgPrimary } from '../constants/colors';
+import fontStyles from '../constants/fonts';
 
 const Stack = createStackNavigator();
 
@@ -21,7 +22,7 @@ const HomeTab = () => {
             shadowOffset: { height: 0, width: 0 }, // Gets rid of white line underneath
           },
           headerTintColor: '#fff',
-          headerTitleStyle: { fontSize: 25 },
+          headerTitleStyle: fontStyles.smallHeaderTitle,
           headerTitleAlign: 'left',
         }}
       />
