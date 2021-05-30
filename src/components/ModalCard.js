@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { bgTertiary } from '../constants/colors';
+import fontStyles from '../constants/fonts';
 
 const ModalCard = (props) => {
   const {
@@ -86,11 +87,24 @@ const ModalCard = (props) => {
           { renderPagination() }
         </View>
 
-        <View>
-          <Text style={styles.caption}>
+        <View style={{
+          flexDirection: 'row',
+          flexWrap: 1,
+        }}
+        >
+          <Text style={[fontStyles.mediumTextRegular, {
+            width: '95%',
+            margin: 10,
+            marginBottom: 3,
+          }]}
+          >
             {caption}
           </Text>
-          <Text style={styles.date}>
+          <Text style={[fontStyles.smallTextRegular, {
+            width: '95%',
+            margin: 10,
+          }]}
+          >
             {getDateString(diff)}
           </Text>
         </View>
@@ -104,19 +118,6 @@ const styles = StyleSheet.create({
     backgroundColor: bgTertiary,
     padding: 10,
     borderRadius: 5,
-  },
-  date: {
-    color: 'white',
-    fontSize: 13,
-    width: '95%',
-    margin: 10,
-  },
-
-  caption: {
-    color: 'white',
-    fontSize: 16,
-    width: '95%',
-    margin: 10,
   },
   carouselImage: {
     width: '100%',

@@ -9,7 +9,7 @@ import {
   bgTertiary, bgSecondary,
 } from '../constants/colors';
 import ModalCard from './ModalCard';
-// import fontStyles from '../constants/fonts';
+import fontStyles from '../constants/fonts';
 
 const PostCard = (props) => {
   const {
@@ -51,15 +51,15 @@ const PostCard = (props) => {
           <View style={styles.modalView}>
             <View style={styles.header}>
               <View>
-                <Text>
+                <Text style={[fontStyles.mediumTextBold, { paddingTop: 5, paddingBottom: 5, paddingLeft: 1 }]}>
                   {item.username}
                   {' '}
                   @
                 </Text>
-                <Text>
+                <Text style={[fontStyles.largeHeaderTitle, { paddingBottom: 5 }]}>
                   {location.title}
                 </Text>
-                <Text>
+                <Text style={[fontStyles.smallTextRegular, { paddingBottom: 5, paddingLeft: 1 }]}>
                   {location.category}
                 </Text>
               </View>
