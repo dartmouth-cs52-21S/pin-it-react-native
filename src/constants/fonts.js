@@ -6,7 +6,7 @@ const fontStyles = StyleSheet.create({
   smallHeaderTitle: {
     fontSize: RFValue(25),
     color: 'white',
-    fontFamily: 'Montserrat_700Bold',
+    fontFamily: 'Montserrat_600SemiBold',
   },
   largeHeaderTitle: {
     fontSize: RFValue(30),
