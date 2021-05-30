@@ -7,6 +7,7 @@ import ButtonGroup from './ButtonGroup';
 import { bgTertiary, accentGreen } from '../constants/colors';
 import LocationDisplay from './LocationDisplay';
 import { getLocationByPlaceId } from '../services/locationService';
+import fontStyles from '../constants/fonts';
 
 const NewMissionModal = (props) => {
   const milesToMeters = 1609.34;
@@ -46,9 +47,9 @@ const NewMissionModal = (props) => {
 
   return (
     <View style={styles.container} keyboardShouldPersistTaps="handled">
-      <Text style={[styles.title]}>New Mission  🏆</Text>
+      <Text style={fontStyles.largeTextBold}>New Mission  🏆</Text>
       <View style={styles.sectionContainer}>
-        <Text style={styles.text}>I want to visit...</Text>
+        <Text style={[styles.text, fontStyles.mediumTextRegular]}>I want to visit...</Text>
         <ButtonGroup
           choices={placeChoices}
           selected={places}
@@ -56,7 +57,7 @@ const NewMissionModal = (props) => {
         />
       </View>
       <View style={styles.sectionContainer}>
-        <Text style={styles.text}>I am willing to travel...</Text>
+        <Text style={[styles.text, fontStyles.mediumTextRegular]}>I am willing to travel...</Text>
         <ButtonGroup
           choices={distChoices}
           selected={distances}
@@ -77,7 +78,7 @@ const NewMissionModal = (props) => {
           onPress={handleSubmit}
           style={styles.button}
         >
-          <Text style={styles.buttonText}>New Mission</Text>
+          <Text style={fontStyles.mediumTextBold}>New Mission</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -91,17 +92,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 28,
   },
   text: {
-    color: 'white',
-    fontSize: 14,
     marginBottom: 5,
   },
-  title: {
-    color: 'white',
-    fontSize: 25,
-    fontWeight: 'bold',
-  },
   sectionContainer: {
-    marginVertical: 15,
+    marginVertical: 10,
   },
   address: {
     backgroundColor: bgTertiary,
@@ -114,10 +108,6 @@ const styles = StyleSheet.create({
     backgroundColor: accentGreen,
     padding: 10,
     borderRadius: 10,
-  },
-  buttonText: {
-    color: 'white',
-    fontWeight: 'bold',
   },
   locationDisplay: {
     width: '100%',
