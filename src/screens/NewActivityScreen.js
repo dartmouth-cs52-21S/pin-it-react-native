@@ -1,23 +1,45 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, Polyline } from 'react-native-maps';
 import { Modalize } from 'react-native-modalize';
 import { Portal } from 'react-native-portalize';
 import {
-  StyleSheet, View, TouchableOpacity, Text,
+  StyleSheet, View, TouchableOpacity, Text, ActivityIndicator,
 } from 'react-native';
-import { bgPrimary } from '../constants/colors';
+import haversine from 'haversine';
+import { accentPurple, bgPrimary } from '../constants/colors';
 import NewMissionModal from '../components/NewMissionModal';
 import MissionFoundModal from '../components/MissionFoundModal';
-import { generateMission } from '../services/missionService';
+import DistanceIndicator from '../components/DistanceIndicator';
+import { generateMission, routeToMission, postMission } from '../services/missionService';
 import { getLocation } from '../selectors/app';
+import { getMission } from '../selectors/mission';
+import { setMission, clearMission } from '../actions/missions';
 
 const NewActivityScreen = (props) => {
   const newMissionRef = useRef(null);
   const missionFoundRef = useRef(null);
+  const mapRef = useRef(null);
 
   const [missionLocation, setMissionLocation] = useState(null);
   const [raiseModal, setRaiseModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [route, setRoute] = useState([]);
+
+  const { location, mission } = props;
+  const { latitude, longitude } = location || {};
+
+  const [myLocation, setMyLocation] = useState(location);
+  const [distance, setDistance] = useState(0);
+
+  // whenever the user moves (myLocation changes), update value of distance
+  useEffect(() => {
+    if (mission && myLocation) {
+      const loc = { latitude: mission.location.latitude, longitude: mission.location.longitude };
+      const dist = haversine(myLocation, loc, { unit: 'mile' });
+      setDistance(Math.floor(dist));
+    }
+  }, [myLocation]);
 
   const onMarkerPress = (e) => {
     console.log('pressed');
@@ -30,28 +52,48 @@ const NewActivityScreen = (props) => {
   const onSubmit = async (lat, lng, radius, query) => {
     setRaiseModal(false);
     newMissionRef.current?.close();
+    console.log(myLocation);
     const data = await generateMission(lat, lng, radius, query);
     setMissionLocation(data);
     missionFoundRef.current?.open();
   };
 
-  const onAccept = () => {
-    console.log('accepted');
+  const onAccept = async () => {
     missionFoundRef.current?.close();
+    setLoading(true);
+    const createdMission = await postMission('hey', 'hello', missionLocation);
+    props.setMission(createdMission);
+    const response = await routeToMission(latitude, longitude, createdMission.location.placeId);
+    setLoading(false);
+    mapRef.current?.animateToRegion(response.zoomBounds);
+    setRoute(response.coords);
   };
 
-  const { location } = props;
-  const { latitude, longitude } = location || {};
+  const onCancel = () => {
+    console.log('clicked');
+    props.clearMission();
+    setMissionLocation(null);
+    setRoute([]);
+  };
 
   return (
     <View syle={styles.container}>
       <MapView
-        style={styles.mapView}
+        ref={mapRef}
+        style={[styles.mapView, mission ? { height: '90%' } : null]}
         initialRegion={{
           latitude,
           longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
+        }}
+        showsUserLocation
+        onUserLocationChange={(e) => {
+          const userLocation = {
+            latitude: e.nativeEvent.coordinate.latitude,
+            longitude: e.nativeEvent.coordinate.longitude,
+          };
+          setMyLocation(userLocation);
         }}
       >
         {latitude && (
@@ -59,11 +101,21 @@ const NewActivityScreen = (props) => {
           onPress={onMarkerPress}
         />
         )}
+
+        {missionLocation && (
+          <Marker coordinate={missionLocation}
+            title="destination"
+          />
+        )}
+
+        <Polyline coordinates={route} strokeWidth={4} strokeColor="blue" />
       </MapView>
       <View style={styles.buttonContainer}>
+        {!mission && (
         <TouchableOpacity style={styles.newActivityButton} onPress={onModalPress}>
           <Text style={styles.buttonText}>🎲 Generate New Mission</Text>
         </TouchableOpacity>
+        )}
         <Portal>
           <Modalize ref={newMissionRef}
             modalHeight={raiseModal ? 800 : 500}
@@ -84,6 +136,15 @@ const NewActivityScreen = (props) => {
           </Modalize>
         </Portal>
       </View>
+      {mission && (
+        <DistanceIndicator mission={mission} distance={distance} onCancel={onCancel} />
+      )}
+      {loading && (
+        <ActivityIndicator style={styles.activityIndicator}
+          size="large"
+          color={accentPurple}
+        />
+      )}
     </View>
   );
 };
@@ -122,10 +183,16 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: '500',
   },
+  activityIndicator: {
+    position: 'absolute',
+    alignSelf: 'center',
+    top: '50%',
+  },
 });
 
 const mapStateToProps = (state) => ({
   location: getLocation(state),
+  mission: getMission(state),
 });
 
-export default connect(mapStateToProps, null)(NewActivityScreen);
+export default connect(mapStateToProps, { setMission, clearMission })(NewActivityScreen);
