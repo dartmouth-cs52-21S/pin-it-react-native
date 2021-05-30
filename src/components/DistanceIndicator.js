@@ -38,9 +38,8 @@ export default DistanceIndicator;
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    height: 90,
+    height: '10%',
     flexDirection: 'row',
-    position: 'absolute',
     backgroundColor: Colors.bgPrimary,
     paddingVertical: 10,
   },

@@ -1,4 +1,3 @@
-/* eslint-disable react/destructuring-assignment */
 import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import MapView, { Marker, Polyline } from 'react-native-maps';
@@ -20,6 +19,7 @@ import { setMission, clearMission } from '../actions/missions';
 const NewActivityScreen = (props) => {
   const newMissionRef = useRef(null);
   const missionFoundRef = useRef(null);
+  const mapRef = useRef(null);
 
   const [missionLocation, setMissionLocation] = useState(null);
   const [raiseModal, setRaiseModal] = useState(false);
@@ -32,11 +32,11 @@ const NewActivityScreen = (props) => {
   const [myLocation, setMyLocation] = useState(location);
   const [distance, setDistance] = useState(0);
 
+  // whenever the user moves (myLocation changes), update value of distance
   useEffect(() => {
     if (mission && myLocation) {
       const loc = { latitude: mission.location.latitude, longitude: mission.location.longitude };
       const dist = haversine(myLocation, loc, { unit: 'mile' });
-      console.log(dist);
       setDistance(Math.floor(dist));
     }
   }, [myLocation]);
@@ -63,12 +63,14 @@ const NewActivityScreen = (props) => {
     setLoading(true);
     const createdMission = await postMission('hey', 'hello', missionLocation);
     props.setMission(createdMission);
-    const newRoute = await routeToMission(latitude, longitude, createdMission.location.placeId);
+    const response = await routeToMission(latitude, longitude, createdMission.location.placeId);
     setLoading(false);
-    setRoute(newRoute.route);
+    mapRef.current?.animateToRegion(response.zoomBounds);
+    setRoute(response.coords);
   };
 
   const onCancel = () => {
+    console.log('clicked');
     props.clearMission();
     setMissionLocation(null);
     setRoute([]);
@@ -77,7 +79,8 @@ const NewActivityScreen = (props) => {
   return (
     <View syle={styles.container}>
       <MapView
-        style={styles.mapView}
+        ref={mapRef}
+        style={[styles.mapView, mission ? { height: '90%' } : null]}
         initialRegion={{
           latitude,
           longitude,
@@ -134,7 +137,7 @@ const NewActivityScreen = (props) => {
         </Portal>
       </View>
       {mission && (
-        <DistanceIndicator mission={mission} distance={distance} position={{ bottom: 60, left: 0 }} onCancel={onCancel} />
+        <DistanceIndicator mission={mission} distance={distance} onCancel={onCancel} />
       )}
       {loading && (
         <ActivityIndicator style={styles.activityIndicator}
