@@ -2,6 +2,7 @@ import React from 'react';
 import {
   SafeAreaView, FlatList, StyleSheet, StatusBar,
 } from 'react-native';
+import { connect } from 'react-redux';
 import PostCarousel from '../../components/PostCarousel';
 import { bgPrimary } from '../../constants/colors';
 
@@ -11,36 +12,9 @@ const renderItem = ({ item }) => (
 );
 
 const PostsTab = (props) => {
-  const posts = [
-    {
-      username: 'Tester_10',
-      imageUrls: ['https://images.getbento.com/accounts/fa5a0ad193d9db0f760b62a4b1633afd/media/images/67297Memorial_entrance.jpg', 'https://images.getbento.com/accounts/fa5a0ad193d9db0f760b62a4b1633afd/media/images/4171table_spread_2.jpg',
-      ],
-      caption: 'super interesting caption jfklsjfklds jfdkls jfdskl fj fd fdsl fdsjkfds l fjdsk fdsl fjdskl fjdsk l',
-      location: {
-        title: 'Dish Society',
-        placeId: 'jfkdlf', // Google maps place id
-        category: 'Restaurant',
-        latitude: 10,
-        longitude: 20,
-      },
-    },
-    {
-      username: 'Tester_10',
-      imageUrls: [
-        'https://images.fineartamerica.com/images/artworkimages/mediumlarge/2/central-square-cambridge-ma-graffiti-alley-cambridge-massachusetts-toby-mcguire.jpg',
-        'https://scoutcambridge.com/wp-content/uploads/2018/03/ByDanaForsythe-1.jpg',
-        'https://gregcookland.com/wonderland/wp-content/uploads/2020/06/picBlackLivesMatter-GraffitiAlleyCambridge200618_0038w.jpg'],
-      caption: 'super interesting caption',
-      location: {
-        title: 'Graffiti',
-        placeId: 'jfkdlf', // Google maps place id
-        category: 'Public Art',
-        latitude: 11,
-        longitude: 20,
-      },
-    },
-  ];
+  const { user } = props;
+  const { posts } = user;
+  console.log(posts);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -63,4 +37,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PostsTab;
+const mapStateToProps = (state) => ({
+  user: state.user.user_data,
+});
+
+export default connect(mapStateToProps, null)(PostsTab);
