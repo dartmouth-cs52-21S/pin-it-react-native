@@ -11,7 +11,7 @@ const MissionCard = ({ mission, onPress }) => {
   const { icon, style: iconStyle } = categories[mission.category];
 
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={[iconStyle, styles.iconContainer]}>
         <FontAwesomeIcon icon={icon} size={26} color="white" />
       </View>
@@ -25,10 +25,10 @@ const MissionCard = ({ mission, onPress }) => {
       </View>
       <View style={styles.detailsContainer}>
         <Text style={fontStyles.mediumTextRegular}>
-          {`${10} mins  👟`}
+          {`${0} mins  👟`}
         </Text>
         <Text style={fontStyles.mediumTextRegular}>
-          {`${10} mins  🚗`}
+          {`${0} mins  🚗`}
         </Text>
       </View>
     </TouchableOpacity>
@@ -41,13 +41,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     flexDirection: 'row',
     alignItems: 'stretch',
-    maxWidth: '100%',
+    width: '90%',
     marginVertical: 10,
+    alignSelf: 'center',
   },
   iconContainer: {
     borderBottomLeftRadius: 10,
     borderTopLeftRadius: 10,
-    width: 60,
+    width: 70,
     marginRight: 15,
     alignItems: 'center',
     justifyContent: 'center',
