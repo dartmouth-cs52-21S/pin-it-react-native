@@ -4,12 +4,12 @@ import {
   View, Text, StyleSheet, Image, Modal, Pressable, TouchableOpacity,
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faImages } from '@fortawesome/free-solid-svg-icons';
+import { faImages, faTimes } from '@fortawesome/free-solid-svg-icons';
 import {
   bgTertiary, bgSecondary,
 } from '../constants/colors';
 import ModalCard from './ModalCard';
-// import fontStyles from '../constants/fonts';
+import fontStyles from '../constants/fonts';
 
 const PostCard = (props) => {
   const {
@@ -51,15 +51,15 @@ const PostCard = (props) => {
           <View style={styles.modalView}>
             <View style={styles.header}>
               <View>
-                <Text>
+                <Text style={[fontStyles.mediumTextBold, { paddingTop: 5, paddingBottom: 5, paddingLeft: 1 }]}>
                   {item.username}
                   {' '}
                   @
                 </Text>
-                <Text>
+                <Text style={[fontStyles.largeHeaderTitle, { paddingBottom: 5 }]}>
                   {location.title}
                 </Text>
-                <Text>
+                <Text style={[fontStyles.smallTextRegular, { paddingBottom: 5, paddingLeft: 1 }]}>
                   {location.category}
                 </Text>
               </View>
@@ -67,7 +67,9 @@ const PostCard = (props) => {
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => setModalVisible(!modalVisible)}
               >
-                <Text style={styles.textStyle}>X</Text>
+                <View style={styles.imagesIcon}>
+                  <FontAwesomeIcon icon={faTimes} size={40} color="white" />
+                </View>
               </Pressable>
             </View>
             <ModalCard {...item}
@@ -119,11 +121,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: '5%',
     top: '5%',
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
   },
   carouselImage: {
     width: '100%',
