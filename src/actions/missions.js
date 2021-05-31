@@ -1,8 +1,9 @@
-// import axios from 'axios';
-// import { setError } from './app';
-// import config from '../../app-config';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setError } from './app';
+import config from '../../app-config';
 
-// const { api } = config;
+const { api } = config;
 
 export const ActionTypes = {
   GET_MISSIONS: 'GET_MISSIONS',
@@ -20,5 +21,17 @@ export const setMission = (mission) => {
 export const clearMission = () => {
   return {
     type: ActionTypes.CLEAR_MISSION,
+  };
+};
+
+export const getMissions = () => {
+  return (dispatch) => {
+    AsyncStorage.getItem('token').then((token) => {
+      return axios.get(`${api}/usermissions`, { headers: { authorization: token } });
+    }).then((response) => {
+      dispatch({ type: ActionTypes.GET_MISSIONS, payload: response.data });
+    }).catch((error) => {
+      dispatch(setError(`Fetching missions failed: ${error.response.data.error}`));
+    });
   };
 };

@@ -1,62 +1,80 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  Text, SafeAreaView, View, StyleSheet,
+  Text, SafeAreaView, View, StyleSheet, TouchableWithoutFeedback,
 } from 'react-native';
-import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import { connect } from 'react-redux';
 import { bgPrimary } from '../constants/colors';
 import fontStyles from '../constants/fonts';
-import * as Colors from '../constants/colors';
-import ActiveMissionsTab from '../components/ActiveMissionsTab';
+import { getMissionsList } from '../selectors/mission';
+import { getMissions, setMission } from '../actions/missions';
+import MissionCard from '../components/MissionCard';
 
-const CompletedTab = () => (<Text style={styles.testText}>Completed</Text>);
+const OngoingActivityScreen = (props) => {
+  const { navigation, missions } = props;
+  const [activeTab, setActiveTab] = useState(true);
 
-const OngoingActivityScreen = () => {
-  const renderScene = SceneMap({
-    active: ActiveMissionsTab,
-    completed: CompletedTab,
-  });
+  useEffect(() => {
+    // will trigger whenever screen is focused on (from https://reactnavigation.org/docs/navigation-lifecycle/)
+    const unsubscribe = navigation.addListener('focus', () => {
+      props.getMissions();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
-  const renderLabel = (labelProps) => (
-    <Text style={[fontStyles.mediumTextRegular,
-      labelProps.focused ? { color: Colors.accentPurple, fontWeight: 'bold' } : { color: 'white' },
-    ]}
-    >
-      {labelProps.route.title}
-    </Text>
-  );
+  const onMissionPress = (mission) => {
+    // temporary, this will later become mission.location
+    const newLoc = {
+      title: 'Dartmouth College', placeId: 'ChIJNfKLOVm0tEwR3sbIIQqOkmw', latitude: 43.6423, longitude: -72.2518,
+    };
+    props.setMission({ ...mission, location: newLoc });
+    navigation.navigate('New');
+  };
 
-  const renderTabBar = (props) => (
-    <TabBar
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...props}
-      scrollEnabled
-      indicatorStyle={{ backgroundColor: Colors.accentPurple }}
-      style={{
-        backgroundColor: Colors.bgPrimary, marginLeft: '5%', marginRight: '5%',
-      }}
-      tabStyle={styles.tabStyle}
-      renderLabel={renderLabel}
-    />
-  );
-
-  const [index, setIndex] = useState(0);
-  const [routes] = useState([
-    { key: 'active', title: 'Active' },
-    { key: 'completed', title: 'Completed' },
-  ]);
+  const active = missions.filter((mission) => !mission.completed);
+  const completed = missions.filter((mission) => mission.completed);
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
         <Text style={fontStyles.largeHeaderTitle}>My Missions</Text>
       </View>
-      <TabView
-        style={styles.tabViewContainer}
-        navigationState={{ index, routes }}
-        renderScene={renderScene}
-        onIndexChange={setIndex}
-        renderTabBar={renderTabBar}
-      />
+      <View style={styles.selectorContainer}>
+        <TouchableWithoutFeedback onPress={() => setActiveTab(true)}>
+          <View style={styles.selectorTextContainer}>
+            <Text style={[styles.selectorText, activeTab ? { fontWeight: 'bold' } : null]}
+              onPress={() => setActiveTab(true)}
+            >
+              {`Active (${active.length})`}
+            </Text>
+            {activeTab && <View style={styles.circleSelector} />}
+          </View>
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => setActiveTab(false)}>
+          <View style={styles.selectorTextContainer}>
+            <Text style={[styles.selectorText, activeTab ? null : { fontWeight: 'bold' }]}
+              onPress={() => setActiveTab(false)}
+            >
+              {`Completed (${completed.length})`}
+            </Text>
+            {!activeTab && <View style={styles.circleSelector} />}
+          </View>
+        </TouchableWithoutFeedback>
+      </View>
+      {activeTab
+        ? active.map((mission) => (
+          <MissionCard
+            mission={mission}
+            key={mission.title}
+            onPress={() => onMissionPress(mission)}
+          />
+        ))
+        : completed.map((mission) => (
+          <MissionCard
+            mission={mission}
+            key={mission.title}
+            onPress={() => console.log('yo')}
+          />
+        ))}
     </SafeAreaView>
   );
 };
@@ -73,16 +91,42 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   headerContainer: {
-    marginTop: 100,
+    marginTop: 80,
     padding: 20,
   },
-  tabStyle: {
-    padding: 0,
-    borderLeftWidth: 10,
-    borderRightWidth: 10,
-    borderColor: Colors.bgPrimary,
-    width: 'auto',
+  missionText: {
+    color: 'white',
+  },
+  selectorContainer: {
+    width: '100%',
+    height: 50,
+    flexDirection: 'row',
+    marginBottom: 10,
+  },
+  selectorTextContainer: {
+    width: 150,
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  selectorText: {
+    fontSize: 18,
+    width: '100%',
+    color: 'white',
+    textAlign: 'center',
+    marginBottom: 8,
+    fontWeight: '300',
+  },
+  circleSelector: {
+    width: 10,
+    height: 10,
+    borderRadius: 100,
+    backgroundColor: 'white',
+    alignSelf: 'center',
   },
 });
 
-export default OngoingActivityScreen;
+const mapStateToProps = (state) => ({
+  missions: getMissionsList(state),
+});
+
+export default connect(mapStateToProps, { getMissions, setMission })(OngoingActivityScreen);

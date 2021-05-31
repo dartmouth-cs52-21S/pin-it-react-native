@@ -6,8 +6,8 @@ const { api } = config;
 
 export const generateMission = async (latitude, longitude, radius, query) => {
   const url = `${api}/new_mission?latitude=${latitude}&longitude=${longitude}&query=${query}&radius=${radius}`;
-  const reponse = await axios.get(url);
-  return reponse.data;
+  const response = await axios.get(url);
+  return response.data;
 };
 
 export const postMission = async (title, category, location) => {
@@ -21,7 +21,6 @@ export const postMission = async (title, category, location) => {
 
 export const routeToMission = async (latitude, longitude, endId) => {
   const url = `${api}/route?latitude=${latitude}&longitude=${longitude}&end=${endId}`;
-  console.log(url);
   const token = await AsyncStorage.getItem('token');
   const response = await axios.get(url, { headers: { authorization: token } });
   return response.data;

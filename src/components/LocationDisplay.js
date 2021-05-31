@@ -45,7 +45,7 @@ const LocationDisplay = (props) => {
         </View>
       )}
       styles={{ textInputContainer, textInput }}
-      textInputProps={{ onFocus, onBlur }}
+      textInputProps={{ onFocus, onBlur, clearTextOnFocus: true }}
     />
   );
 };

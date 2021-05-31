@@ -7,31 +7,28 @@ import * as Colors from '../constants/colors';
 import fontStyles from '../constants/fonts';
 import categories from '../constants/categories';
 
-const MissionCard = (props) => {
-  const {
-    title, category, walkingTime, drivingTime,
-  } = props;
-  const { icon, style: iconStyle } = categories[category];
+const MissionCard = ({ mission, onPress }) => {
+  const { icon, style: iconStyle } = categories[mission.category];
 
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={[iconStyle, styles.iconContainer]}>
         <FontAwesomeIcon icon={icon} size={26} color="white" />
       </View>
       <View style={styles.textContainer}>
         <Text style={fontStyles.mediumTextBold} numberOfLines={1}>
-          {title}
+          {mission.title}
         </Text>
         <Text style={fontStyles.mediumTextRegular} numberOfLines={1}>
-          {category}
+          {mission.category}
         </Text>
       </View>
       <View style={styles.detailsContainer}>
         <Text style={fontStyles.mediumTextRegular}>
-          {`${walkingTime} mins  👟`}
+          {`${0} mins  👟`}
         </Text>
         <Text style={fontStyles.mediumTextRegular}>
-          {`${drivingTime} mins  🚗`}
+          {`${0} mins  🚗`}
         </Text>
       </View>
     </TouchableOpacity>
@@ -44,13 +41,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     flexDirection: 'row',
     alignItems: 'stretch',
-    maxWidth: '100%',
+    width: '90%',
     marginVertical: 10,
+    alignSelf: 'center',
   },
   iconContainer: {
     borderBottomLeftRadius: 10,
     borderTopLeftRadius: 10,
-    width: 60,
+    width: 70,
     marginRight: 15,
     alignItems: 'center',
     justifyContent: 'center',

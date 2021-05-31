@@ -41,6 +41,22 @@ const NewActivityScreen = (props) => {
     }
   }, [myLocation]);
 
+  const drawRoute = async (lat, lng, placeId) => {
+    setLoading(true);
+    const response = await routeToMission(lat, lng, placeId);
+    mapRef.current?.animateToRegion(response.zoomBounds, 1000);
+    setRoute(response.coords);
+    setLoading(false);
+  };
+
+  // if you selected an existing mission. load the route from existing mission
+  useEffect(() => {
+    if (mission && (!missionLocation || missionLocation.placeId !== mission.location.placeId)) {
+      setMissionLocation(mission.location);
+      drawRoute(43.7022, -72.2896, mission.location.placeId);
+    }
+  }, [mission]);
+
   const onMarkerPress = (e) => {
     console.log('pressed');
   };
@@ -52,7 +68,6 @@ const NewActivityScreen = (props) => {
   const onSubmit = async (lat, lng, radius, query) => {
     setRaiseModal(false);
     newMissionRef.current?.close();
-    console.log(myLocation);
     const data = await generateMission(lat, lng, radius, query);
     setMissionLocation(data);
     missionFoundRef.current?.open();
@@ -60,17 +75,12 @@ const NewActivityScreen = (props) => {
 
   const onAccept = async () => {
     missionFoundRef.current?.close();
-    setLoading(true);
     const createdMission = await postMission('hey', 'hello', missionLocation);
     props.setMission(createdMission);
-    const response = await routeToMission(latitude, longitude, createdMission.location.placeId);
-    setLoading(false);
-    mapRef.current?.animateToRegion(response.zoomBounds);
-    setRoute(response.coords);
+    drawRoute(latitude, longitude, createdMission.location.placeId);
   };
 
   const onCancel = () => {
-    console.log('clicked');
     props.clearMission();
     setMissionLocation(null);
     setRoute([]);

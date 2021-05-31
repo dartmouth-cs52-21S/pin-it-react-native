@@ -9,13 +9,13 @@ const categories = {
       backgroundColor: '#2CA8C7',
     },
   },
-  Activity: {
+  Park: {
     icon: faRunning,
     style: {
       backgroundColor: '#19A33F',
     },
   },
-  'Photo Spot': {
+  Landmark: {
     icon: faCamera,
     style: {
       backgroundColor: '#4984F9',
