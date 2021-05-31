@@ -21,7 +21,6 @@ export const postMission = async (title, category, location) => {
 
 export const routeToMission = async (latitude, longitude, endId) => {
   const url = `${api}/route?latitude=${latitude}&longitude=${longitude}&end=${endId}`;
-  console.log(url);
   const token = await AsyncStorage.getItem('token');
   const response = await axios.get(url, { headers: { authorization: token } });
   return response.data;
