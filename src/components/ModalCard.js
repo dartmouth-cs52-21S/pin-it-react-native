@@ -4,18 +4,37 @@ import {
 } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { bgTertiary } from '../constants/colors';
-import LocationHeader from './LocationHeader';
+import fontStyles from '../constants/fonts';
 
-const PostCarousel = (props) => {
+const ModalCard = (props) => {
   const {
-    caption, imageUrls, location,
+    caption, imageUrls, createdAt,
   // eslint-disable-next-line react/destructuring-assignment
   } = props;
 
   console.log(props);
-
   const [activeIndex, setActiveIndex] = useState(0);
   const ref = useRef(null);
+  const getDateString = (difference) => {
+    if (Math.floor(difference / (1000 * 60)) < 60) {
+      const time = Math.floor(difference / (1000 * 60));
+      const dtstr = `${time} minutes ago`;
+      return dtstr;
+    }
+    if (Math.floor(difference / (1000 * 60 * 60)) < 24) {
+      const time = Math.floor(difference / (1000 * 60 * 60));
+      const dtstr = `${time} hours ago`;
+      return dtstr;
+    } else {
+      const time = Math.floor(difference / (1000 * 60 * 60 * 24));
+      const dtstr = `${time} days ago`;
+      return dtstr;
+    }
+  };
+
+  const date = new Date(createdAt);
+  const realdate = new Date();
+  const diff = realdate - date;
 
   // Carousel Image
   const renderItem = useCallback(({ item }) => (
@@ -54,7 +73,6 @@ const PostCarousel = (props) => {
   return (
     <View>
       <View style={styles.card}>
-        <LocationHeader location={location} />
         <View style={{ height: 350, flexDirection: 'column', alignItems: 'center' }}>
           <Carousel
             layout="default"
@@ -69,9 +87,25 @@ const PostCarousel = (props) => {
           { renderPagination() }
         </View>
 
-        <View style={styles.heading}>
-          <Text style={styles.caption}>
+        <View style={{
+          flexDirection: 'row',
+          flexWrap: 1,
+        }}
+        >
+          <Text style={[fontStyles.mediumTextRegular, {
+            width: '95%',
+            margin: 10,
+            marginBottom: 3,
+          }]}
+          >
             {caption}
+          </Text>
+          <Text style={[fontStyles.smallTextRegular, {
+            width: '95%',
+            margin: 10,
+          }]}
+          >
+            {getDateString(diff)}
           </Text>
         </View>
       </View>
@@ -82,20 +116,8 @@ const PostCarousel = (props) => {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: bgTertiary,
-    padding: 15,
-    marginTop: 20,
+    padding: 10,
     borderRadius: 5,
-  },
-  heading: {
-    flexDirection: 'row',
-    flex: 0,
-    justifyContent: 'space-between',
-  },
-  caption: {
-    color: 'white',
-    fontSize: 16,
-    width: '95%',
-    margin: 10,
   },
   carouselImage: {
     width: '100%',
@@ -105,4 +127,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PostCarousel;
+export default ModalCard;

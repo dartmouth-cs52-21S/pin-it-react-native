@@ -7,7 +7,7 @@ import { bgPrimary } from '../constants/colors';
 import fontStyles from '../constants/fonts';
 import { getMissionsList } from '../selectors/mission';
 import { getMissions, setMission } from '../actions/missions';
-import MissionDisplay from '../components/MissionDisplay';
+import MissionCard from '../components/MissionDisplay';
 
 const OngoingActivityScreen = (props) => {
   const { navigation, missions } = props;
@@ -34,7 +34,7 @@ const OngoingActivityScreen = (props) => {
         <Text style={fontStyles.largeHeaderTitle}>My Missions</Text>
       </View>
       {missions.filter((mission) => !mission.completed).map((mission) => (
-        <MissionDisplay
+        <MissionCard
           mission={mission}
           key={mission.title}
           onPress={() => onMissionPress(mission)}

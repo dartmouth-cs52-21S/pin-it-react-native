@@ -4,11 +4,12 @@ import {
   View, Text, StyleSheet, Image, Modal, Pressable, TouchableOpacity,
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faImages } from '@fortawesome/free-solid-svg-icons';
+import { faImages, faTimes } from '@fortawesome/free-solid-svg-icons';
 import {
-  bgTertiary, accentPink,
+  bgTertiary, bgSecondary,
 } from '../constants/colors';
-import PostCarousel from './PostCarousel';
+import ModalCard from './ModalCard';
+import fontStyles from '../constants/fonts';
 
 const PostCard = (props) => {
   const {
@@ -48,15 +49,32 @@ const PostCard = (props) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <PostCarousel {...item}
+            <View style={styles.header}>
+              <View>
+                <Text style={[fontStyles.mediumTextBold, { paddingTop: 5, paddingBottom: 5, paddingLeft: 1 }]}>
+                  {item.username}
+                  {' '}
+                  @
+                </Text>
+                <Text style={[fontStyles.largeHeaderTitle, { paddingBottom: 5 }]}>
+                  {location.title}
+                </Text>
+                <Text style={[fontStyles.smallTextRegular, { paddingBottom: 5, paddingLeft: 1 }]}>
+                  {location.category}
+                </Text>
+              </View>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <View style={styles.imagesIcon}>
+                  <FontAwesomeIcon icon={faTimes} size={40} color="white" />
+                </View>
+              </Pressable>
+            </View>
+            <ModalCard {...item}
               location={location}
             />
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}
-            >
-              <Text style={styles.textStyle}>Hide Modal</Text>
-            </Pressable>
           </View>
         </View>
       </Modal>
@@ -65,17 +83,27 @@ const PostCard = (props) => {
 };
 
 const styles = StyleSheet.create({
+  header: {
+    backgroundColor: bgSecondary,
+    width: '100%',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 15,
+    paddingBottom: 5,
+  },
   centeredView: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   modalView: {
-    padding: 20,
     borderRadius: 20,
     backgroundColor: bgTertiary,
     alignItems: 'center',
     shadowColor: '#000',
+    width: '100%',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -93,14 +121,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: '5%',
     top: '5%',
-  },
-  buttonClose: {
-    backgroundColor: accentPink,
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
   },
   carouselImage: {
     width: '100%',

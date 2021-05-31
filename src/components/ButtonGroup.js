@@ -3,6 +3,7 @@ import {
   View, Text, StyleSheet, TouchableOpacity,
 } from 'react-native';
 import { accentPink, bgTertiary } from '../constants/colors';
+import fontStyles from '../constants/fonts';
 
 const ButtonGroup = (props) => {
   const { selected, setSelected } = props;
@@ -22,7 +23,7 @@ const ButtonGroup = (props) => {
               : bgTertiary,
           }]}
         >
-          <Text style={styles.buttonText}>{choice}</Text>
+          <Text style={[fontStyles.smallTextRegular]}>{choice}</Text>
         </TouchableOpacity>
       ))}
     </View>
