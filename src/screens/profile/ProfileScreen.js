@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { getUser } from '../../actions/user';
 import PostsTab from './PostsTab';
+import BadgesTab from './BadgesTab';
 import { signOutUser } from '../../actions/auth';
 import * as Colors from '../../constants/colors';
 
@@ -14,7 +15,6 @@ const instaLogo = require('../../assets/instagram.png');
 const youtubeLogo = require('../../assets/youtube.png');
 
 const MissionsTab = () => (<Text style={styles.testText}>Missions</Text>);
-const BadgesTab = () => (<Text style={styles.testText}>Badges</Text>);
 const PinsTab = () => (<Text style={styles.testText}>Pins</Text>);
 
 const renderScene = SceneMap({
