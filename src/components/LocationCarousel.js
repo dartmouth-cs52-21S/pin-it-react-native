@@ -77,7 +77,6 @@ const LocationCarousel = (props) => {
                 style={styles.title}
                 onPress={async () => {
                   const fullLocation = await getLocationPostsById(id);
-                  console.log(fullLocation);
                   props.navigation.navigate('GridScreen', {
                     location: {
                       title, category, latitude, longitude,
