@@ -8,7 +8,13 @@ import fontStyles from '../constants/fonts';
 import categories from '../constants/categories';
 
 const MissionCard = ({ mission, onPress }) => {
-  const { icon, style: iconStyle } = categories[mission.category];
+  const category = categories[mission.category];
+  let { icon } = categories.Restaurant;
+  let iconStyle = categories.Restaurant.style;
+  if (category) {
+    icon = category.icon;
+    iconStyle = category.style;
+  }
 
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>

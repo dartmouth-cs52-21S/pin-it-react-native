@@ -17,7 +17,7 @@ const NewMissionModal = (props) => {
   const [distances, setDistances] = useState([]);
   const [start, setStart] = useState(props.initialLocation);
 
-  const placeChoices = ['Restaurants', 'Bars', 'Museums', 'Parks', 'Landmarks', 'Stores'];
+  const placeChoices = ['Restaurant', 'Bar', 'Museum', 'Park', 'Landmark', 'Store'];
   const distChoices = ['<1 mile', '5-10 miles', '10-25 miles', '25+ miles'];
 
   let distValues = [1, 10, 25, 50];

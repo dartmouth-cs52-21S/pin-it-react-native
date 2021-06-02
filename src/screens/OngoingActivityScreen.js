@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Text, SafeAreaView, View, StyleSheet, TouchableWithoutFeedback,
+  Text, SafeAreaView, View, StyleSheet, TouchableWithoutFeedback, ScrollView,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { bgPrimary } from '../constants/colors';
@@ -22,11 +22,7 @@ const OngoingActivityScreen = (props) => {
   }, [navigation]);
 
   const onMissionPress = (mission) => {
-    // temporary, this will later become mission.location
-    const newLoc = {
-      title: 'Dartmouth College', placeId: 'ChIJNfKLOVm0tEwR3sbIIQqOkmw', latitude: 43.6423, longitude: -72.2518,
-    };
-    props.setMission({ ...mission, location: newLoc });
+    props.setMission(mission);
     navigation.navigate('New');
   };
 
@@ -60,21 +56,23 @@ const OngoingActivityScreen = (props) => {
           </View>
         </TouchableWithoutFeedback>
       </View>
-      {activeTab
-        ? active.map((mission) => (
-          <MissionCard
-            mission={mission}
-            key={mission.title}
-            onPress={() => onMissionPress(mission)}
-          />
-        ))
-        : completed.map((mission) => (
-          <MissionCard
-            mission={mission}
-            key={mission.title}
-            onPress={() => console.log('yo')}
-          />
-        ))}
+      <ScrollView>
+        {activeTab
+          ? active.map((mission) => (
+            <MissionCard
+              mission={mission}
+              key={mission.title}
+              onPress={() => onMissionPress(mission)}
+            />
+          ))
+          : completed.map((mission) => (
+            <MissionCard
+              mission={mission}
+              key={mission.title}
+              onPress={() => console.log('yo')}
+            />
+          ))}
+      </ScrollView>
     </SafeAreaView>
   );
 };

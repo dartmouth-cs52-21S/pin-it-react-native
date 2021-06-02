@@ -49,7 +49,7 @@ const ActivityStack = (props) => (
         headerTintColor: '#fff',
         headerTitleStyle: { fontSize: 25 },
         headerTitleAlign: 'center',
-        headerRight: () => (<Button title="Submit" onPress={() => props.createPost(props.post, () => navigation.navigate('CameraScreen'))} />),
+        headerRight: () => (<Button title="Submit" onPress={() => props.createPost(props.post, () => navigation.navigate('MainActivityScreen'))} />),
       })}
     />
   </Stack.Navigator>

@@ -37,7 +37,6 @@ export const handleImageUpload = (onSuccess) => async (dispatch) => {
 export const handleUploadfromCamera = (photo, onSuccess) => async (dispatch) => {
   if (photo) {
     const result = await uploadPhoto(photo);
-    console.log(result);
     dispatch(updateCurrentPost({ imageUrls: [result.data.url] }));
     onSuccess();
   }

@@ -6,6 +6,9 @@ import { Camera } from 'expo-camera';
 import { connect } from 'react-redux';
 import * as Colors from '../constants/colors';
 import { handleUploadfromCamera } from '../actions/posts';
+import { clearMission } from '../actions/missions';
+import { completeMission } from '../services/missionService';
+import { getMission } from '../selectors/mission';
 
 // adapted from sample code at https://docs.expo.io/versions/latest/sdk/camera/
 const CameraScreen = (props) => {
@@ -15,6 +18,8 @@ const CameraScreen = (props) => {
 
   const onSuccess = () => {
     setLoading(false);
+    props.clearMission();
+    completeMission(props.mission.id);
     props.navigation.navigate('PostCreationScreen');
   };
 
@@ -62,7 +67,11 @@ const CameraScreen = (props) => {
   );
 };
 
-export default connect(null, { handleUploadfromCamera })(CameraScreen);
+const mapStateToProps = (state) => ({
+  mission: getMission(state),
+});
+
+export default connect(mapStateToProps, { handleUploadfromCamera, clearMission })(CameraScreen);
 
 const styles = StyleSheet.create({
   container: {
