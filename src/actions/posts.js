@@ -34,6 +34,14 @@ export const handleImageUpload = (onSuccess) => async (dispatch) => {
   }
 };
 
+export const handleUploadfromCamera = (photo, onSuccess) => async (dispatch) => {
+  if (photo) {
+    const result = await uploadPhoto(photo);
+    dispatch(updateCurrentPost({ imageUrls: [result.data.url] }));
+    onSuccess();
+  }
+};
+
 export const createPost = (newPost, onSuccess) => async (dispatch) => {
   const token = await AsyncStorage.getItem('token');
   axios
