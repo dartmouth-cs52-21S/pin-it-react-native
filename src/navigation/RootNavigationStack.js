@@ -8,27 +8,24 @@ import * as Location from 'expo-location';
 import { SignInScreen, SignUpScreen } from '../screens/auth';
 import { bgPrimary } from '../constants/colors';
 import MainTabBar from './MainTabBar';
-import { setLocPermissionGranted, setLocation } from '../actions/app';
-import { getCurrentLocation } from '../services/locationService';
+import { setLocPermissionGranted } from '../actions/app';
 
 const Stack = createStackNavigator();
 
 const RootNavigationStack = (props) => {
   const { authenticated } = props;
 
-  const getLocation = async () => {
+  const checkLocationPermission = async () => {
     const { status } = await Location.requestForegroundPermissionsAsync(); // location permission status
 
     if (status !== 'granted') {
       props
         .setLocPermissionGranted(false);
-    } else {
-      await getCurrentLocation(props.setLocation);
     }
   };
 
   useEffect(() => {
-    getLocation();
+    checkLocationPermission();
   }, []);
 
   return (
@@ -84,7 +81,6 @@ const mapStateToProps = (reduxState) => ({
 });
 
 const mapDispatchToProps = {
-  setLocation,
   setLocPermissionGranted,
 };
 

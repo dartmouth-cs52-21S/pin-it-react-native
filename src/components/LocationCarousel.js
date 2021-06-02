@@ -6,15 +6,19 @@ import {
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { connect } from 'react-redux';
 import {
   bgPrimary, bgSecondary,
 } from '../constants/colors';
 import categories from '../constants/categories';
 import PostCard from './PostCard';
+import { getLocationInfo } from '../services/locationService';
+import { getQueriedLocations } from '../actions/locations';
 
 const { width: viewportWidth } = Dimensions.get('window');
 
 const LocationCarousel = (props) => {
+  console.log(props);
   const {
     title, category, latitude, longitude, address, posts,
   } = props;
@@ -72,12 +76,15 @@ const LocationCarousel = (props) => {
               <Text
                 numberOfLines={1}
                 style={styles.title}
-                onPress={() => props.navigation.navigate('GridScreen', {
-                  location: {
-                    title, category, latitude, longitude,
-                  },
-                  posts,
-                })}
+                onPress={async () => {
+                  // await props.getFullLocation(placeId);
+                  props.navigation.navigate('GridScreen', {
+                    location: {
+                      title, category, latitude, longitude,
+                    },
+                    posts,
+                  });
+                }}
               >
                 {title}
               </Text>
@@ -161,4 +168,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LocationCarousel;
+const mapStateToProps = (state) => ({
+  queriedLocationsList: state.locations.queriedLocationsList,
+  // fullLocation: state.locations.fullLocation,
+});
+
+export default connect(mapStateToProps, { getLocationInfo, getQueriedLocations })(LocationCarousel);

@@ -5,6 +5,7 @@ export const ActionTypes = {
   SET_ERROR: 'SET_ERROR',
   SET_LOC_PERMISSION_GRANTED: 'SET_LOC_PERMISSION_GRANTED',
   SET_LOCATION: 'SET_LOCATION',
+  CLEAR_LOCATION: 'CLEAR_LOCATION',
 };
 
 export const displayToast = (type, text1, text2) => {
@@ -31,6 +32,13 @@ export function setLocation(location) {
   return {
     type: ActionTypes.SET_LOCATION,
     payload: location,
+  };
+}
+
+export function clearLocation(location) {
+  return {
+    type: ActionTypes.CLEAR_LOCATION,
+    payload: null,
   };
 }
 

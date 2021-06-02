@@ -7,7 +7,7 @@ import { useCollapsibleSubHeader, CollapsibleSubHeaderAnimator } from 'react-nav
 import { SearchBar } from 'react-native-elements';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import { getLocations } from '../actions/locations';
+import { getQueriedLocations } from '../actions/locations';
 import LocationCarousel from '../components/LocationCarousel';
 import TagRow from '../components/TagRow';
 import LocationDisplay from '../components/LocationDisplay';
@@ -19,19 +19,13 @@ const FeedScreen = (props) => {
   const [searchFocused, setSearchFocused] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [tags, setTags] = useState([]);
-  const { locationsList, location } = props;
+  const { queriedLocationsList, location } = props;
 
   /* Show all locations (no search query) on first render; referenced:
   https://stackoverflow.com/questions/53253940/make-react-useeffect-hook-not-run-on-initial-render
   */
-  const firstUpdate = useRef(true);
   useEffect(() => {
-    if (firstUpdate.current) {
-      firstUpdate.current = false;
-      props.getLocations('', '');
-    } else {
-      props.getLocations(search, location ? location.title : '');
-    }
+    props.getQueriedLocations(search, location);
   }, [location]);
 
   const handleTagPressed = (tagValue) => {
@@ -44,7 +38,7 @@ const FeedScreen = (props) => {
 
   const handleRefresh = async () => {
     setIsFetching(true);
-    await props.getLocations(search, location ? location.title : '');
+    await props.getQueriedLocations(search, location);
     setIsFetching(false);
   };
 
@@ -71,7 +65,7 @@ const FeedScreen = (props) => {
 
   const handleSubmitEditing = () => {
     props
-      .getLocations(search, location ? location.title : '')
+      .getQueriedLocations(search, location)
       .finally(() => setSearchFocused(false));
   };
 
@@ -131,7 +125,7 @@ const FeedScreen = (props) => {
         contentContainerStyle={{ paddingTop: containerPaddingTop }}
         scrollIndicatorInsets={{ top: scrollIndicatorInsetTop }}
         style={styles.postList}
-        data={locationsList}
+        data={queriedLocationsList}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
@@ -197,8 +191,8 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => ({
-  locationsList: state.locations.locationsList,
+  queriedLocationsList: state.locations.queriedLocationsList,
   location: state.app.location,
 });
 
-export default connect(mapStateToProps, { getLocations })(FeedScreen);
+export default connect(mapStateToProps, { getQueriedLocations })(FeedScreen);
