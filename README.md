@@ -49,4 +49,4 @@ This repository contains the contributions of
 
 ## Acknowledgments
 
-Thank you Prof. Tim and our TA Jordan!
+Thank you Prof. Tim, our TA Jordan, and San Quan Prioleau!
