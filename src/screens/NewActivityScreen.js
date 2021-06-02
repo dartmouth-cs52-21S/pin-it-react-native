@@ -7,9 +7,11 @@ import {
   StyleSheet, View, TouchableOpacity, Text, ActivityIndicator,
 } from 'react-native';
 import haversine from 'haversine';
+import ConfettiCannon from 'react-native-confetti-cannon';
 import { accentPurple, bgPrimary } from '../constants/colors';
 import NewMissionModal from '../components/NewMissionModal';
 import MissionFoundModal from '../components/MissionFoundModal';
+import ArrivedModal from '../components/ArrivedModal';
 import DistanceIndicator from '../components/DistanceIndicator';
 import { generateMission, routeToMission, postMission } from '../services/missionService';
 import { getLocation } from '../selectors/app';
@@ -17,8 +19,13 @@ import { getMission } from '../selectors/mission';
 import { setMission, clearMission } from '../actions/missions';
 
 const NewActivityScreen = (props) => {
+  const ARRIVED_DIST = 50; // when 50 m within destination, register arrival
+  const LEFT_DIST = 75; // when 75 m away from destination, no longer able to take pic
+
   const newMissionRef = useRef(null);
   const missionFoundRef = useRef(null);
+  const arrivedRef = useRef(null);
+  const confettiRef = useRef(null);
   const mapRef = useRef(null);
 
   const [missionLocation, setMissionLocation] = useState(null);
@@ -26,18 +33,30 @@ const NewActivityScreen = (props) => {
   const [loading, setLoading] = useState(false);
   const [route, setRoute] = useState([]);
 
-  const { location, mission } = props;
+  const { location, mission, navigation } = props;
   const { latitude, longitude } = location || {};
 
   const [myLocation, setMyLocation] = useState(location);
   const [distance, setDistance] = useState(0);
+  const [arrived, setArrived] = useState(false);
 
   // whenever the user moves (myLocation changes), update value of distance
   useEffect(() => {
     if (mission && myLocation) {
       const loc = { latitude: mission.location.latitude, longitude: mission.location.longitude };
-      const dist = haversine(myLocation, loc, { unit: 'mile' });
-      setDistance(Math.floor(dist));
+      const METERS_TO_MILES = 1609.34;
+      const dist = haversine(myLocation, loc, { unit: 'meter' });
+      setDistance((dist / METERS_TO_MILES).toFixed(1));
+
+      if (!arrived && dist < ARRIVED_DIST) {
+        setArrived(true);
+        arrivedRef.current?.open();
+        setTimeout(() => confettiRef.current?.start(), 500);
+      }
+
+      if (arrived && dist > LEFT_DIST) {
+        setArrived(false);
+      }
     }
   }, [myLocation]);
 
@@ -56,10 +75,6 @@ const NewActivityScreen = (props) => {
       drawRoute(43.7022, -72.2896, mission.location.placeId);
     }
   }, [mission]);
-
-  const onMarkerPress = (e) => {
-    console.log('pressed');
-  };
 
   const onModalPress = (e) => {
     newMissionRef.current?.open();
@@ -86,6 +101,11 @@ const NewActivityScreen = (props) => {
     setRoute([]);
   };
 
+  const onTakePhotoPress = () => {
+    arrivedRef.current?.close();
+    navigation.navigate('CameraScreen');
+  };
+
   return (
     <View syle={styles.container}>
       <MapView
@@ -107,9 +127,7 @@ const NewActivityScreen = (props) => {
         }}
       >
         {latitude && (
-        <Marker coordinate={{ latitude, longitude }}
-          onPress={onMarkerPress}
-        />
+        <Marker coordinate={{ latitude, longitude }} />
         )}
 
         {missionLocation && (
@@ -143,6 +161,22 @@ const NewActivityScreen = (props) => {
             modalHeight={700}
           >
             <MissionFoundModal location={missionLocation} onAccept={onAccept} />
+          </Modalize>
+          <Modalize ref={arrivedRef}
+            modalStyle={{ backgroundColor: bgPrimary }}
+            modalHeight={700}
+          >
+            <View style={{ height: 700 }}>
+              <ArrivedModal mission={mission} onPress={onTakePhotoPress} />
+              <ConfettiCannon count={200}
+                origin={{ x: -10, y: 0 }}
+                autoStart={false}
+                ref={confettiRef}
+                onAnimationEnd={() => confettiRef.current?.stop()}
+                fadeOut
+                fallSpeed={2000}
+              />
+            </View>
           </Modalize>
         </Portal>
       </View>

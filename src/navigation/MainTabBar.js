@@ -11,7 +11,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import HomeTab from './HomeTab';
 import LeaderboardTab from './LeaderboardTab';
-import ActivityTab from './ActivityTab';
+import ActivityStack from './ActivityTab';
 import UploadTab from './UploadTab';
 import ProfileTab from './ProfileTab';
 import {
@@ -49,7 +49,7 @@ const MainTabBar = (props) => {
     >
       <Tab.Screen name="Home" component={HomeTab} />
       <Tab.Screen name="Leaderboard" component={LeaderboardTab} />
-      <Tab.Screen name="Activity" component={ActivityTab} />
+      <Tab.Screen name="Activity" component={ActivityStack} />
       <Tab.Screen name="Upload" component={UploadTab} />
       <Tab.Screen name="Profile" component={ProfileTab} />
     </Tab.Navigator>
