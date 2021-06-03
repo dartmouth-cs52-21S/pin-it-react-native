@@ -61,14 +61,14 @@ const OngoingActivityScreen = (props) => {
           ? active.map((mission) => (
             <MissionCard
               mission={mission}
-              key={mission.title}
+              key={`${mission.title}${mission.createdAt}`}
               onPress={() => onMissionPress(mission)}
             />
           ))
           : completed.map((mission) => (
             <MissionCard
               mission={mission}
-              key={mission.title}
+              key={`${mission.title}${mission.createdAt}`}
               onPress={() => console.log('yo')}
             />
           ))}
