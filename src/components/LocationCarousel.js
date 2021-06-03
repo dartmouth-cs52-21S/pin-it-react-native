@@ -18,7 +18,6 @@ import { getQueriedLocations } from '../actions/locations';
 const { width: viewportWidth } = Dimensions.get('window');
 
 const LocationCarousel = (props) => {
-  console.log(props);
   const {
     title, category, latitude, longitude, address, posts,
   } = props;

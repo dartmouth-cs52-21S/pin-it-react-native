@@ -61,6 +61,10 @@ const PostCreationScreen = (props) => {
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
               }}
+              pitchEnabled={false}
+              rotateEnabled={false}
+              zoomEnabled={false}
+              scrollEnabled={false}
             >
               <Marker coordinate={{ latitude, longitude }} />
             </MapView>

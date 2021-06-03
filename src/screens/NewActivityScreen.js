@@ -19,6 +19,7 @@ import {
 import { getLocation } from '../selectors/app';
 import { getMission } from '../selectors/mission';
 import { setMission, clearMission } from '../actions/missions';
+import ErrorModal from '../components/ErrorModal';
 
 const NewActivityScreen = (props) => {
   const ARRIVED_DIST = 50; // when 50 m within destination, register arrival
@@ -41,6 +42,9 @@ const NewActivityScreen = (props) => {
   const [myLocation, setMyLocation] = useState(location);
   const [distance, setDistance] = useState(0);
   const [arrived, setArrived] = useState(false);
+
+  const [placeError, setPlaceError] = useState(false);
+  const [routeError, setRouteError] = useState(false);
 
   const arrive = () => {
     if (!mission) return;
@@ -70,9 +74,14 @@ const NewActivityScreen = (props) => {
   const drawRoute = async (lat, lng, placeId) => {
     setLoading(true);
     const response = await routeToMission(lat, lng, placeId);
+    setLoading(false);
+    if (!response.coords) {
+      setRouteError(true);
+      setRoute([]);
+      return;
+    }
     mapRef.current?.animateToRegion(response.zoomBounds, 1000);
     setRoute(response.coords);
-    setLoading(false);
   };
 
   // if you selected an existing mission. load the route from existing mission
@@ -94,9 +103,15 @@ const NewActivityScreen = (props) => {
   const onSubmit = async (lat, lng, radius, query) => {
     setRaiseModal(false);
     newMissionRef.current?.close();
-    const data = await generateMission(lat, lng, radius, query);
-    setMissionLocation(data);
-    missionFoundRef.current?.open();
+    setLoading(true);
+    try {
+      const data = await generateMission(lat, lng, radius, query);
+      setMissionLocation(data);
+      missionFoundRef.current?.open();
+    } catch (error) {
+      setPlaceError(true);
+    }
+    setLoading(false);
   };
 
   const onAccept = async () => {
@@ -104,7 +119,7 @@ const NewActivityScreen = (props) => {
     const createdMission = await postMission(missionLocation.title, missionLocation.category, missionLocation);
     const toSet = { ...createdMission, location: missionLocation }; // until we populate location
     props.setMission(toSet);
-    drawRoute(latitude, longitude, toSet.location.placeId);
+    drawRoute(myLocation.latitude, myLocation.longitude, toSet.location.placeId);
   };
 
   const onCancel = () => {
@@ -205,6 +220,18 @@ const NewActivityScreen = (props) => {
           color={accentPurple}
         />
       )}
+      <ErrorModal
+        visible={placeError}
+        onDismiss={() => setPlaceError(false)}
+        mainText="No Location Avaiable"
+        secondaryText="Try increasing your search radius or searching for a different category"
+      />
+      <ErrorModal
+        visible={routeError}
+        onDismiss={() => setRouteError(false)}
+        mainText="No Route Found"
+        secondaryText="Could not calculate route between your location and the destination"
+      />
     </View>
   );
 };
