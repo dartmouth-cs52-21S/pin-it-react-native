@@ -4,6 +4,16 @@ import config from '../../app-config';
 
 const { googleApi, googleApiKey, api } = config;
 
+// Get location object from our server
+export const getLocationPostsById = async (id) => {
+  try {
+    const response = await axios.get(`${api}/locations/posts/${id}`);
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
+
 export const getLocationByPlaceId = async (placeId) => {
   const req = `${googleApi}/place/details/json?placeid=${placeId}&fields=name,formatted_address,geometry&key=${googleApiKey}`;
   const response = await axios.get(req);
