@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import {
-  View, SafeAreaView, StyleSheet, StatusBar, Text, RefreshControl, Animated, TouchableOpacity,
+  View, SafeAreaView, StyleSheet, Text, RefreshControl, Animated, TouchableOpacity,
 } from 'react-native';
 import { useCollapsibleSubHeader, CollapsibleSubHeaderAnimator } from 'react-navigation-collapsible';
 import { SearchBar } from 'react-native-elements';
@@ -152,7 +152,6 @@ const FeedScreen = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
     backgroundColor: bgPrimary,
   },
   header: {
