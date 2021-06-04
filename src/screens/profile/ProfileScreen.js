@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import {
-  SafeAreaView, StyleSheet, Text, Image, View, Platform,
+  SafeAreaView, StyleSheet, Text, Image, View, Platform, TextInput, Dimensions,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import { getUser } from '../../actions/user';
+import { getUser, editUser } from '../../actions/user';
 import PostsTab from './PostsTab';
 import BadgesTab from './BadgesTab';
 import { signOutUser } from '../../actions/auth';
@@ -13,6 +13,8 @@ import * as Colors from '../../constants/colors';
 
 const instaLogo = require('../../assets/instagram.png');
 const youtubeLogo = require('../../assets/youtube.png');
+
+const windowWidth = (Dimensions.get('window').width) / 4;
 
 const MissionsTab = () => (<Text style={styles.testText}>Missions</Text>);
 const PinsTab = () => (<Text style={styles.testText}>Pins</Text>);
@@ -30,7 +32,7 @@ const renderLabel = (labelProps) => (
       {
         fontSize: 16,
         textAlign: 'center',
-        width: 103,
+        width: windowWidth,
       },
       labelProps.focused ? { color: Colors.accentPurple, fontWeight: 'bold' } : { color: 'white' },
     ]}
@@ -64,12 +66,55 @@ const ProfileScreen = (props) => {
   const { user } = props;
 
   const [index, setIndex] = useState(0);
+  const [editing, setEditing] = useState(false);
+  const [text, onChangeText] = useState('');
+  const [workaround, changeWorkAround] = useState(0);
   const [routes] = useState([
     { key: 'posts', title: 'Posts' },
     { key: 'missions', title: 'Missions' },
     { key: 'pins', title: 'Pins' },
     { key: 'badges', title: 'Badges' },
   ]);
+
+  const renderEditButton = (edit) => {
+    if (!edit) {
+      return (
+        <TouchableOpacity style={styles.logoutButtonContainer} onPress={() => setEditing(true)}>
+          <Text style={styles.logoutButton}>Edit</Text>
+        </TouchableOpacity>
+      );
+    } else {
+      if (workaround === 0) {
+        onChangeText(user.bio);
+        changeWorkAround(1);
+      }
+      const userdata = {
+        bio: text,
+      };
+      return (
+        <TouchableOpacity style={styles.logoutButtonContainer} onPress={() => { setEditing(false); props.editUser(userdata); }}>
+          <Text style={styles.logoutButton}>Done</Text>
+        </TouchableOpacity>
+      );
+    }
+  };
+
+  const renderBio = (edit) => {
+    if (!edit) {
+      return (
+        <Text style={styles.bioText}>{user.bio}</Text>
+      );
+    } else {
+      return (
+        <TextInput
+          style={{ height: 70, backgroundColor: 'white', margin: 10 }}
+          onChangeText={onChangeText}
+          value={text}
+          multiline
+        />
+      );
+    }
+  };
 
   useEffect(() => {
     props.getUser();
@@ -81,6 +126,7 @@ const ProfileScreen = (props) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.bannerContainer}>
+        {renderEditButton(editing)}
         <TouchableOpacity style={styles.logoutButtonContainer} onPress={() => props.signOutUser()}>
           <Text style={styles.logoutButton}>Log Out</Text>
         </TouchableOpacity>
@@ -104,7 +150,7 @@ const ProfileScreen = (props) => {
           </Text>
         </View>
       </View>
-      <Text style={styles.bioText}>{user.bio}</Text>
+      {renderBio(editing)}
       <View style={styles.socialsContainer}>
         <Image style={styles.socialsLogo} source={instaLogo} />
         <Text style={styles.socialsText}>Instagram</Text>
@@ -132,11 +178,14 @@ const styles = StyleSheet.create({
   bannerContainer: {
     height: 40,
     alignItems: 'flex-end',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
   },
   logoutButtonContainer: {
     backgroundColor: 'rgba(255,255,255,0.2)',
     paddingVertical: 5,
     paddingHorizontal: 10,
+    marginHorizontal: 5,
     borderRadius: 20,
     height: 'auto',
     width: 'auto',
@@ -213,4 +262,4 @@ const mapStateToProps = (state) => ({
   user: state.user.user_data,
 });
 
-export default connect(mapStateToProps, { getUser, signOutUser })(ProfileScreen);
+export default connect(mapStateToProps, { getUser, signOutUser, editUser })(ProfileScreen);
