@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  SafeAreaView, StyleSheet, Text, Image, View,
+  SafeAreaView, StyleSheet, Text, Image, View, Platform,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
@@ -25,18 +25,21 @@ const renderScene = SceneMap({
 });
 
 const renderLabel = (labelProps) => (
-  <Text style={[
-    {
-      fontSize: 16,
-      textAlign: 'center',
-      width: 'auto',
-      paddingRight: 5, // Let me know how this looks on your screen, for mine, it's needed to offset the bolding
-    },
-    labelProps.focused ? { color: Colors.accentPurple, fontWeight: 'bold' } : { color: 'white' },
-  ]}
-  >
-    {labelProps.route.title}
-  </Text>
+  <View style={{ whiteSpace: 'nowrap' }}>
+    <Text style={[
+      {
+        fontSize: 16,
+        textAlign: 'center',
+        width: 103,
+        whiteSpace: 'nowrap',
+      },
+      labelProps.focused ? { color: Colors.accentPurple, fontWeight: 'bold' } : { color: 'white' },
+    ]}
+    >
+      {labelProps.route.title}
+    </Text>
+  </View>
+
 );
 
 const renderTabBar = (props) => (
@@ -46,13 +49,12 @@ const renderTabBar = (props) => (
     scrollEnabled
     indicatorStyle={{ backgroundColor: Colors.accentPurple }}
     style={{
-      backgroundColor: Colors.bgPrimary, marginLeft: '5%', marginRight: '5%',
+      backgroundColor: Colors.bgPrimary,
+      maxWidth: '100%',
     }}
     tabStyle={{
       padding: 0,
-      borderLeftWidth: 10,
-      borderRightWidth: 10,
-      borderColor: Colors.bgPrimary,
+      borderColor: 'red',
       width: 'auto',
     }}
     renderLabel={renderLabel}
@@ -123,9 +125,10 @@ const ProfileScreen = (props) => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     width: '100%',
-    height: '100%',
     backgroundColor: Colors.bgPrimary,
+    paddingTop: Platform.OS === 'android' ? 45 : 0,
   },
   bannerContainer: {
     height: 40,
@@ -202,6 +205,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   tabViewContainer: {
+    maxWidth: '100%',
     marginTop: 20,
   },
 });
