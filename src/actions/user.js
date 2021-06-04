@@ -7,6 +7,7 @@ const { api } = config;
 
 export const ActionTypes = {
   GET_USER: 'GET_USER',
+  GET_TOP_USERS: 'GET_TOP_USERS',
 };
 
 export const getUser = () => async (dispatch) => {
@@ -17,6 +18,17 @@ export const getUser = () => async (dispatch) => {
       dispatch({ type: ActionTypes.GET_USER, payload: response.data });
     })
     .catch((error) => {
-      dispatch(setError(`Posting failed: ${error.response.data}`));
+      dispatch(setError(`Getting user failed: ${error.response.data}`));
+    });
+};
+
+// Get users with the highest number of completed missions
+export const getTopUsers = () => async (dispatch) => {
+  axios.get(`${api}/topusers`)
+    .then((response) => {
+      dispatch({ type: ActionTypes.GET_TOP_USERS, payload: response.data });
+    })
+    .catch((error) => {
+      dispatch(setError(`Getting top users failed: ${error.response.data}`));
     });
 };
