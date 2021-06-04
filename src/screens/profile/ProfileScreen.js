@@ -25,13 +25,12 @@ const renderScene = SceneMap({
 });
 
 const renderLabel = (labelProps) => (
-  <View style={{ whiteSpace: 'nowrap' }}>
+  <View>
     <Text style={[
       {
         fontSize: 16,
         textAlign: 'center',
         width: 103,
-        whiteSpace: 'nowrap',
       },
       labelProps.focused ? { color: Colors.accentPurple, fontWeight: 'bold' } : { color: 'white' },
     ]}

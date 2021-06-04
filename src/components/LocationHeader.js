@@ -6,12 +6,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import categories from '../constants/categories';
 
 const LocationHeader = (props) => {
+  const { location } = props;
   const {
-    location: {
-      category, title, latitude, longitude,
-    },
-    // eslint-disable-next-line react/destructuring-assignment
-  } = props;
+    category, title, latitude, longitude,
+  } = location || {};
 
   const renderIcon = () => {
     const { icon, style } = categories[category] || {};
