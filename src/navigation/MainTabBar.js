@@ -1,5 +1,5 @@
 /* eslint-disable react/destructuring-assignment */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
@@ -9,6 +9,7 @@ import {
   faPlusCircle,
   faChartBar,
 } from '@fortawesome/free-solid-svg-icons';
+import { connect } from 'react-redux';
 import HomeTab from './HomeTab';
 import LeaderboardTab from './LeaderboardTab';
 import ActivityStack from './ActivityTab';
@@ -17,6 +18,8 @@ import ProfileTab from './ProfileTab';
 import {
   bgPrimary, bgSecondary, accentPurple,
 } from '../constants/colors';
+import { getCurrentLocation } from '../services/locationService';
+import { setCurrentLocation } from '../actions/locations';
 
 const Tab = createBottomTabNavigator();
 
@@ -28,6 +31,13 @@ const MainTabBar = (props) => {
     Upload: faPlusCircle,
     Profile: faUser,
   };
+
+  useEffect(() => {
+    getCurrentLocation((place) => {
+      const curr = { latitude: place.latitude, longitude: place.longitude };
+      props.setCurrentLocation(curr);
+    });
+  });
 
   return (
     <Tab.Navigator
@@ -56,4 +66,4 @@ const MainTabBar = (props) => {
   );
 };
 
-export default MainTabBar;
+export default connect(null, { setCurrentLocation })(MainTabBar);

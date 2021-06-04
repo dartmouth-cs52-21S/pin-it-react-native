@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import {
   ActivityIndicator, TextInput, Image, View, StyleSheet,
@@ -14,11 +14,13 @@ import LocationDisplay from '../../components/LocationDisplay';
 
 const PostCreationScreen = (props) => {
   const { post, location, updatePost } = props;
+  const [postCaption, setPostCaption] = useState('');
 
   const { latitude, longitude } = location || { };
-  const imageUrl = post.imageUrls[0];
 
-  if (!imageUrl) {
+  const imageUrl = post?.imageUrls?.[0];
+
+  if (!post) {
     return (
       <View style={styles.container}>
         <ActivityIndicator />
@@ -29,12 +31,20 @@ const PostCreationScreen = (props) => {
   return (
     <View style={styles.container}>
       <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
-        <Image
-          style={styles.uploadedImage}
-          source={{
-            uri: imageUrl,
-          }}
-        />
+        {imageUrl
+          ? (
+            <Image
+              style={styles.uploadedImage}
+              source={{
+                uri: imageUrl,
+              }}
+            />
+          )
+          : (
+            <View style={styles.uploadedImage}>
+              <ActivityIndicator />
+            </View>
+          )}
         <View style={styles.postDetailsContainer}>
           <TagRow
             active={[post.category]}
@@ -43,8 +53,8 @@ const PostCreationScreen = (props) => {
           />
           <TextInput
             style={styles.textInput}
-            value={post.caption}
-            onChangeText={(caption) => updatePost({ ...post, caption })}
+            value={postCaption}
+            onChangeText={(caption) => { updatePost({ ...post, caption }); setPostCaption(caption); }}
             placeholder="Caption"
             placeholderTextColor="grey"
             multiline
@@ -93,6 +103,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: undefined,
     aspectRatio: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   textInput: {
     backgroundColor: bgTertiary,

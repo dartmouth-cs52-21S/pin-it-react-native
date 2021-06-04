@@ -15,6 +15,11 @@ import { getCurrentPost } from '../selectors/posts';
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 
+const onCreatePost = (props, navigation) => {
+  if (!props.post) return;
+  props.createPost(props.post, () => navigation.navigate('MainActivityScreen'));
+};
+
 const ActivityStack = (props) => (
   <Stack.Navigator
     screenOptions={{
@@ -49,7 +54,7 @@ const ActivityStack = (props) => (
         headerTintColor: '#fff',
         headerTitleStyle: { fontSize: 25 },
         headerTitleAlign: 'center',
-        headerRight: () => (<Button title="Submit" onPress={() => props.createPost(props.post, () => navigation.navigate('MainActivityScreen'))} />),
+        headerRight: () => (<Button title="Submit" onPress={() => onCreatePost(props, navigation)} />),
       })}
     />
   </Stack.Navigator>

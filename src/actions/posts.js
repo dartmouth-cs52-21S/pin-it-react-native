@@ -9,6 +9,7 @@ const { api } = config;
 export const ActionTypes = {
   GET_POSTS: 'GET_POSTS',
   UPDATE_CURRENT_POST: 'UPDATE_CURRENT_POST',
+  CLEAR_POST: 'CLEAR_POST',
 };
 
 /*
@@ -18,6 +19,12 @@ export const updateCurrentPost = (currentPost) => {
   return {
     type: ActionTypes.UPDATE_CURRENT_POST,
     payload: currentPost,
+  };
+};
+
+export const clearPost = () => {
+  return {
+    type: ActionTypes.CLEAR_POST,
   };
 };
 
