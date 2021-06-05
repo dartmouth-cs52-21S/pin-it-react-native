@@ -18,7 +18,7 @@ const UploadTab = (props) => {
         name="UploadScreen"
         component={UploadScreen}
         options={{
-          title: 'New Post',
+          title: '',
           headerStyle: {
             backgroundColor: bgPrimary,
             shadowOffset: { height: 0, width: 0 }, // Gets rid of white line underneath
@@ -49,10 +49,8 @@ const UploadTab = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  let location = getLocation(state);
-  const { imageUrls, caption, category } = getCurrentPost(state);
-
-  location = { ...location, category };
+  const location = getLocation(state);
+  const { imageUrls, caption } = getCurrentPost(state);
 
   return {
     post: {

@@ -1,8 +1,10 @@
 import React from 'react';
 import _ from 'lodash';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  ScrollView, View, TouchableOpacity, StyleSheet,
+} from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import categories from '../constants/categories';
+import { categories } from '../constants/categories';
 
 const TagRow = (props) => {
   const { containerStyle, active, handleTagPressed } = props;
@@ -20,9 +22,9 @@ const TagRow = (props) => {
   };
 
   return (
-    <View style={[styles.container, containerStyle]}>
+    <ScrollView horizontal style={[styles.container, containerStyle]} showsHorizontalScrollIndicator={false}>
       {_.map(categories, (value, key) => renderCategory(value, key))}
-    </View>
+    </ScrollView>
   );
 };
 
@@ -31,14 +33,15 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignSelf: 'center',
-    justifyContent: 'space-between',
     width: '100%',
+    overflow: 'hidden',
   },
   icon: {
     color: 'white',
     paddingHorizontal: 20,
     paddingVertical: 6,
     borderRadius: 12,
+    marginRight: 12,
   },
   inactiveStyle: {
     opacity: 0.6,

@@ -19,6 +19,7 @@ const PostsTab = (props) => {
     <SafeAreaView style={styles.container}>
       <FlatList
         data={posts}
+        keyExtractor={(item) => item.id}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
       />

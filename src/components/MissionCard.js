@@ -5,7 +5,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import * as Colors from '../constants/colors';
 import fontStyles from '../constants/fonts';
-import categories from '../constants/categories';
+import { categories } from '../constants/categories';
 
 const MissionCard = ({ mission, onPress }) => {
   const category = categories[mission.category];
