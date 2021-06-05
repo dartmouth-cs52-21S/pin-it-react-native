@@ -12,6 +12,8 @@ const PostCarousel = (props) => {
   // eslint-disable-next-line react/destructuring-assignment
   } = props;
 
+  console.log(props);
+
   const [activeIndex, setActiveIndex] = useState(0);
   const ref = useRef(null);
 
