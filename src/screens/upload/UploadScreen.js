@@ -1,25 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import {
-  Text, TouchableOpacity, View, StyleSheet,
+  Text, TouchableOpacity, View, StyleSheet, Image,
 } from 'react-native';
 import { handleImageUpload } from '../../actions/posts';
-import BadgeModal from '../../components/BadgeModal';
+import * as Colors from '../../constants/colors';
+import fontStyles from '../../constants/fonts';
+
+const bgImage = require('../../assets/upload-image.png');
 
 const UploadScreen = (props) => {
   const { handleImageUpload: handleUploadPress } = props;
-  const [modalVisible, setModalVisible] = useState(false);
   const onSuccess = () => props.navigation.navigate('PostCreationScreen');
 
   return (
     <View style={styles.container}>
+      <Image style={styles.uploadImage} source={bgImage} />
+      <Text style={[fontStyles.smallHeaderTitle, styles.title]}>Share your journey</Text>
+      <Text style={[fontStyles.smallMediumText, styles.descriptionText]}>Let us know of the exciting, beautiful, spontaneous, or boring places where you go! Or go to 🎲 to complete missions and earn badges.</Text>
       <TouchableOpacity style={styles.uploadButton} onPress={() => handleUploadPress(onSuccess)}>
-        <Text>Upload Photo</Text>
+        <Text style={fontStyles.mediumTextBold}>Share photos</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.uploadButton} onPress={() => setModalVisible(!modalVisible)}>
-        <Text>Open Modal</Text>
-      </TouchableOpacity>
-      <BadgeModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
     </View>
   );
 };
@@ -30,38 +31,27 @@ const styles = StyleSheet.create({
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: Colors.bgPrimary,
   },
   uploadButton: {
-    width: 150,
-    height: 50,
-    backgroundColor: 'gray',
-    justifyContent: 'center',
-    alignItems: 'center',
+    alignSelf: 'center',
+    backgroundColor: Colors.accentGreen,
+    padding: 10,
+    borderRadius: 10,
+    marginVertical: 20,
   },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+  title: {
+    marginVertical: 20,
+    color: Colors.accentPurple,
+  },
+  uploadImage: {
+    marginBottom: 10,
     width: '90%',
-    height: '50%',
+    resizeMode: 'contain',
   },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-    width: '100%',
-    height: '100%',
+  descriptionText: {
+    width: '90%',
+    textAlign: 'center',
   },
 });
 

@@ -18,7 +18,7 @@ const UploadTab = (props) => {
         name="UploadScreen"
         component={UploadScreen}
         options={{
-          title: 'New Post',
+          title: '',
           headerStyle: {
             backgroundColor: bgPrimary,
             shadowOffset: { height: 0, width: 0 }, // Gets rid of white line underneath

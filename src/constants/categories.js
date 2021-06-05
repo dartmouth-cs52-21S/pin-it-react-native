@@ -2,7 +2,7 @@ import {
   faUtensils, faRunning, faCamera, faGlassMartiniAlt, faPalette,
 } from '@fortawesome/free-solid-svg-icons';
 
-const categories = {
+export const categories = {
   Restaurant: {
     icon: faUtensils,
     style: {
@@ -33,6 +33,24 @@ const categories = {
       backgroundColor: '#F9516C',
     },
   },
+};
+
+export const placeTypeToCategory = {
+  amusement_park: 'Park',
+  art_gallery: 'Art',
+  bakery: 'Restaurant',
+  bar: 'Bar',
+  bowling_alley: 'Park',
+  cafe: 'Restaurant',
+  campground: 'Park',
+  casino: 'Bar',
+  museum: 'Art',
+  night_club: 'Landmark',
+  park: 'Park',
+  restaurant: 'Restaurant',
+  stadium: 'Park',
+  tourist_attraction: 'Landmark',
+  zoo: 'Landmark',
 };
 
 export default categories;

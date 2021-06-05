@@ -2,7 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import categories from '../constants/categories';
+import { categories } from '../constants/categories';
 
 const TagRow = (props) => {
   const { containerStyle, active, handleTagPressed } = props;

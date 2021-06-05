@@ -87,12 +87,6 @@ const FeedScreen = (props) => {
           }}
           onFocus={() => setSearchFocused(true)}
         />
-        {/* {searchFocused
-        && (
-        <TouchableOpacity style={styles.doneButton} onPress={handleCancel}>
-          <Text style={styles.doneText}>Done</Text>
-        </TouchableOpacity>
-        )} */}
       </View>
 
       {searchFocused && <LocationDisplay />}

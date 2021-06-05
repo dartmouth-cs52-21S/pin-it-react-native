@@ -41,7 +41,6 @@ const CameraScreen = (props) => {
       const newPhoto = await cam.current?.takePictureAsync({ base64: true });
       props.handleUploadfromCamera(newPhoto.base64, onSuccess);
     } catch (error) {
-      console.log(error);
       setLoading(false);
     }
   };

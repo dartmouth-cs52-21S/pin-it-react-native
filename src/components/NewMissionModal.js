@@ -24,7 +24,6 @@ const NewMissionModal = (props) => {
   distValues = distValues.map((num) => num * milesToMeters);
 
   const onLocationSelect = async (data) => {
-    console.log('selecting');
     const placeId = data.place_id;
     const { latitude, longitude } = await getLocationByPlaceId(placeId);
     setStart({ latitude, longitude });
