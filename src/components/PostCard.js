@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from 'react';
 import {
-  View, Text, StyleSheet, Image, Modal, Pressable, TouchableOpacity,
+  View, Text, StyleSheet, Image, Modal, Pressable, TouchableWithoutFeedback,
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faImages, faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -22,23 +22,21 @@ const PostCard = (props) => {
       {/* Code for displaying images evenly in grid view
       https://stackoverflow.com/questions/54039345/display-images-in-flatlist/54042860
       */}
-      <TouchableOpacity
-        style={{
-          flex: 1 / 3,
-          aspectRatio: 1,
-        }}
+      <TouchableWithoutFeedback
         onPress={() => setModalVisible(true)}
       >
-        <Image
-          style={styles.carouselImage}
-          source={{ uri: item.imageUrls[0] }}
-        />
-        {item.imageUrls.length > 1 && (
-        <View style={styles.imagesIcon}>
-          <FontAwesomeIcon icon={faImages} size={23} color="white" />
+        <View style={styles.touchableImage}>
+          <Image
+            style={styles.carouselImage}
+            source={{ uri: item.imageUrls[0] }}
+          />
+          {item.imageUrls.length > 1 && (
+          <View style={styles.imagesIcon}>
+            <FontAwesomeIcon icon={faImages} size={23} color="white" />
+          </View>
+          )}
         </View>
-        )}
-      </TouchableOpacity>
+      </TouchableWithoutFeedback>
       <Modal
         animationType="slide"
         visible={modalVisible}
@@ -126,6 +124,10 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
+  },
+  touchableImage: {
+    flex: 1 / 3,
+    aspectRatio: 1,
   },
 });
 
