@@ -13,7 +13,7 @@ const LeaderboardTab = () => {
         name="LeaderboardScreen"
         component={LeaderboardScreen}
         options={{
-          title: 'Leaderboard',
+          title: '',
           headerStyle: {
             backgroundColor: bgPrimary,
             shadowOffset: { height: 0, width: 0 }, // Gets rid of white line underneath
