@@ -2,7 +2,7 @@ import {
   faUtensils, faRunning, faCamera, faGlassMartiniAlt, faPalette, faShoppingBag, faVolleyballBall, faMapMarked,
 } from '@fortawesome/free-solid-svg-icons';
 
-export const categories = {
+const categories = {
   Restaurant: {
     icon: faUtensils,
     style: {
