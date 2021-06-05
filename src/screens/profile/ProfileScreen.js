@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => ({
-  user: state.user.user_data,
+  user: state.user.userData,
 });
 
 export default connect(mapStateToProps, { getUser, signOutUser, editUser })(ProfileScreen);
