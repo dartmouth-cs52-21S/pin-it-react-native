@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  SafeAreaView, StyleSheet, Text, Image, View, Platform, TextInput, Dimensions,
+  SafeAreaView, StyleSheet, Text, Image, View, Platform, TextInput, Dimensions, Linking,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
@@ -153,9 +153,18 @@ const ProfileScreen = (props) => {
       {renderBio(editing)}
       <View style={styles.socialsContainer}>
         <Image style={styles.socialsLogo} source={instaLogo} />
-        <Text style={styles.socialsText}>Instagram</Text>
+        <Text style={styles.socialsText}
+          onPress={() => Linking.openURL('https://www.youtube.com/channel/UCSzN7Vl0SwahaxAqHpx5tng')}
+        >
+          Instagram
+        </Text>
         <Image style={styles.socialsLogo} source={youtubeLogo} />
-        <Text style={styles.socialsText}>Youtube</Text>
+        <Text style={styles.socialsText}
+          onPress={() => Linking.openURL('https://www.youtube.com/channel/UCSzN7Vl0SwahaxAqHpx5tng')}
+        >
+          Youtube
+
+        </Text>
       </View>
       <TabView
         style={styles.tabViewContainer}
