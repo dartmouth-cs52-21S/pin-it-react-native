@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     alignSelf: 'center',
     paddingLeft: 7,
+    width: '80%',
   },
   detail: {
     fontSize: 12,
