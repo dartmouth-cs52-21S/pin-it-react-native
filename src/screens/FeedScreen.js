@@ -25,8 +25,8 @@ const FeedScreen = (props) => {
   https://stackoverflow.com/questions/53253940/make-react-useeffect-hook-not-run-on-initial-render
   */
   useEffect(() => {
-    props.getQueriedLocations(search, location);
-  }, [location]);
+    props.getQueriedLocations(search, location, tags);
+  }, [location, tags]);
 
   const handleTagPressed = (tagValue) => {
     if (tags.includes(tagValue)) {
@@ -38,7 +38,7 @@ const FeedScreen = (props) => {
 
   const handleRefresh = async () => {
     setIsFetching(true);
-    await props.getQueriedLocations(search, location);
+    await props.getQueriedLocations(search, location, tags);
     setIsFetching(false);
   };
 
@@ -65,7 +65,7 @@ const FeedScreen = (props) => {
 
   const handleSubmitEditing = () => {
     props
-      .getQueriedLocations(search, location)
+      .getQueriedLocations(search, location, tags)
       .finally(() => setSearchFocused(false));
   };
 
