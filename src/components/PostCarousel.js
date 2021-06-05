@@ -73,6 +73,14 @@ const PostCarousel = (props) => {
           <Text style={styles.caption}>
             {caption}
           </Text>
+          <Pressable
+            style={[styles.button, styles.buttonClose]}
+            onPress={() => { console.log('baboo'); }}
+          >
+            <View style={styles.imagesIcon}>
+              <FontAwesomeIcon icon={faTimes} size={29} color="white" />
+            </View>
+          </Pressable>
         </View>
       </View>
     </View>
