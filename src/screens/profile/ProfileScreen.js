@@ -409,7 +409,7 @@ const styles = StyleSheet.create({
   },
   tabViewContainer: {
     maxWidth: '100%',
-    marginTop: 7,
+    marginTop: 5,
   },
 });
 

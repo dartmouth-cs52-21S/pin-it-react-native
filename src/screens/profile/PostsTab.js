@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
     paddingHorizontal: 15,
-    paddingVertical: 15,
+    paddingVertical: 0,
     backgroundColor: bgPrimary,
   },
 });
