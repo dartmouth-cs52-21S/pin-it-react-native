@@ -9,8 +9,8 @@ export const categories = {
       backgroundColor: '#4984F9',
     },
   },
-  Park: {
-    icon: faRunning,
+  Bar: {
+    icon: faGlassMartiniAlt,
     style: {
       backgroundColor: '#FC6079',
     },
@@ -21,8 +21,8 @@ export const categories = {
       backgroundColor: '#FE9B3A',
     },
   },
-  Bar: {
-    icon: faGlassMartiniAlt,
+  Park: {
+    icon: faRunning,
     style: {
       backgroundColor: '#4FBE82',
     },
