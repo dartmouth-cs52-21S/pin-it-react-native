@@ -6,14 +6,12 @@ import {
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { connect } from 'react-redux';
 import {
   bgPrimary, bgSecondary,
 } from '../constants/colors';
 import categories from '../constants/categories';
 import PostCard from './PostCard';
 import { getLocationPostsById } from '../services/locationService';
-import { getQueriedLocations } from '../actions/locations';
 
 const { width: viewportWidth } = Dimensions.get('window');
 
@@ -167,8 +165,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => ({
-  queriedLocationsList: state.locations.queriedLocationsList,
-});
-
-export default connect(mapStateToProps, { getQueriedLocations })(LocationCarousel);
+export default LocationCarousel;
