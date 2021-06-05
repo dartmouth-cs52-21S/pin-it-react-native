@@ -1,6 +1,7 @@
 import axios from 'axios';
 import * as Location from 'expo-location';
 import config from '../../app-config';
+import { placeTypeToCategory } from '../constants/categories';
 
 const { googleApi, googleApiKey, api } = config;
 
@@ -15,11 +16,19 @@ export const getLocationPostsById = async (id) => {
 };
 
 export const getLocationByPlaceId = async (placeId) => {
-  const req = `${googleApi}/place/details/json?placeid=${placeId}&fields=name,formatted_address,geometry&key=${googleApiKey}`;
+  const req = `${googleApi}/place/details/json?placeid=${placeId}&fields=name,formatted_address,geometry,types&key=${googleApiKey}`;
   const response = await axios.get(req);
   const { result } = response.data;
 
   const { lat: latitude, lng: longitude } = result.geometry?.location || {};
+
+  let category = 'Poi'; // default to Point of Interest
+  for (const t of result.types) {
+    if (placeTypeToCategory[t]) {
+      category = placeTypeToCategory[t];
+      break;
+    }
+  }
 
   const place = {
     placeId,
@@ -27,6 +36,7 @@ export const getLocationByPlaceId = async (placeId) => {
     longitude,
     title: result.name,
     address: result.formatted_address,
+    category,
   };
 
   return place;

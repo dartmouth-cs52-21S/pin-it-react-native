@@ -21,6 +21,7 @@ const BadgesTab = (props) => {
         data={badges}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
+        keyExtractor={(item) => item.badge.title}
       />
     </SafeAreaView>
   );
