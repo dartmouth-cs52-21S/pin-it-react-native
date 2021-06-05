@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import {
-  SafeAreaView, StyleSheet, Text, Image, View, Platform, TextInput, Dimensions, Linking,
+  SafeAreaView, StyleSheet, Text, Image, View, Platform, TextInput, Dimensions, Pressable, Linking, Modal,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { getUser, editUser } from '../../actions/user';
 import PostsTab from './PostsTab';
 import BadgesTab from './BadgesTab';
 import { signOutUser } from '../../actions/auth';
 import * as Colors from '../../constants/colors';
+// import fontStyles from '../../constants/fonts';
 
 const instaLogo = require('../../assets/instagram.png');
 const youtubeLogo = require('../../assets/youtube.png');
@@ -69,6 +72,7 @@ const ProfileScreen = (props) => {
   const [editing, setEditing] = useState(false);
   const [text, onChangeText] = useState('');
   const [workaround, changeWorkAround] = useState(0);
+  const [modalVisible, setModalVisible] = useState(false);
   const [routes] = useState([
     { key: 'posts', title: 'Posts' },
     { key: 'missions', title: 'Missions' },
@@ -79,7 +83,7 @@ const ProfileScreen = (props) => {
   const renderEditButton = (edit) => {
     if (!edit) {
       return (
-        <TouchableOpacity style={styles.logoutButtonContainer} onPress={() => setEditing(true)}>
+        <TouchableOpacity style={styles.logoutButtonContainer} onPress={() => { setModalVisible(true); setEditing(true); }}>
           <Text style={styles.logoutButton}>Edit</Text>
         </TouchableOpacity>
       );
@@ -92,26 +96,37 @@ const ProfileScreen = (props) => {
         bio: text,
       };
       return (
-        <TouchableOpacity style={styles.logoutButtonContainer} onPress={() => { setEditing(false); props.editUser(userdata); }}>
-          <Text style={styles.logoutButton}>Done</Text>
-        </TouchableOpacity>
-      );
-    }
-  };
+        <Modal
+          animationType="slide"
+          visible={modalVisible}
+          transparent={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+            setEditing(false);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <View style={styles.header}>
 
-  const renderBio = (edit) => {
-    if (!edit) {
-      return (
-        <Text style={styles.bioText}>{user.bio}</Text>
-      );
-    } else {
-      return (
-        <TextInput
-          style={{ height: 70, backgroundColor: 'white', margin: 10 }}
-          onChangeText={onChangeText}
-          value={text}
-          multiline
-        />
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => { setModalVisible(!modalVisible); setEditing(false); props.editUser(userdata); }}
+                >
+                  <View style={styles.imagesIcon}>
+                    <FontAwesomeIcon icon={faTimes} size={40} color="white" />
+                  </View>
+                </Pressable>
+              </View>
+              <TextInput
+                style={{ height: 70, backgroundColor: 'white', margin: 10 }}
+                onChangeText={onChangeText}
+                value={text}
+                multiline
+              />
+            </View>
+          </View>
+        </Modal>
       );
     }
   };
@@ -150,7 +165,7 @@ const ProfileScreen = (props) => {
           </Text>
         </View>
       </View>
-      {renderBio(editing)}
+      <Text style={styles.bioText}>{user.bio}</Text>
       <View style={styles.socialsContainer}>
         <Image style={styles.socialsLogo} source={instaLogo} />
         <Text style={styles.socialsText}
@@ -178,6 +193,45 @@ const ProfileScreen = (props) => {
 };
 
 const styles = StyleSheet.create({
+  header: {
+    backgroundColor: Colors.bgSecondary,
+    width: '100%',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 15,
+    paddingBottom: 5,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalView: {
+    borderRadius: 20,
+    backgroundColor: Colors.bgTertiary,
+    alignItems: 'center',
+    shadowColor: '#000',
+    width: '100%',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    zIndex: 10,
+  },
+  imagesIcon: {
+    position: 'absolute',
+    right: '5%',
+    top: '5%',
+  },
   container: {
     flex: 1,
     width: '100%',
