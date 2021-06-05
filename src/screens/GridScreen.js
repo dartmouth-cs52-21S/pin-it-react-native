@@ -10,7 +10,7 @@ const GridScreen = ({ route }) => {
   const { location, posts } = route.params;
 
   const renderItem = useCallback(({ item }) => (
-    <PostCard location={location} item={item} post={item} />
+    <PostCard location={location} item={item} isGridScreen />
   ));
 
   return (
@@ -21,7 +21,7 @@ const GridScreen = ({ route }) => {
       </View>
       <FlatList
         data={posts}
-        numColumns={3}
+        numColumns={2}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
       />
@@ -32,11 +32,8 @@ const GridScreen = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    margin: -2,
     backgroundColor: bgPrimary,
-  },
-  gridItem: {
-    flex: 1,
-    margin: 10,
   },
   header: {
     padding: 20,
