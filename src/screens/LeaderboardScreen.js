@@ -3,8 +3,11 @@ import { connect } from 'react-redux';
 import {
   View, StyleSheet, Text, Image,
 } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { getTopUsers, getUser, getUserRankInfo } from '../actions/user';
-import { bgPrimary, accentPink, bgSecondary } from '../constants/colors';
+import {
+  bgPrimary, bgSecondary, accentPurple,
+} from '../constants/colors';
 
 const LeaderboardScreen = (props) => {
   const getLeaderboardData = async () => {
@@ -31,6 +34,9 @@ const LeaderboardScreen = (props) => {
       </View>
 
       <View style={styles.headerColumn}>
+        <Text style={styles.mainText}>
+          you
+        </Text>
         <Image
           style={styles.profPic}
           source={{ uri: userRankInfo.profPic }}
@@ -52,11 +58,9 @@ const LeaderboardScreen = (props) => {
   );
 
   const renderRow = (user, index) => (
-    <View style={styles.rowContainer}>
-      <View style={styles.rowRankContainer}>
+    <View style={styles.rowContainer} key={user.id}>
+      <View style={styles.rowDetails}>
         <Text style={styles.rowRank}>{index}</Text>
-      </View>
-      <View key={user.id} style={styles.row}>
         <Image
           style={styles.rowImage}
           source={{ uri: user.profPic }}
@@ -64,25 +68,26 @@ const LeaderboardScreen = (props) => {
         <Text style={styles.rowUsername}>
           {user.username}
         </Text>
-        <Text style={styles.rowReaches}>
-          {user.missionsCompleted}
-        </Text>
       </View>
+      <Text style={styles.rowReaches}>
+        {user.missionsCompleted}
+      </Text>
     </View>
   );
 
   return (
     <View style={styles.container}>
       {renderHeader()}
-      {topUsers.map((user, index) => renderRow(user, index + 1))}
+      <ScrollView style={styles.scrollview}>
+        {topUsers.map((user, index) => renderRow(user, index + 1))}
+      </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    height: '100%',
+    flex: 1,
     alignItems: 'center',
     backgroundColor: bgPrimary,
   },
@@ -91,9 +96,8 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 50,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
+    marginVertical: 20,
+    padding: 10,
     borderRadius: 10,
   },
   headerColumn: {
@@ -107,60 +111,62 @@ const styles = StyleSheet.create({
   },
   mainText: {
     color: 'white',
-    fontSize: 30,
+    fontSize: 25,
     textAlign: 'center',
     fontWeight: 'bold',
   },
   profPic: {
     width: 120,
     height: 120,
+    borderColor: accentPurple,
+    borderWidth: 4,
     borderRadius: 100,
-    borderColor: accentPink,
-    borderWidth: 5,
   },
 
-  // Leaderboard row
+  // Leaderboard rows
+  scrollview: {
+    width: '100%',
+  },
   rowContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    width: '80%',
+    alignSelf: 'center',
+    width: '90%',
+    marginVertical: 10,
+    paddingHorizontal: 20,
+    height: 70,
+    backgroundColor: bgSecondary,
+    borderRadius: 8,
+  },
+  rowDetails: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   rowRank: {
     color: 'white',
     fontSize: 20,
   },
-  row: {
-    backgroundColor: bgSecondary,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '85%',
-    paddingHorizontal: 30,
-    height: 60,
-    borderRadius: 100,
-  },
   rowImage: {
-    position: 'absolute',
-    width: 60,
-    height: 60,
+    width: 50,
+    height: 50,
+    marginHorizontal: 20,
     borderRadius: 100,
   },
   rowUsername: {
-    marginLeft: 60,
     color: 'white',
-    fontSize: 20,
+    fontSize: 18,
   },
   rowReaches: {
-    color: accentPink,
-    fontSize: 25,
+    color: accentPurple,
+    fontSize: 20,
     fontWeight: 'bold',
   },
 });
 
 const mapStateToProps = (state) => ({
-  topUsers: state.user.top_users,
-  userRankInfo: state.user.user_rank_info,
+  topUsers: state.user.topUsers,
+  userRankInfo: state.user.userRankInfo,
 });
 
 export default connect(mapStateToProps, { getUser, getUserRankInfo, getTopUsers })(LeaderboardScreen);
