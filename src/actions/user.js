@@ -8,17 +8,34 @@ const { api } = config;
 export const ActionTypes = {
   GET_USER: 'GET_USER',
   GET_TOP_USERS: 'GET_TOP_USERS',
+  GET_USER_RANK_INFO: 'GET_USER_RANK_INFO',
 };
 
 export const getUser = () => async (dispatch) => {
   const token = await AsyncStorage.getItem('token');
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`${api}/user`, { headers: { authorization: token } })
+      .then((response) => {
+        dispatch({ type: ActionTypes.GET_USER, payload: response.data });
+        resolve(response.data._id);
+      })
+      .catch((error) => {
+        dispatch(setError(`Getting user failed: ${error.response.data}`));
+        reject();
+      });
+  });
+};
+
+export const editUser = (userdata) => async (dispatch) => {
+  const token = await AsyncStorage.getItem('token');
   axios
-    .get(`${api}/user`, { headers: { authorization: token } })
+    .put(`${api}/user`, userdata, { headers: { authorization: token } })
     .then((response) => {
       dispatch({ type: ActionTypes.GET_USER, payload: response.data });
     })
     .catch((error) => {
-      dispatch(setError(`Getting user failed: ${error.response.data}`));
+      dispatch(setError(`Posting failed: ${error.response.data}`));
     });
 };
 
@@ -33,14 +50,13 @@ export const getTopUsers = () => async (dispatch) => {
     });
 };
 
-export const editUser = (userdata) => async (dispatch) => {
-  const token = await AsyncStorage.getItem('token');
-  axios
-    .put(`${api}/user`, userdata, { headers: { authorization: token } })
+// Get user rank info by userId
+export const getUserRankInfo = (userId) => async (dispatch) => {
+  axios.get(`${api}/userrankinfo/${userId}`)
     .then((response) => {
-      dispatch({ type: ActionTypes.GET_USER, payload: response.data });
+      dispatch({ type: ActionTypes.GET_USER_RANK_INFO, payload: response.data[0] });
     })
     .catch((error) => {
-      dispatch(setError(`Posting failed: ${error.response.data}`));
+      dispatch(setError(`Getting user rnak info failed: ${error.response.data}`));
     });
 };

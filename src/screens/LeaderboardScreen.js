@@ -1,17 +1,46 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Text, View, StyleSheet } from 'react-native';
-import { getTopUsers } from '../actions/user';
+import Leaderboard from 'react-native-leaderboard';
+import { View, StyleSheet, Text } from 'react-native';
+import { getTopUsers, getUser, getUserRankInfo } from '../actions/user';
 
 const LeaderboardScreen = (props) => {
-  useEffect(() => { props.getTopUsers(); }, []);
+  useEffect(() => {
+    const getLeaderboardData = async () => {
+      const userId = await props.getUser();
+      props.getUserRankInfo(userId);
+    };
 
-  const { topUsers } = props;
-  console.log(topUsers);
+    getLeaderboardData();
+    props.getTopUsers();
+  }, []);
+
+  const { topUsers, userRankInfo } = props;
+
+  const renderHeader = () => (
+    <View>
+      <Text>
+        #
+        {userRankInfo.rank}
+      </Text>
+      <Text>{userRankInfo.username}</Text>
+      <Text>
+        {userRankInfo.missionsCompleted}
+        {' '}
+        missions completed
+      </Text>
+    </View>
+  );
 
   return (
     <View style={styles.container}>
-      <Text>Todo</Text>
+      {renderHeader()}
+      <Leaderboard
+        data={topUsers}
+        sortBy="missionsCompleted"
+        labelBy="username"
+        icon="profPic"
+      />
     </View>
   );
 };
@@ -27,6 +56,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   topUsers: state.user.top_users,
+  userRankInfo: state.user.user_rank_info,
 });
 
-export default connect(mapStateToProps, { getTopUsers })(LeaderboardScreen);
+export default connect(mapStateToProps, { getUser, getUserRankInfo, getTopUsers })(LeaderboardScreen);
