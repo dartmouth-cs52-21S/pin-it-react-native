@@ -6,6 +6,7 @@ import {
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faUser, faLock, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { displayToast } from '../actions/app';
 import { signInUser, signUpUser } from '../actions/auth';
 import {
   bgPrimary, bgTertiary, accentPink,
@@ -17,6 +18,7 @@ const Auth = (props) => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [password2, setPassword2] = useState('');
 
   const renderUsername = () => {
     if (authType === 'signUp') {
@@ -36,6 +38,36 @@ const Auth = (props) => {
       );
     } else {
       return (null);
+    }
+  };
+
+  const renderPassword2 = () => {
+    if (authType === 'signUp') {
+      return (
+        <View style={styles.userEntry}>
+          <FontAwesomeIcon icon={faLock} size={28} color={bgTertiary} />
+          <TextInput
+            style={styles.textInput}
+            value={password2}
+            onChangeText={(text) => setPassword2(text)}
+            placeholder="Password"
+            type="password"
+            autoCapitalize="none"
+            placeholderTextColor="grey"
+            secureTextEntry
+          />
+        </View>
+      );
+    } else {
+      return (null);
+    }
+  };
+
+  const validator = () => {
+    if (email.length > 0 && password.length > 0 && username.length > 0 && password === password2) {
+      props.signUpUser({ email, password, username });
+    } else {
+      displayToast('error', 'Sign in failed', 'Fill all fields and match passwords');
     }
   };
 
@@ -64,7 +96,7 @@ const Auth = (props) => {
         <>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => props.signUpUser({ email, password, username })}
+            onPress={validator}
           >
             <Text style={styles.buttonText}>Sign up</Text>
           </TouchableOpacity>
@@ -115,6 +147,7 @@ const Auth = (props) => {
             secureTextEntry
           />
         </View>
+        {renderPassword2()}
         {renderButtons()}
       </View>
     </View>
