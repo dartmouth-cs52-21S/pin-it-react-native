@@ -2,13 +2,10 @@ import React, { useRef, useEffect } from 'react';
 import {
   StyleSheet, View, Text, LogBox, TouchableOpacity,
 } from 'react-native';
-import { connect } from 'react-redux';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import config from '../../app-config';
-import { getLocation } from '../selectors/app';
-import { updateLocation, clearLocation } from '../actions/app';
 import { accentPurple } from '../constants/colors';
 
 // Ignores issue tied to GooglePlacesAutocomplete component
@@ -18,14 +15,19 @@ const { googleApiKey } = config;
 
 const LocationDisplay = (props) => {
   const locationInputRef = useRef();
-  const { address } = props;
-  const { onFocus, onBlur } = props;
+  const { onFocus, onBlur, initialAddress } = props;
   const { textInputContainer, textInput } = styles;
 
   const clearQuery = () => {
     locationInputRef.current?.setAddressText('');
-    props.clearLocation();
+    props.onClear();
   };
+
+  useEffect(() => {
+    if (initialAddress) {
+      locationInputRef.current?.setAddressText(initialAddress);
+    }
+  });
 
   const ClearButton = () => (
     <TouchableOpacity style={styles.clearButton} onPress={clearQuery}>
@@ -33,18 +35,13 @@ const LocationDisplay = (props) => {
     </TouchableOpacity>
   );
 
-  useEffect(() => {
-    locationInputRef.current?.setAddressText(address || '');
-  }, []);
-
   return (
     <GooglePlacesAutocomplete
       ref={locationInputRef}
-      placeholder={address || 'neighborhood, city, state, or zip code'}
+      placeholder="neighborhood, city, state, or zip code"
       fetchDetails
       onPress={(data, details = null) => {
-        props.updateLocation(data.place_id);
-        if (props.onPress) props.onPress(data, details);
+        props.onPress(data, details);
       }}
       currentLocation
       query={{
@@ -95,8 +92,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => ({
-  address: getLocation(state)?.address,
-});
-
-export default connect(mapStateToProps, { updateLocation, clearLocation })(LocationDisplay);
+export default LocationDisplay;

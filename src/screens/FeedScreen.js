@@ -19,7 +19,9 @@ const FeedScreen = (props) => {
   const [searchFocused, setSearchFocused] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [tags, setTags] = useState([]);
-  const { queriedLocationsList, location } = props;
+  const [location, setLocation] = useState(null);
+
+  const { queriedLocationsList } = props;
 
   /* Show all locations (no search query) on first render; referenced:
   https://stackoverflow.com/questions/53253940/make-react-useeffect-hook-not-run-on-initial-render
@@ -69,6 +71,16 @@ const FeedScreen = (props) => {
       .finally(() => setSearchFocused(false));
   };
 
+  const handleSubmitLocation = (loc) => {
+    setLocation(loc);
+    props.getQueriedLocations(null, loc);
+  };
+
+  const onClearLocation = () => {
+    setLocation(null);
+    props.getQueriedLocations(search, null);
+  };
+
   const renderHeader = () => (
     <View style={styles.header}>
       <View style={styles.searchBarContainer}>
@@ -95,7 +107,14 @@ const FeedScreen = (props) => {
         )} */}
       </View>
 
-      {searchFocused && <LocationDisplay />}
+      {searchFocused
+        && (
+        <LocationDisplay
+          onPress={handleSubmitLocation}
+          onClear={onClearLocation}
+          initialAddress={location?.description}
+        />
+        )}
       {!searchFocused && (
         <TagRow
           active={tags}
@@ -192,7 +211,6 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   queriedLocationsList: state.locations.queriedLocationsList,
-  location: state.app.location,
 });
 
 export default connect(mapStateToProps, { getQueriedLocations })(FeedScreen);

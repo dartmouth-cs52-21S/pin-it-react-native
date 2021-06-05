@@ -12,7 +12,7 @@ export const ActionTypes = {
 export const getQueriedLocations = (search, location) => async (dispatch) => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${api}/locations?search=${search}&location=${location ? location.title : ''}`)
+      .get(`${api}/locations?search=${search}&location=${location ? location.description : ''}`)
       .then((response) => {
         dispatch({ type: ActionTypes.GET_QUERIED_LOCATIONS, payload: response.data });
         resolve();

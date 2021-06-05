@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity,
 } from 'react-native';
+import { connect } from 'react-redux';
 import ButtonGroup from './ButtonGroup';
 import { bgTertiary, accentGreen } from '../constants/colors';
 import LocationDisplay from './LocationDisplay';
@@ -15,7 +16,7 @@ const NewMissionModal = (props) => {
 
   const [places, setPlaces] = useState([]);
   const [distances, setDistances] = useState([]);
-  const [start, setStart] = useState(props.initialLocation);
+  const [start, setStart] = useState(props.currentLocation);
 
   const placeChoices = ['Restaurant', 'Bar', 'Museum', 'Park', 'Landmark', 'Store'];
   const distChoices = ['<1 mile', '5-10 miles', '10-25 miles', '25+ miles'];
@@ -24,7 +25,6 @@ const NewMissionModal = (props) => {
   distValues = distValues.map((num) => num * milesToMeters);
 
   const onLocationSelect = async (data) => {
-    console.log('selecting');
     const placeId = data.place_id;
     const { latitude, longitude } = await getLocationByPlaceId(placeId);
     setStart({ latitude, longitude });
@@ -69,6 +69,7 @@ const NewMissionModal = (props) => {
         <LocationDisplay
           containerStyle={styles.locationDisplay}
           onPress={onLocationSelect}
+          onClear={() => setStart(props.currentLocation)}
           onFocus={onFocus}
           onBlur={onBlur}
         />
@@ -114,4 +115,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NewMissionModal;
+const mapStateToProps = (state) => ({
+  currentLocation: state.locations.currentLocation,
+});
+
+export default connect(mapStateToProps, null)(NewMissionModal);

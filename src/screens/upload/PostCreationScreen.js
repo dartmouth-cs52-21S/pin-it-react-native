@@ -13,8 +13,9 @@ import TagRow from '../../components/TagRow';
 import LocationDisplay from '../../components/LocationDisplay';
 
 const PostCreationScreen = (props) => {
-  const { post, location, updatePost } = props;
+  const { post, updatePost, currentLocation } = props;
   const [postCaption, setPostCaption] = useState('');
+  const [location, setLocation] = useState(currentLocation);
 
   const { latitude, longitude } = location || { };
 
@@ -60,7 +61,10 @@ const PostCreationScreen = (props) => {
             multiline
             numberOfLines={3}
           />
-          <LocationDisplay />
+          <LocationDisplay
+            onPress={(place) => setLocation(place)}
+            onClear={() => setLocation(currentLocation)}
+          />
           {location && (
           <>
             <MapView
@@ -136,6 +140,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => ({
   post: getCurrentPost(state),
   location: getLocation(state),
+  currentLocation: state.locations.currentLocation,
 });
 
 const mapDispatchToProps = {

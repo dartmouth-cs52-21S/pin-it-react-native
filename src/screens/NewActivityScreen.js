@@ -16,7 +16,6 @@ import DistanceIndicator from '../components/DistanceIndicator';
 import {
   generateMission, routeToMission, postMission,
 } from '../services/missionService';
-import { getLocation } from '../selectors/app';
 import { getMission } from '../selectors/mission';
 import { setMission, clearMission } from '../actions/missions';
 import { setCurrentLocation } from '../actions/locations';
@@ -38,9 +37,8 @@ const NewActivityScreen = (props) => {
   const [route, setRoute] = useState([]);
 
   const {
-    location, mission, navigation, currentLocation,
+    mission, navigation, currentLocation,
   } = props;
-  const { latitude, longitude } = location || {};
 
   const [distance, setDistance] = useState(0);
   const [arrived, setArrived] = useState(false);
@@ -158,10 +156,6 @@ const NewActivityScreen = (props) => {
           props.setCurrentLocation(userLocation);
         }}
       >
-        {latitude && (
-        <Marker coordinate={{ latitude, longitude }} />
-        )}
-
         {missionLocation && (
           <Marker coordinate={missionLocation}
             title="destination"
@@ -184,7 +178,6 @@ const NewActivityScreen = (props) => {
             scrollViewProps={{ keyboardShouldPersistTaps: 'always' }}
           >
             <NewMissionModal onSubmit={onSubmit}
-              initialLocation={location}
               onFocus={() => setRaiseModal(true)}
               onBlur={() => setRaiseModal(false)}
             />
@@ -285,7 +278,6 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => ({
-  location: getLocation(state),
   mission: getMission(state),
   currentLocation: state.locations.currentLocation,
 });
