@@ -49,10 +49,8 @@ const UploadTab = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  let location = getLocation(state);
-  const { imageUrls, caption, category } = getCurrentPost(state);
-
-  location = { ...location, category };
+  const location = getLocation(state);
+  const { imageUrls, caption } = getCurrentPost(state);
 
   return {
     post: {

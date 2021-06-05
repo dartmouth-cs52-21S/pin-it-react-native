@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   },
   uploadButton: {
     alignSelf: 'center',
-    backgroundColor: Colors.accentGreen,
+    backgroundColor: Colors.lightBlue,
     padding: 10,
     borderRadius: 10,
     marginVertical: 20,

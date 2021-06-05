@@ -1,56 +1,92 @@
 import {
-  faUtensils, faRunning, faCamera, faGlassMartiniAlt, faPalette,
+  faUtensils, faRunning, faCamera, faGlassMartiniAlt, faPalette, faShoppingBag, faVolleyballBall, faMapMarked,
 } from '@fortawesome/free-solid-svg-icons';
 
 export const categories = {
   Restaurant: {
     icon: faUtensils,
     style: {
-      backgroundColor: '#2CA8C7',
+      backgroundColor: '#4984F9',
     },
   },
   Park: {
     icon: faRunning,
     style: {
-      backgroundColor: '#19A33F',
+      backgroundColor: '#FC6079',
     },
   },
   Landmark: {
     icon: faCamera,
     style: {
-      backgroundColor: '#4984F9',
+      backgroundColor: '#FE9B3A',
     },
   },
   Bar: {
     icon: faGlassMartiniAlt,
     style: {
-      backgroundColor: '#FE9B3A',
+      backgroundColor: '#4FBE82',
     },
   },
   Art: {
     icon: faPalette,
     style: {
-      backgroundColor: '#F9516C',
+      backgroundColor: '#9381FF',
+    },
+  },
+  Shopping: {
+    icon: faShoppingBag,
+    style: {
+      backgroundColor: '#D974CF',
+    },
+  },
+  Sports: {
+    icon: faVolleyballBall,
+    style: {
+      backgroundColor: '#FFEE59',
+    },
+  },
+  Poi: {
+    icon: faMapMarked,
+    style: {
+      backgroundColor: '#7EAAFF',
     },
   },
 };
 
+// corresponding icon for place type (not actual category)
 export const placeTypeToCategory = {
   amusement_park: 'Park',
+  aquarium: 'Park',
   art_gallery: 'Art',
   bakery: 'Restaurant',
   bar: 'Bar',
-  bowling_alley: 'Park',
+  bowling_alley: 'Sports',
   cafe: 'Restaurant',
   campground: 'Park',
   casino: 'Bar',
+  city_hall: 'Landmark',
+  embassy: 'Landmark',
+  gym: 'Sports',
   museum: 'Art',
-  night_club: 'Landmark',
+  meal_delivery: 'Restaurant',
+  meal_takeaway: 'Restaurant',
+  night_club: 'Bar',
   park: 'Park',
   restaurant: 'Restaurant',
-  stadium: 'Park',
+  stadium: 'Sports',
   tourist_attraction: 'Landmark',
-  zoo: 'Landmark',
+  zoo: 'Park',
+  point_of_interest: 'Poi',
+  shopping_mall: 'Shopping',
+  department_store: 'Shopping',
+  jewelry_store: 'Shopping',
+  furniture_store: 'Shopping',
+  home_goods_store: 'Shopping',
+  clothing_store: 'Shopping',
+  store: 'Shopping',
+  establishment: 'Shopping',
+  food: 'Restaurant',
+  landmark: 'Landmark',
 };
 
 export default categories;
