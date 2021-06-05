@@ -1,20 +1,23 @@
 import React, { useState, useCallback, useRef } from 'react';
 import {
-  View, Text, StyleSheet, Image,
+  View, Text, StyleSheet, Image, Pressable, Modal,
 } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faEllipsisH, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { connect } from 'react-redux';
 import { bgTertiary } from '../constants/colors';
 import LocationHeader from './LocationHeader';
+import { getUser, deletePost } from '../actions/user';
 
 const PostCarousel = (props) => {
   const {
-    caption, imageUrls, location,
+    caption, imageUrls, location, id,
   // eslint-disable-next-line react/destructuring-assignment
   } = props;
 
-  console.log(props);
-
   const [activeIndex, setActiveIndex] = useState(0);
+  const [modalVisible, setModalVisible] = useState(false);
   const ref = useRef(null);
 
   // Carousel Image
@@ -31,6 +34,14 @@ const PostCarousel = (props) => {
       />
     </View>
   ), []);
+
+  const deletePostAndUpdateUser = async () => {
+    const message = props.deletePost(id);
+    if (message) {
+      props.getUser();
+      setModalVisible(!modalVisible);
+    }
+  };
 
   // Carousel Pagination
   const renderPagination = () => {
@@ -53,6 +64,35 @@ const PostCarousel = (props) => {
 
   return (
     <View>
+      <Modal
+        animationType="slide"
+        visible={modalVisible}
+        transparent={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Pressable
+              style={[styles.button2, styles.buttonClose]}
+              onPress={deletePostAndUpdateUser}
+            >
+              <Text style={{ color: 'white' }}>
+                Delete
+              </Text>
+            </Pressable>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <View style={styles.imagesIcon}>
+                <FontAwesomeIcon icon={faTimes} size={24} color="white" />
+              </View>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
       <View style={styles.card}>
         <LocationHeader location={location} />
         <View style={{ height: 350, flexDirection: 'column', alignItems: 'center' }}>
@@ -73,15 +113,15 @@ const PostCarousel = (props) => {
           <Text style={styles.caption}>
             {caption}
           </Text>
-          <Pressable
-            style={[styles.button, styles.buttonClose]}
-            onPress={() => { console.log('baboo'); }}
-          >
-            <View style={styles.imagesIcon}>
-              <FontAwesomeIcon icon={faTimes} size={29} color="white" />
-            </View>
-          </Pressable>
         </View>
+        <Pressable
+          style={[styles.ellipses, styles.buttonClose]}
+          onPress={() => setModalVisible(true)}
+        >
+          <View style={styles.imagesIcon}>
+            <FontAwesomeIcon icon={faEllipsisH} size={29} color="white" />
+          </View>
+        </Pressable>
       </View>
     </View>
   );
@@ -99,11 +139,50 @@ const styles = StyleSheet.create({
     flex: 0,
     justifyContent: 'space-between',
   },
+  ellipses: {
+    borderRadius: 20,
+    padding: 10,
+    zIndex: 10,
+    position: 'absolute',
+    left: '90%',
+    bottom: '-2%',
+  },
   caption: {
     color: 'white',
     fontSize: 16,
     width: '95%',
     margin: 10,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalView: {
+    borderRadius: 20,
+    backgroundColor: bgTertiary,
+    alignItems: 'center',
+    shadowColor: '#000',
+    width: '30%',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button2: {
+    backgroundColor: 'rgba(255,255,255,.2)',
+    borderRadius: 20,
+    padding: 10,
+    zIndex: 10,
+    marginTop: 10,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    zIndex: 10,
   },
   carouselImage: {
     width: '100%',
@@ -113,4 +192,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PostCarousel;
+export default connect(null, { getUser, deletePost })(PostCarousel);

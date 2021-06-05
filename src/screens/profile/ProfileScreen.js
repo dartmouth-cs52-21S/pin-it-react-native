@@ -208,7 +208,7 @@ const ProfileScreen = (props) => {
 
   useEffect(() => {
     props.getUser();
-  }, []);
+  }, [user.posts]);
 
   const blankProfile = 'https://res.cloudinary.com/djc5u8rjt/image/upload/v1621833029/ux9xmvmtjl3nf7x7ls2n.png';
   const blankInsta = 'https://www.instagram.com/?hl=en';
