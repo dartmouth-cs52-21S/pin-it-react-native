@@ -26,7 +26,6 @@ const MissionsTab = () => (<Text style={styles.testText}>Missions</Text>);
 const renderScene = (props) => SceneMap({
   posts: PostsTab,
   missions: MissionsTab,
-  // eslint-disable-next-line react/destructuring-assignment
   pins: () => (<PinsTab navigation={props.navigation} />),
   badges: BadgesTab,
 });
