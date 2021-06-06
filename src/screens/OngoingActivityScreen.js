@@ -69,7 +69,7 @@ const OngoingActivityScreen = (props) => {
             <MissionCard
               mission={mission}
               key={`${mission.title}${mission.createdAt}`}
-              onPress={() => console.log('yo')}
+              onPress={() => {}}
             />
           ))}
       </ScrollView>

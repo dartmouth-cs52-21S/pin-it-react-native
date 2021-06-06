@@ -11,6 +11,8 @@ const { api } = config;
 export const ActionTypes = {
   GET_POSTS: 'GET_POSTS',
   UPDATE_CURRENT_POST: 'UPDATE_CURRENT_POST',
+  CLEAR_POST: 'CLEAR_POST',
+  SET_POST_IMAGE: 'SET_POST_IMAGE',
 };
 
 /*
@@ -23,6 +25,19 @@ export const updateCurrentPost = (currentPost) => {
   };
 };
 
+export const clearPost = () => {
+  return {
+    type: ActionTypes.CLEAR_POST,
+  };
+};
+
+export const setPostImage = (img) => {
+  return {
+    type: ActionTypes.SET_POST_IMAGE,
+    payload: img,
+  };
+};
+
 /*
  * Api Calls
  */
@@ -31,7 +46,7 @@ export const handleImageUpload = (onSuccess) => async (dispatch) => {
 
   if (photo) {
     const result = await uploadPhoto(photo);
-    dispatch(updateCurrentPost({ imageUrls: [result.data.url] }));
+    dispatch(setPostImage({ imageUrls: [result.data.url] }));
     onSuccess();
   }
 };
@@ -39,7 +54,7 @@ export const handleImageUpload = (onSuccess) => async (dispatch) => {
 export const handleUploadfromCamera = (photo, onSuccess) => async (dispatch) => {
   if (photo) {
     const result = await uploadPhoto(photo);
-    dispatch(updateCurrentPost({ imageUrls: [result.data.url] }));
+    dispatch(setPostImage({ imageUrls: [result.data.url] }));
     onSuccess();
   }
 };

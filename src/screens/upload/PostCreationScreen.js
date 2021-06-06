@@ -1,23 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import {
   ActivityIndicator, TextInput, Image, View, StyleSheet,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import MapView, { Marker } from 'react-native-maps';
-import { getLocation } from '../../selectors/app';
 import { getCurrentPost } from '../../selectors/posts';
 import { updateCurrentPost } from '../../actions/posts';
 import { bgPrimary, bgTertiary } from '../../constants/colors';
 import LocationDisplay from '../../components/LocationDisplay';
+import { getLocationByPlaceId, getCurrentLocation } from '../../services/locationService';
 
 const PostCreationScreen = (props) => {
-  const { post, location, updatePost } = props;
+  const { post, updatePost, currentLocation } = props;
+  const [postCaption, setPostCaption] = useState('');
+  const [location, setLocation] = useState(currentLocation);
+
+  useEffect(() => {
+    getCurrentLocation((loc) => {
+      updatePost({ ...post, location: loc });
+    });
+  }, []);
 
   const { latitude, longitude } = location || { };
-  const imageUrl = post.imageUrls[0];
 
-  if (!imageUrl) {
+  const imageUrl = post?.imageUrls?.[0];
+
+  if (!post) {
     return (
       <View style={styles.container}>
         <ActivityIndicator />
@@ -25,26 +34,46 @@ const PostCreationScreen = (props) => {
     );
   }
 
+  const setLocationToPost = async (place) => {
+    const loc = await getLocationByPlaceId(place.place_id);
+    setLocation(loc);
+    updatePost({ ...post, location: loc });
+  };
+
   return (
     <View style={styles.container}>
       <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
-        <Image
-          style={styles.uploadedImage}
-          source={{
-            uri: imageUrl,
-          }}
-        />
+        {imageUrl
+          ? (
+            <Image
+              style={styles.uploadedImage}
+              source={{
+                uri: imageUrl,
+              }}
+            />
+          )
+          : (
+            <View style={styles.uploadedImage}>
+              <ActivityIndicator />
+            </View>
+          )}
         <View style={styles.postDetailsContainer}>
           <TextInput
             style={styles.textInput}
-            value={post.caption}
-            onChangeText={(caption) => updatePost({ ...post, caption })}
+            value={postCaption}
+            onChangeText={(caption) => {
+              updatePost({ ...post, caption });
+              setPostCaption(caption);
+            }}
             placeholder="Caption"
             placeholderTextColor="grey"
             multiline
             numberOfLines={3}
           />
-          <LocationDisplay />
+          <LocationDisplay
+            onPress={setLocationToPost}
+            onClear={() => setLocation(currentLocation)}
+          />
           {location && (
           <>
             <MapView
@@ -55,10 +84,6 @@ const PostCreationScreen = (props) => {
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
               }}
-              pitchEnabled={false}
-              rotateEnabled={false}
-              zoomEnabled={false}
-              scrollEnabled={false}
             >
               <Marker coordinate={{ latitude, longitude }} />
             </MapView>
@@ -87,6 +112,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: undefined,
     aspectRatio: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   textInput: {
     backgroundColor: bgTertiary,
@@ -113,7 +140,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   post: getCurrentPost(state),
-  location: getLocation(state),
+  currentLocation: state.locations.currentLocation,
 });
 
 const mapDispatchToProps = {
