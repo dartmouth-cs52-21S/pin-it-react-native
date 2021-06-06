@@ -87,12 +87,12 @@ const ModalCard = (props) => {
         </View>
 
         <View style={{
-          flexDirection: 'row',
-          flexWrap: 1,
+          flexDirection: 'column',
         }}
         >
           <Text style={[fontStyles.mediumTextRegular, {
             width: '95%',
+            maxWidth: '95%',
             margin: 10,
             marginBottom: 3,
           }]}

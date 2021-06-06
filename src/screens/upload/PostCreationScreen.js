@@ -8,7 +8,6 @@ import MapView, { Marker } from 'react-native-maps';
 import { getCurrentPost } from '../../selectors/posts';
 import { updateCurrentPost } from '../../actions/posts';
 import { bgPrimary, bgTertiary } from '../../constants/colors';
-import TagRow from '../../components/TagRow';
 import LocationDisplay from '../../components/LocationDisplay';
 import { getLocationByPlaceId, getCurrentLocation } from '../../services/locationService';
 
@@ -59,11 +58,6 @@ const PostCreationScreen = (props) => {
             </View>
           )}
         <View style={styles.postDetailsContainer}>
-          <TagRow
-            active={[post.category]}
-            containerStyle={styles.tagRow}
-            handleTagPressed={(category) => updatePost({ ...post, category })}
-          />
           <TextInput
             style={styles.textInput}
             value={postCaption}
@@ -132,10 +126,6 @@ const styles = StyleSheet.create({
   },
   locationDisplay: {
     marginBottom: 15,
-  },
-  tagRow: {
-    marginBottom: 20,
-    justifyContent: 'space-between',
   },
   mapView: {
     width: '100%',

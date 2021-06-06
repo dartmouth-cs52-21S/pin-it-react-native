@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from 'react';
 import {
-  View, Text, StyleSheet, Image, Modal, Pressable, TouchableOpacity,
+  View, Text, StyleSheet, Image, Modal, Pressable, TouchableWithoutFeedback,
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faImages, faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -13,7 +13,7 @@ import fontStyles from '../constants/fonts';
 
 const PostCard = (props) => {
   const {
-    location, item,
+    location, item, isGridScreen,
   } = props;
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -22,23 +22,35 @@ const PostCard = (props) => {
       {/* Code for displaying images evenly in grid view
       https://stackoverflow.com/questions/54039345/display-images-in-flatlist/54042860
       */}
-      <TouchableOpacity
-        style={{
-          flex: 1 / 3,
-          aspectRatio: 1,
-        }}
+      <TouchableWithoutFeedback
         onPress={() => setModalVisible(true)}
       >
-        <Image
-          style={styles.carouselImage}
-          source={{ uri: item.imageUrls[0] }}
-        />
-        {item.imageUrls.length > 1 && (
-        <View style={styles.imagesIcon}>
-          <FontAwesomeIcon icon={faImages} size={23} color="white" />
+        <View style={styles.touchableImage}>
+          <Image
+            style={styles.carouselImage}
+            source={{ uri: item.imageUrls[0] }}
+          />
+          {item.imageUrls.length > 1 && (
+          <View style={styles.imagesIcon}>
+            <FontAwesomeIcon icon={faImages} size={23} color="white" />
+          </View>
+          )}
+          <View style={[styles.carouselFooter, isGridScreen ? styles.carouselFooterGridScreen : styles.carouselFooterFeedScreen]}>
+            <Text
+              style={[styles.carouselUsername, isGridScreen ? styles.carouselUsernameGridScreen : styles.carouselUsernameFeedScreen]}
+              numberOfLines={1}
+            >
+              @
+              {item.username}
+            </Text>
+            <View style={[styles.circle, isGridScreen ? styles.circleGridScreen : styles.circleFeedScreen]}>
+              <Text style={styles.carouselNumImages}>
+                {item.imageUrls.length}
+              </Text>
+            </View>
+          </View>
         </View>
-        )}
-      </TouchableOpacity>
+      </TouchableWithoutFeedback>
       <Modal
         animationType="slide"
         visible={modalVisible}
@@ -126,6 +138,61 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
+  },
+  carouselFooter: {
+    position: 'absolute',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexShrink: 1,
+    backgroundColor: 'rgba(147,129,255, 0.5)',
+  },
+  carouselFooterFeedScreen: {
+    bottom: 10,
+    left: 10,
+    padding: 5,
+  },
+  carouselFooterGridScreen: {
+    bottom: 5,
+    left: 5,
+    padding: 3,
+  },
+  carouselUsername: {
+    color: 'white',
+    flexShrink: 1,
+    paddingRight: 10,
+  },
+  carouselUsernameGridScreen: {
+    fontSize: 20,
+    maxWidth: 100,
+  },
+  carouselUsernameFeedScreen: {
+    fontSize: 22,
+    maxWidth: 200,
+  },
+  circle: {
+    backgroundColor: 'rgba(147,129,255, 0.8)',
+    borderRadius: 100,
+    justifyContent: 'center',
+  },
+  circleGridScreen: {
+    width: 30,
+    height: 30,
+  },
+  circleFeedScreen: {
+    width: 40,
+    height: 40,
+  },
+  carouselNumImages: {
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  touchableImage: {
+    flex: 1 / 2,
+    aspectRatio: 1,
+    margin: 2,
   },
 });
 

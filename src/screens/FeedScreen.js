@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import {
-  View, SafeAreaView, StyleSheet, StatusBar, Text, RefreshControl, Animated, TouchableOpacity,
+  View, SafeAreaView, StyleSheet, Text, RefreshControl, Animated, TouchableOpacity,
 } from 'react-native';
 import { useCollapsibleSubHeader, CollapsibleSubHeaderAnimator } from 'react-navigation-collapsible';
 import { SearchBar } from 'react-native-elements';
@@ -27,8 +27,8 @@ const FeedScreen = (props) => {
   https://stackoverflow.com/questions/53253940/make-react-useeffect-hook-not-run-on-initial-render
   */
   useEffect(() => {
-    props.getQueriedLocations(search, location);
-  }, [location]);
+    props.getQueriedLocations(search, location, tags);
+  }, [location, tags]);
 
   const handleTagPressed = (tagValue) => {
     if (tags.includes(tagValue)) {
@@ -40,7 +40,7 @@ const FeedScreen = (props) => {
 
   const handleRefresh = async () => {
     setIsFetching(true);
-    await props.getQueriedLocations(search, location);
+    await props.getQueriedLocations(search, location, tags);
     setIsFetching(false);
   };
 
@@ -67,7 +67,7 @@ const FeedScreen = (props) => {
 
   const handleSubmitEditing = () => {
     props
-      .getQueriedLocations(search, location)
+      .getQueriedLocations(search, location, tags)
       .finally(() => setSearchFocused(false));
   };
 
@@ -99,12 +99,6 @@ const FeedScreen = (props) => {
           }}
           onFocus={() => setSearchFocused(true)}
         />
-        {/* {searchFocused
-        && (
-        <TouchableOpacity style={styles.doneButton} onPress={handleCancel}>
-          <Text style={styles.doneText}>Done</Text>
-        </TouchableOpacity>
-        )} */}
       </View>
 
       {searchFocused
@@ -171,7 +165,6 @@ const FeedScreen = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
     backgroundColor: bgPrimary,
   },
   header: {

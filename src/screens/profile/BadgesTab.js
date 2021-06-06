@@ -6,15 +6,14 @@ import { connect } from 'react-redux';
 import BadgeTile from '../../components/BadgeTile';
 import { bgPrimary } from '../../constants/colors';
 
-const renderItem = ({ item }) => (
-  // eslint-disable-next-line react/jsx-props-no-spreading
-  <BadgeTile {...item} />
-);
+const renderItem = ({ item }) => {
+  const { dateEarned } = item;
+  return <BadgeTile badge={{ ...item.badge, dateEarned }} />;
+};
 
 const BadgesTab = (props) => {
   const { user } = props;
   const { badges } = user;
-  console.log(user);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -22,6 +21,7 @@ const BadgesTab = (props) => {
         data={badges}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
+        keyExtractor={(item) => item.badge.title}
       />
     </SafeAreaView>
   );
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => ({
-  user: state.user.user_data,
+  user: state.user.userData,
 });
 
 export default connect(mapStateToProps, null)(BadgesTab);

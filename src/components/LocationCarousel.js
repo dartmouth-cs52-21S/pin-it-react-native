@@ -6,20 +6,18 @@ import {
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { connect } from 'react-redux';
 import {
   bgPrimary, bgSecondary,
 } from '../constants/colors';
 import categories from '../constants/categories';
 import PostCard from './PostCard';
-import { getLocationInfo } from '../services/locationService';
-import { getQueriedLocations } from '../actions/locations';
+import { getLocationPostsById } from '../services/locationService';
 
 const { width: viewportWidth } = Dimensions.get('window');
 
 const LocationCarousel = (props) => {
   const {
-    title, category, latitude, longitude, address, posts,
+    title, category, latitude, longitude, address, posts, id,
   } = props;
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -76,12 +74,12 @@ const LocationCarousel = (props) => {
                 numberOfLines={1}
                 style={styles.title}
                 onPress={async () => {
-                  // await props.getFullLocation(placeId);
+                  const fullLocation = await getLocationPostsById(id);
                   props.navigation.navigate('GridScreen', {
                     location: {
                       title, category, latitude, longitude,
                     },
-                    posts,
+                    posts: fullLocation.data[0].posts,
                   });
                 }}
               >
@@ -143,6 +141,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     alignSelf: 'center',
     paddingLeft: 7,
+    width: '80%',
   },
   detail: {
     fontSize: 12,
@@ -167,9 +166,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => ({
-  queriedLocationsList: state.locations.queriedLocationsList,
-  // fullLocation: state.locations.fullLocation,
-});
-
-export default connect(mapStateToProps, { getLocationInfo, getQueriedLocations })(LocationCarousel);
+export default LocationCarousel;

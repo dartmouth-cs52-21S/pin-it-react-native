@@ -12,14 +12,13 @@ const Stack = createStackNavigator();
 
 const UploadTab = (props) => {
   const { post } = props;
-  console.log(post);
   return (
     <Stack.Navigator>
       <Stack.Screen
         name="UploadScreen"
         component={UploadScreen}
         options={{
-          title: 'New Post',
+          title: '',
           headerStyle: {
             backgroundColor: bgPrimary,
             shadowOffset: { height: 0, width: 0 }, // Gets rid of white line underneath

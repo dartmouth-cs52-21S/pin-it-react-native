@@ -1,14 +1,20 @@
 import { ActionTypes } from '../actions/user';
 
 const initialState = {
-  user_data: {},
+  userData: {},
+  topUsers: [],
+  userRankInfo: {},
 };
 
 const UserReducer = (state = initialState, action) => {
   const { payload } = action;
   switch (action.type) {
     case ActionTypes.GET_USER:
-      return { ...state, user_data: payload };
+      return { ...state, userData: payload };
+    case ActionTypes.GET_TOP_USERS:
+      return { ...state, topUsers: payload };
+    case ActionTypes.GET_USER_RANK_INFO:
+      return { ...state, userRankInfo: payload };
     default:
       return state;
   }

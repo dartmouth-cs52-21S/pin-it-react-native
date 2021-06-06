@@ -19,6 +19,7 @@ const PostsTab = (props) => {
     <SafeAreaView style={styles.container}>
       <FlatList
         data={posts}
+        keyExtractor={(item) => item.id}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
       />
@@ -31,13 +32,13 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
     paddingHorizontal: 15,
-    paddingVertical: 15,
+    paddingVertical: 0,
     backgroundColor: bgPrimary,
   },
 });
 
 const mapStateToProps = (state) => ({
-  user: state.user.user_data,
+  user: state.user.userData,
 });
 
 export default connect(mapStateToProps, null)(PostsTab);
