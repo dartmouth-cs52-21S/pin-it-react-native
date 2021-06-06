@@ -12,9 +12,6 @@ export const ActionTypes = {
 export const getQueriedLocations = (search, location, tags) => async (dispatch) => {
   return new Promise((resolve, reject) => {
     axios
-<<<<<<< HEAD
-      .get(`${api}/locations?search=${search}&location=${location ? location.description : ''}`)
-=======
       .get(`${api}/locations`, {
         params: {
           search,
@@ -22,7 +19,6 @@ export const getQueriedLocations = (search, location, tags) => async (dispatch) 
           tags,
         },
       })
->>>>>>> ce65153242f5ff05fd27a8bfbfd0bee2f295f7ff
       .then((response) => {
         dispatch({ type: ActionTypes.GET_QUERIED_LOCATIONS, payload: response.data });
         resolve();
