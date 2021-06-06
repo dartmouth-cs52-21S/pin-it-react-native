@@ -15,8 +15,11 @@ const PostCarouselList = ({ posts }) => {
     <SafeAreaView style={styles.container}>
       <FlatList
         data={posts}
+        initialScrollIndex={0}
+        initialNumToRender={2}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
+        removeClippedSubviews={false}
         showsVerticalScrollIndicator={false}
       />
     </SafeAreaView>

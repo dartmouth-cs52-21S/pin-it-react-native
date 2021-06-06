@@ -118,7 +118,7 @@ const ProfileScreen = (props) => {
         <Modal
           animationType="slide"
           visible={modalVisible}
-          transparent={modalVisible}
+          transparent
           onRequestClose={() => {
             setModalVisible(!modalVisible);
             setEditing(false);

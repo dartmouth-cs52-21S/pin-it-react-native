@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import * as Colors from '../constants/colors';
 import config from '../../app-config';
+import fontStyles from '../constants/fonts';
 
 const { googleApiKey } = config;
 
@@ -14,17 +15,15 @@ const ArrivedModal = ({ mission, onPress }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titleText}>ARRIVED AT</Text>
-      <Text style={[styles.titleText, { fontWeight: 'bold' }]}>{mission ? mission.title.toUpperCase() : ''}</Text>
+      <Text style={[styles.titleText, fontStyles.largeTextRegular]}>ARRIVED AT</Text>
+      <Text style={[styles.titleText, fontStyles.smallHeaderTitle]}>{mission ? mission.title.toUpperCase() : ''}</Text>
       <Image style={styles.locationImage} source={{ uri: finalUri }} />
       <TouchableOpacity style={styles.startButton} onPress={onPress}>
-        <Text style={styles.startButtonText}>Take Photo</Text>
+        <Text style={fontStyles.mediumTextBold}>Take Photo</Text>
       </TouchableOpacity>
     </View>
   );
 };
-
-export default ArrivedModal;
 
 const styles = StyleSheet.create({
   container: {
@@ -35,35 +34,24 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     paddingHorizontal: 30,
   },
-
   titleText: {
-    fontSize: 26,
-    color: 'white',
-    marginBottom: 15,
+    marginBottom: 10,
     textAlign: 'center',
-    fontWeight: '200',
   },
-
   locationImage: {
-    marginTop: 20,
-    marginBottom: 50,
-    height: 250,
+    marginVertical: 20,
     width: 250,
-    resizeMode: 'contain',
+    height: undefined,
+    aspectRatio: 1,
+    resizeMode: 'cover',
   },
-
   startButton: {
-    height: 60,
-    width: 180,
-    borderRadius: 15,
+    alignSelf: 'center',
     backgroundColor: Colors.accentGreen,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  startButtonText: {
-    fontSize: 20,
-    color: 'white',
-    fontWeight: 'bold',
+    padding: 10,
+    borderRadius: 10,
+    marginVertical: 20,
   },
 });
+
+export default ArrivedModal;

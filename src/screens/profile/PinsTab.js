@@ -33,6 +33,9 @@ const PinsTab = ({ user, ...props }) => {
 
     for (const post of posts) {
       const { location } = post;
+      // eslint-disable-next-line no-continue
+      if (!location) { continue; }
+
       let grouped = false;
       for (const group of groupedLocations) {
         if (withinRadius(group, location, region.longitudeDelta / N_BOXES)) {

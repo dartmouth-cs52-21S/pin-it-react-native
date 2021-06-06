@@ -20,6 +20,7 @@ import { getLocation } from '../selectors/app';
 import { getMission } from '../selectors/mission';
 import { setMission, clearMission } from '../actions/missions';
 import ErrorModal from '../components/ErrorModal';
+import BadgeModal from '../components/BadgeModal';
 
 const NewActivityScreen = (props) => {
   const ARRIVED_DIST = 50; // when 50 m within destination, register arrival
@@ -34,9 +35,12 @@ const NewActivityScreen = (props) => {
   const [missionLocation, setMissionLocation] = useState(null);
   const [raiseModal, setRaiseModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [badgeModalVisible, setBadgeModalVisible] = useState(false);
   const [route, setRoute] = useState([]);
 
-  const { location, mission, navigation } = props;
+  const {
+    location, mission, navigation, badges,
+  } = props;
   const { latitude, longitude } = location || {};
 
   const [myLocation, setMyLocation] = useState(location);
@@ -99,6 +103,12 @@ const NewActivityScreen = (props) => {
   const onModalPress = (e) => {
     newMissionRef.current?.open();
   };
+
+  useEffect(() => {
+    if (props.badges.length > 0) {
+      setBadgeModalVisible(true);
+    }
+  }, [JSON.stringify(badges)]);
 
   const onSubmit = async (lat, lng, radius, query) => {
     setRaiseModal(false);
@@ -232,6 +242,7 @@ const NewActivityScreen = (props) => {
         mainText="No Route Found"
         secondaryText="Could not calculate route between your location and the destination"
       />
+      <BadgeModal modalVisible={badgeModalVisible} setModalVisible={setBadgeModalVisible} />
     </View>
   );
 };
@@ -285,6 +296,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => ({
   location: getLocation(state),
   mission: getMission(state),
+  badges: state.badges.badgeList,
 });
 
 export default connect(mapStateToProps, { setMission, clearMission })(NewActivityScreen);

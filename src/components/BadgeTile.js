@@ -21,7 +21,7 @@ const BadgeTile = ({ badge }) => {
           {title}
         </Text>
         <Text style={fontStyles.smallTextRegular} numberOfLines={1}>
-          {`Earned on ${new Date(dateEarned).toDateString().slice(0, -4)}`}
+          {dateEarned ? `Earned on ${new Date(dateEarned).toDateString().slice(0, -4)}` : 'Earned just now'}
         </Text>
       </View>
     </View>

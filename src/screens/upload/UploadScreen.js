@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable react/destructuring-assignment */
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import {
   Text, TouchableOpacity, View, StyleSheet, Image,
@@ -6,21 +7,30 @@ import {
 import { handleImageUpload } from '../../actions/posts';
 import * as Colors from '../../constants/colors';
 import fontStyles from '../../constants/fonts';
+import BadgeModal from '../../components/BadgeModal';
 
 const bgImage = require('../../assets/upload-image.png');
 
 const UploadScreen = (props) => {
   const { handleImageUpload: handleUploadPress } = props;
-  const onSuccess = () => props.navigation.navigate('PostCreationScreen');
+  const onUploadPress = () => props.navigation.navigate('PostCreationScreen');
+  const [modalVisible, setModalVisible] = useState(false);
+
+  useEffect(() => {
+    if (props.badges.length > 0) {
+      setModalVisible(true);
+    }
+  }, [JSON.stringify(props.badges)]);
 
   return (
     <View style={styles.container}>
       <Image style={styles.uploadImage} source={bgImage} />
       <Text style={[fontStyles.largeTextBold, styles.title]}>Share your journey</Text>
       <Text style={[fontStyles.smallTextRegular, styles.descriptionText]}>Let us know of the exciting, beautiful, spontaneous, or boring places where you go! Or go to 🎲 to complete missions and earn badges.</Text>
-      <TouchableOpacity style={styles.uploadButton} onPress={() => handleUploadPress(onSuccess)}>
+      <TouchableOpacity style={styles.uploadButton} onPress={() => handleUploadPress(onUploadPress)}>
         <Text style={fontStyles.mediumTextBold}>Share photos</Text>
       </TouchableOpacity>
+      <BadgeModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
     </View>
   );
 };
@@ -55,4 +65,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(null, { handleImageUpload })(UploadScreen);
+const mapStateToProps = (state) => ({
+  badges: state.badges.badgeList,
+});
+
+export default connect(mapStateToProps, { handleImageUpload })(UploadScreen);
