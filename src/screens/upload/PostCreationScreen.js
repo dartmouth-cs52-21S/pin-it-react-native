@@ -20,7 +20,7 @@ const PostCreationScreen = (props) => {
     getCurrentLocation((loc) => {
       updatePost({ ...post, location: loc });
     });
-  });
+  }, []);
 
   const { latitude, longitude } = location || { };
 
@@ -61,7 +61,10 @@ const PostCreationScreen = (props) => {
           <TextInput
             style={styles.textInput}
             value={postCaption}
-            onChangeText={(caption) => { updatePost({ ...post, caption }); setPostCaption(caption); }}
+            onChangeText={(caption) => {
+              updatePost({ ...post, caption });
+              setPostCaption(caption);
+            }}
             placeholder="Caption"
             placeholderTextColor="grey"
             multiline

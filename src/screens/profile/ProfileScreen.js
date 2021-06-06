@@ -13,7 +13,8 @@ import BadgesTab from './BadgesTab';
 import { signOutUser } from '../../actions/auth';
 import { getPhoto, uploadPhoto } from '../../services/imageUpload';
 import { accentPurple, bgPrimary, bgTertiary } from '../../constants/colors';
-// import fontStyles from '../../constants/fonts';
+import PinsTab from './PinsTab';
+import { getUserData } from '../../selectors/user';
 
 const instaLogo = require('../../assets/instagram.png');
 const youtubeLogo = require('../../assets/youtube.png');
@@ -21,12 +22,11 @@ const youtubeLogo = require('../../assets/youtube.png');
 const windowWidth = (Dimensions.get('window').width) / 4;
 
 const MissionsTab = () => (<Text style={styles.testText}>Missions</Text>);
-const PinsTab = () => (<Text style={styles.testText}>Pins</Text>);
 
-const renderScene = SceneMap({
+const renderScene = (props) => SceneMap({
   posts: PostsTab,
   missions: MissionsTab,
-  pins: PinsTab,
+  pins: () => (<PinsTab navigation={props.navigation} />),
   badges: BadgesTab,
 });
 
@@ -47,10 +47,10 @@ const renderLabel = (labelProps) => (
 
 );
 
-const renderTabBar = (props) => (
+const renderTabBar = (tabBarProps) => (
   <TabBar
     // eslint-disable-next-line react/jsx-props-no-spreading
-    {...props}
+    {...tabBarProps}
     scrollEnabled
     indicatorStyle={{ backgroundColor: accentPurple }}
     style={{
@@ -118,7 +118,7 @@ const ProfileScreen = (props) => {
         <Modal
           animationType="slide"
           visible={modalVisible}
-          transparent={modalVisible}
+          transparent
           onRequestClose={() => {
             setModalVisible(!modalVisible);
             setEditing(false);
@@ -186,7 +186,7 @@ const ProfileScreen = (props) => {
 
   useEffect(() => {
     props.getUser();
-  }, [user.posts]);
+  }, [JSON.stringify(user)]);
 
   const blankProfile = 'https://res.cloudinary.com/djc5u8rjt/image/upload/v1621833029/ux9xmvmtjl3nf7x7ls2n.png';
   const blankInsta = 'https://www.instagram.com/?hl=en';
@@ -241,7 +241,7 @@ const ProfileScreen = (props) => {
       <TabView
         style={styles.tabViewContainer}
         navigationState={{ index, routes }}
-        renderScene={renderScene}
+        renderScene={renderScene(props)}
         onIndexChange={setIndex}
         renderTabBar={renderTabBar}
       />
@@ -395,7 +395,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => ({
-  user: state.user.userData,
+  user: getUserData(state),
 });
 
 export default connect(mapStateToProps, { getUser, signOutUser, editUser })(ProfileScreen);

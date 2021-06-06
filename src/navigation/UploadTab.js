@@ -11,7 +11,12 @@ import fontStyles from '../constants/fonts';
 const Stack = createStackNavigator();
 
 const UploadTab = (props) => {
-  const { post } = props;
+  const handlePostSubmit = (navigation) => {
+    props.createPost(props.post, () => {
+      navigation.navigate('UploadScreen', { uploadSuccessful: true });
+    });
+  };
+
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -41,7 +46,7 @@ const UploadTab = (props) => {
           headerTintColor: '#fff',
           headerTitleStyle: { fontSize: 25 },
           headerTitleAlign: 'center',
-          headerRight: () => (<Button title="Submit" onPress={() => props.createPost(post, () => navigation.navigate('UploadScreen'))} />),
+          headerRight: () => (<Button title="Submit" onPress={() => handlePostSubmit(navigation)} />),
         })}
       />
     </Stack.Navigator>

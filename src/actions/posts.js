@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 import { setError, displayToast } from './app';
+import { getUser } from './user';
 import config from '../../app-config';
 import { getPhoto, uploadPhoto } from '../services/imageUpload';
+import { setBadges } from './badges';
 
 const { api } = config;
 
@@ -10,6 +12,7 @@ export const ActionTypes = {
   GET_POSTS: 'GET_POSTS',
   UPDATE_CURRENT_POST: 'UPDATE_CURRENT_POST',
   CLEAR_POST: 'CLEAR_POST',
+  SET_POST_IMAGE: 'SET_POST_IMAGE',
 };
 
 /*
@@ -28,6 +31,13 @@ export const clearPost = () => {
   };
 };
 
+export const setPostImage = (img) => {
+  return {
+    type: ActionTypes.SET_POST_IMAGE,
+    payload: img,
+  };
+};
+
 /*
  * Api Calls
  */
@@ -36,7 +46,7 @@ export const handleImageUpload = (onSuccess) => async (dispatch) => {
 
   if (photo) {
     const result = await uploadPhoto(photo);
-    dispatch(updateCurrentPost({ imageUrls: [result.data.url] }));
+    dispatch(setPostImage({ imageUrls: [result.data.url] }));
     onSuccess();
   }
 };
@@ -44,19 +54,20 @@ export const handleImageUpload = (onSuccess) => async (dispatch) => {
 export const handleUploadfromCamera = (photo, onSuccess) => async (dispatch) => {
   if (photo) {
     const result = await uploadPhoto(photo);
-    dispatch(updateCurrentPost({ imageUrls: [result.data.url] }));
+    dispatch(setPostImage({ imageUrls: [result.data.url] }));
     onSuccess();
   }
 };
 
 export const createPost = (newPost, onSuccess) => async (dispatch) => {
   const token = await AsyncStorage.getItem('token');
-  console.log(newPost);
   axios
     .post(`${api}/posts`, newPost, { headers: { authorization: token } })
     .then((response) => {
+      dispatch(setBadges(response.data));
       onSuccess();
       displayToast('success', 'Post successfully created');
+      dispatch(getUser());
     })
     .catch((error) => {
       dispatch(setError(`Posting failed: ${error.response.data}`));
