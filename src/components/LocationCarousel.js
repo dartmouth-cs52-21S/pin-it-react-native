@@ -26,9 +26,11 @@ const LocationCarousel = (props) => {
   // Carousel Image
   const renderItem = useCallback(({ item }) => (
     <PostCard item={item}
+      id={id}
       location={{
         title, category, latitude, longitude, address,
       }}
+      navigation={props.navigation}
     />
   ), []);
 

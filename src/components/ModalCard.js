@@ -102,7 +102,7 @@ const ModalCard = (props) => {
           </Text>
           <Text style={[fontStyles.smallTextRegular, {
             width: '95%',
-            margin: 25,
+            margin: 10,
           }]}
           >
             {getDateString(diff)}
