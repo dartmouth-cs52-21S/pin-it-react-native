@@ -34,22 +34,26 @@ const LocationCarousel = (props) => {
 
   // Carousel Pagination
   const renderPagination = () => {
-    return (
-      <Pagination
-        containerStyle={{ paddingVertical: 0 }}
-        dotsLength={posts.length}
-        activeDotIndex={activeIndex}
-        dotStyle={{
-          width: 10,
-          height: 10,
-          borderRadius: 5,
-          backgroundColor: 'rgba(255, 255, 255, 0.92)',
-          marginVertical: 20,
-        }}
-        inactiveDotOpacity={0.4}
-        inactiveDotScale={0.6}
-      />
-    );
+    if (posts.length > 1) {
+      return (
+        <Pagination
+          containerStyle={{ paddingVertical: 0 }}
+          dotsLength={posts.length}
+          activeDotIndex={activeIndex}
+          dotStyle={{
+            width: 10,
+            height: 10,
+            borderRadius: 5,
+            backgroundColor: 'rgba(255, 255, 255, 0.92)',
+            marginTop: 12,
+          }}
+          inactiveDotOpacity={0.4}
+          inactiveDotScale={0.6}
+        />
+      );
+    } else {
+      return <Text style={{ fontSize: 0, marginBottom: 2 }}>{' '}</Text>;
+    }
   };
 
   const renderIcon = () => {
@@ -61,6 +65,42 @@ const LocationCarousel = (props) => {
         <FontAwesomeIcon icon={icon} size={23} color="white" />
       </View>
     );
+  };
+
+  const renderAddress = () => {
+    if (address) {
+      const addressarray = address.split(',');
+      const state2 = addressarray[2];
+      console.log(state2);
+      const state = String(state2).split(' ');
+      if (state2 !== undefined) {
+        return (
+          <Text style={styles.detail} numberOfLines={1}>
+            {addressarray[0]}
+            ,
+            {addressarray[1]}
+            ,
+            {' '}
+            {state[1]}
+          </Text>
+        );
+      } else {
+        return (
+          <Text style={styles.detail} numberOfLines={1}>
+            {addressarray[0]}
+            ,
+            {' '}
+            {addressarray[1]}
+          </Text>
+        );
+      }
+    } else {
+      return (
+        <Text style={styles.detail} numberOfLines={1}>
+          {' '}
+        </Text>
+      );
+    }
   };
 
   return (
@@ -86,10 +126,22 @@ const LocationCarousel = (props) => {
                 {title}
               </Text>
             </View>
-            <View style={{ alignSelf: 'center' }}>
+            <View style={{
+              alignSelf: 'center', height: 24, borderRadius: 10, backgroundColor: 'rgba(255, 255, 255, 0.2)', padding: 2, paddingLeft: 7,
+            }}
+            >
               <Text style={{
-                height: 20, backgroundColor: 'rgba(255, 255, 255, 0.2)', fontSize: 16, color: 'white',
+                height: 20, fontSize: 16, color: 'white', alignSelf: 'center',
               }}
+                onPress={async () => {
+                  const fullLocation = await getLocationPostsById(id);
+                  props.navigation.navigate('GridScreen', {
+                    location: {
+                      title, category, latitude, longitude,
+                    },
+                    posts: fullLocation.data[0].posts,
+                  });
+                }}
               >
                 {posts?.length || 0}
                 {' '}
@@ -98,18 +150,11 @@ const LocationCarousel = (props) => {
             </View>
           </View>
           <View style={styles.subheading}>
-            <Text style={styles.detail}>
-              Location:
-              {' '}
-              {latitude}
-              ,
-              {' '}
-              {longitude}
-            </Text>
+            {renderAddress()}
           </View>
         </View>
       </View>
-      <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+      <View style={{ flexDirection: 'column', alignItems: 'center', marginBottom: 12 }}>
         <Carousel
           layout="default"
           ref={ref}
