@@ -39,6 +39,17 @@ export const editUser = (userdata) => async (dispatch) => {
     });
 };
 
+export const deletePost = (id) => async (dispatch) => {
+  const token = await AsyncStorage.getItem('token');
+  axios
+    .delete(`${api}/post/${id}`, { headers: { authorization: token } })
+    .then((response) => {
+    })
+    .catch((error) => {
+      dispatch(setError(`Deleting failed: ${error.response.data}`));
+    });
+};
+
 // Get users with the highest number of completed missions
 export const getTopUsers = () => async (dispatch) => {
   axios.get(`${api}/topusers`)

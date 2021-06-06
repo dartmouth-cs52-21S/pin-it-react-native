@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 import { setError, displayToast } from './app';
+import { getUser } from './user';
 import config from '../../app-config';
 import { getPhoto, uploadPhoto } from '../services/imageUpload';
+import { setBadges } from './badges';
 
 const { api } = config;
 
@@ -47,8 +49,10 @@ export const createPost = (newPost, onSuccess) => async (dispatch) => {
   axios
     .post(`${api}/posts`, newPost, { headers: { authorization: token } })
     .then((response) => {
+      dispatch(setBadges(response.data));
       onSuccess();
       displayToast('success', 'Post successfully created');
+      dispatch(getUser());
     })
     .catch((error) => {
       dispatch(setError(`Posting failed: ${error.response.data}`));

@@ -1,3 +1,4 @@
 import ProfileScreen from './ProfileScreen';
+import PinsLocationFeedScreen from './PinsLocationFeedScreen';
 
-export default ProfileScreen;
+export { ProfileScreen, PinsLocationFeedScreen };

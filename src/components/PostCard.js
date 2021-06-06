@@ -67,14 +67,29 @@ const PostCard = (props) => {
       <Modal
         animationType="slide"
         visible={modalVisible}
-        transparent={modalVisible}
+        transparent
         onRequestClose={() => {
           setModalVisible(!modalVisible);
         }}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-          <Pressable
+          <Pressable>
+            <View style={styles.header}>
+              <View>
+                <Text style={[fontStyles.mediumTextBold, { paddingTop: 5, paddingBottom: 5, paddingLeft: 1 }]}>
+                  {item.username}
+                  {' '}
+                  @
+                </Text>
+                <Text style={[fontStyles.largeHeaderTitle, { paddingBottom: 5 }]}>
+                  {location.title}
+                </Text>
+                <Text style={[fontStyles.smallTextRegular, { paddingBottom: 5, paddingLeft: 1 }]}>
+                  {location.category === 'Poi' ? 'Point of Interest' : location.category}
+                </Text>
+              </View>
+              <Pressable
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => setModalVisible(!modalVisible)}
               >
@@ -121,6 +136,8 @@ const PostCard = (props) => {
             <ModalCard {...item}
               location={location}
             />
+            </View>
+          </Pressable>
           </View>
         </View>
       </Modal>

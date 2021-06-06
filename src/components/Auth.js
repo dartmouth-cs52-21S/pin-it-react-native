@@ -50,7 +50,7 @@ const Auth = (props) => {
             style={styles.textInput}
             value={password2}
             onChangeText={(text) => setPassword2(text)}
-            placeholder="Password"
+            placeholder="Confirm Password"
             type="password"
             autoCapitalize="none"
             placeholderTextColor="grey"

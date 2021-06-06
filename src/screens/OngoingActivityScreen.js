@@ -32,7 +32,7 @@ const OngoingActivityScreen = (props) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
-        <Text style={fontStyles.largeHeaderTitle}>My Missions</Text>
+        <Text style={fontStyles.smallHeaderTitle}>My Missions</Text>
       </View>
       <View style={styles.selectorContainer}>
         <TouchableWithoutFeedback onPress={() => setActiveTab(true)}>
