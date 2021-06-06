@@ -1,7 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import {
-  View, Text, StyleSheet, Image, Modal, Pressable, TouchableWithoutFeedback,
+  View, Text, StyleSheet, Image, Modal, Pressable, TouchableWithoutFeedback, Dimensions
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faImages, faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -9,14 +10,27 @@ import {
   bgTertiary, bgSecondary,
 } from '../constants/colors';
 import ModalCard from './ModalCard';
+import * as LocationService from '../services/locationService';
+import { getUser } from '../actions/user';
 import fontStyles from '../constants/fonts';
+
+var width = Dimensions.get('window').width;
 
 const PostCard = (props) => {
   const {
-    location, item, isGridScreen,
+    location, item, isGridScreen, user
   } = props;
   const [modalVisible, setModalVisible] = useState(false);
+  // useEffect(() => {
+  //   // LocationService.getCurrentLocation(console.log)
+  //   console.log(item)
+  //   console.log(item.user)
+  //   console.log('space')
+  //   console.log(item.username)
+  // },[item.user]); 
 
+  const blankProfile = 'https://res.cloudinary.com/djc5u8rjt/image/upload/v1621833029/ux9xmvmtjl3nf7x7ls2n.png';
+  const profileUrl = item.user? (item.user.profilePhoto ? item.user.profilePhoto : blankProfile):blankProfile;
   return (
     <>
       {/* Code for displaying images evenly in grid view
@@ -41,7 +55,6 @@ const PostCard = (props) => {
               numberOfLines={1}
             >
               @
-              {item.username}
             </Text>
             <View style={[styles.circle, isGridScreen ? styles.circleGridScreen : styles.circleFeedScreen]}>
               <Text style={styles.carouselNumImages}>
@@ -61,21 +74,7 @@ const PostCard = (props) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View style={styles.header}>
-              <View>
-                <Text style={[fontStyles.mediumTextBold, { paddingTop: 5, paddingBottom: 5, paddingLeft: 1 }]}>
-                  {item.username}
-                  {' '}
-                  @
-                </Text>
-                <Text style={[fontStyles.largeHeaderTitle, { paddingBottom: 5 }]}>
-                  {location.title}
-                </Text>
-                <Text style={[fontStyles.smallTextRegular, { paddingBottom: 5, paddingLeft: 1 }]}>
-                  {location.category}
-                </Text>
-              </View>
-              <Pressable
+          <Pressable
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => setModalVisible(!modalVisible)}
               >
@@ -83,6 +82,41 @@ const PostCard = (props) => {
                   <FontAwesomeIcon icon={faTimes} size={40} color="white" />
                 </View>
               </Pressable>
+            <View style={styles.header}>
+              <View>
+                <Text style={[fontStyles.largeHeaderTitle, { paddingBottom: 5, alignSelf: 'center'}]}>
+                  {location.title}
+                </Text>
+                <Text style={[fontStyles.smallTextRegular, { paddingBottom: 5, paddingLeft: 1, alignSelf: 'center' }]}>
+                  {location.address}
+                </Text>
+                <Text style={[fontStyles.smallTextRegular, { paddingBottom: 5, paddingLeft: 1, alignSelf: 'center' }]}>
+                  {LocationService.getLocationPostsById.length}
+                  {' reaches'}
+                </Text>
+                <View style={styles.horizontalLine}/>
+                <Image style={styles.profilePhoto} source={{ uri: profileUrl }} />
+                <Text style={[fontStyles.mediumTextRegular, { paddingTop: 5, paddingBottom: 5, paddingLeft: 1, alignSelf: 'center' }]}>
+                  {'Reach by'}
+                  {'\n'}
+                  <View style={styles.userid}>
+                  <Text style={[fontStyles.mediumTextRegular,{ paddingTop: 2, paddingBottom: 2, paddingLeft: 1, alignSelf: 'center'}]}>
+                  {' @'}
+                  {item.username}
+                  {' '}
+                </Text>
+                </View>
+                </Text>
+                <Text style={[fontStyles.smallTextRegular, { paddingBottom: 5, paddingLeft: 1, alignSelf: 'center', justifyContent: 'center'}]}>
+                  {item.user?item.user.badges.length:null}
+                  {' badges '}
+                  <Text style={[fontStyles.smallTextRegular, { paddingBottom: 5, paddingLeft: 1, fontSize: 10}]}>
+                  {' \u2B24  '}
+                  </Text>
+                  {item.user?item.user.missionsCompleted:null}
+                  {' missions completed'}
+                  </Text>
+              </View>
             </View>
             <ModalCard {...item}
               location={location}
@@ -96,7 +130,7 @@ const PostCard = (props) => {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: bgSecondary,
+    backgroundColor: 'rgb(3, 9, 44)',
     width: '100%',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -112,9 +146,9 @@ const styles = StyleSheet.create({
   },
   modalView: {
     borderRadius: 20,
-    backgroundColor: bgTertiary,
-    alignItems: 'center',
+    backgroundColor: 'rgb(3, 9, 44)',
     shadowColor: '#000',
+    height: '100%',
     width: '100%',
     shadowOffset: {
       width: 0,
@@ -123,6 +157,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    width: '100%',
+  },
+  horizontalLine:{
+    borderBottomColor: 'rgb(67, 78, 142)',
+    borderBottomWidth: 1,
+    width: width,
+    paddingTop:10,
+    paddingBottom:10,
   },
   button: {
     borderRadius: 20,
@@ -194,6 +236,13 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     margin: 2,
   },
+  userid:{
+    backgroundColor: 'rgb(129, 46, 125)',
+    borderRadius: 30,
+  }
 });
 
-export default PostCard;
+const mapStateToProps = (state) => ({
+  user: state.user.userData,
+});
+export default connect(mapStateToProps, { getUser})(PostCard);

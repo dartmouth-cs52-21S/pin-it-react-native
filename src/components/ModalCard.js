@@ -1,10 +1,11 @@
 import React, { useState, useCallback, useRef } from 'react';
 import {
-  View, Text, StyleSheet, Image,
+  View, Text, StyleSheet, Image, Dimensions,
 } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
-import { bgTertiary } from '../constants/colors';
 import fontStyles from '../constants/fonts';
+
+const { width } = Dimensions.get('window');
 
 const ModalCard = (props) => {
   const {
@@ -77,8 +78,8 @@ const ModalCard = (props) => {
             layout="default"
             ref={ref}
             data={imageUrls}
-            sliderWidth={330}
-            itemWidth={330}
+            sliderWidth={width}
+            itemWidth={width}
             renderItem={renderItem}
             onSnapToItem={(index) => setActiveIndex(index)}
             margin={10}
@@ -93,7 +94,7 @@ const ModalCard = (props) => {
           <Text style={[fontStyles.mediumTextRegular, {
             width: '95%',
             maxWidth: '95%',
-            margin: 10,
+            margin: 25,
             marginBottom: 3,
           }]}
           >
@@ -101,7 +102,7 @@ const ModalCard = (props) => {
           </Text>
           <Text style={[fontStyles.smallTextRegular, {
             width: '95%',
-            margin: 10,
+            margin: 25,
           }]}
           >
             {getDateString(diff)}
@@ -114,7 +115,7 @@ const ModalCard = (props) => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: bgTertiary,
+    backgroundColor: 'rgb(3, 9, 44)',
     padding: 10,
     borderRadius: 5,
   },
@@ -122,7 +123,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
-    borderRadius: 5,
   },
 });
 

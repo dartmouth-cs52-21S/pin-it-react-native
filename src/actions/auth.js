@@ -61,6 +61,7 @@ export function signUpUser(authInfo) {
         displayToast('success', 'Successfully signed up');
       })
       .catch((error) => {
+        console.log(error);
         displayToast('error', 'Sign up failed', error.response.data.error);
       });
   };
