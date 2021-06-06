@@ -16,8 +16,8 @@ const UploadScreen = (props) => {
   return (
     <View style={styles.container}>
       <Image style={styles.uploadImage} source={bgImage} />
-      <Text style={[fontStyles.smallHeaderTitle, styles.title]}>Share your journey</Text>
-      <Text style={[fontStyles.smallMediumText, styles.descriptionText]}>Let us know of the exciting, beautiful, spontaneous, or boring places where you go! Or go to 🎲 to complete missions and earn badges.</Text>
+      <Text style={[fontStyles.largeTextBold, styles.title]}>Share your journey</Text>
+      <Text style={[fontStyles.smallTextRegular, styles.descriptionText]}>Let us know of the exciting, beautiful, spontaneous, or boring places where you go! Or go to 🎲 to complete missions and earn badges.</Text>
       <TouchableOpacity style={styles.uploadButton} onPress={() => handleUploadPress(onSuccess)}>
         <Text style={fontStyles.mediumTextBold}>Share photos</Text>
       </TouchableOpacity>

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 import { setError, displayToast } from './app';
+import { getUser } from './user';
 import config from '../../app-config';
 import { getPhoto, uploadPhoto } from '../services/imageUpload';
 
@@ -49,6 +50,7 @@ export const createPost = (newPost, onSuccess) => async (dispatch) => {
     .then((response) => {
       onSuccess();
       displayToast('success', 'Post successfully created');
+      getUser();
     })
     .catch((error) => {
       dispatch(setError(`Posting failed: ${error.response.data}`));

@@ -39,7 +39,7 @@ const fontStyles = StyleSheet.create({
     fontFamily: 'Montserrat_700Bold',
   },
   largeTextBold: {
-    fontSize: RFValue(25),
+    fontSize: RFValue(20),
     color: 'white',
     fontFamily: 'Montserrat_700Bold',
   },

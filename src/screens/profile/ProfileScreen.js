@@ -13,7 +13,8 @@ import BadgesTab from './BadgesTab';
 import { signOutUser } from '../../actions/auth';
 import { getPhoto, uploadPhoto } from '../../services/imageUpload';
 import { accentPurple, bgPrimary, bgTertiary } from '../../constants/colors';
-// import fontStyles from '../../constants/fonts';
+import PinsTab from './PinsTab';
+import { getUserData } from '../../selectors/user';
 
 const instaLogo = require('../../assets/instagram.png');
 const youtubeLogo = require('../../assets/youtube.png');
@@ -21,50 +22,6 @@ const youtubeLogo = require('../../assets/youtube.png');
 const windowWidth = (Dimensions.get('window').width) / 4;
 
 const MissionsTab = () => (<Text style={styles.testText}>Missions</Text>);
-const PinsTab = () => (<Text style={styles.testText}>Pins</Text>);
-
-const renderScene = SceneMap({
-  posts: PostsTab,
-  missions: MissionsTab,
-  pins: PinsTab,
-  badges: BadgesTab,
-});
-
-const renderLabel = (labelProps) => (
-  <View>
-    <Text style={[
-      {
-        fontSize: 16,
-        textAlign: 'center',
-        width: windowWidth,
-      },
-      labelProps.focused ? { color: accentPurple, fontWeight: 'bold' } : { color: 'white' },
-    ]}
-    >
-      {labelProps.route.title}
-    </Text>
-  </View>
-
-);
-
-const renderTabBar = (props) => (
-  <TabBar
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...props}
-    scrollEnabled
-    indicatorStyle={{ backgroundColor: accentPurple }}
-    style={{
-      backgroundColor: bgPrimary,
-      maxWidth: '100%',
-    }}
-    tabStyle={{
-      padding: 0,
-      borderColor: 'red',
-      width: 'auto',
-    }}
-    renderLabel={renderLabel}
-  />
-);
 
 const ProfileScreen = (props) => {
   const { user } = props;
@@ -83,6 +40,50 @@ const ProfileScreen = (props) => {
     { key: 'pins', title: 'Pins' },
     { key: 'badges', title: 'Badges' },
   ]);
+
+  const renderScene = SceneMap({
+    posts: PostsTab,
+    missions: MissionsTab,
+    // eslint-disable-next-line react/destructuring-assignment
+    pins: () => (<PinsTab navigation={props.navigation} />),
+    badges: BadgesTab,
+  });
+
+  const renderLabel = (labelProps) => (
+    <View>
+      <Text style={[
+        {
+          fontSize: 16,
+          textAlign: 'center',
+          width: windowWidth,
+        },
+        labelProps.focused ? { color: accentPurple, fontWeight: 'bold' } : { color: 'white' },
+      ]}
+      >
+        {labelProps.route.title}
+      </Text>
+    </View>
+
+  );
+
+  const renderTabBar = (tabBarProps) => (
+    <TabBar
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...tabBarProps}
+      scrollEnabled
+      indicatorStyle={{ backgroundColor: accentPurple }}
+      style={{
+        backgroundColor: bgPrimary,
+        maxWidth: '100%',
+      }}
+      tabStyle={{
+        padding: 0,
+        borderColor: 'red',
+        width: 'auto',
+      }}
+      renderLabel={renderLabel}
+    />
+  );
 
   const uploadPFP = async () => {
     const photo = await getPhoto();
@@ -186,7 +187,7 @@ const ProfileScreen = (props) => {
 
   useEffect(() => {
     props.getUser();
-  }, [user.posts]);
+  }, [JSON.stringify(user)]);
 
   const blankProfile = 'https://res.cloudinary.com/djc5u8rjt/image/upload/v1621833029/ux9xmvmtjl3nf7x7ls2n.png';
   const blankInsta = 'https://www.instagram.com/?hl=en';
@@ -395,7 +396,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => ({
-  user: state.user.userData,
+  user: getUserData(state),
 });
 
 export default connect(mapStateToProps, { getUser, signOutUser, editUser })(ProfileScreen);
