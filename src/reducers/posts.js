@@ -10,9 +10,8 @@ const PostsReducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.GET_POSTS:
       return { ...state, postList: payload };
-    case ActionTypes.UPDATE_CURRENT_POST: {
+    case ActionTypes.UPDATE_CURRENT_POST:
       return { ...state, currentPost: payload };
-    }
     default:
       return state;
   }

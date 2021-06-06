@@ -54,7 +54,7 @@ const PostCard = (props) => {
       <Modal
         animationType="slide"
         visible={modalVisible}
-        transparent={modalVisible}
+        transparent
         onRequestClose={() => {
           setModalVisible(!modalVisible);
         }}
@@ -72,7 +72,7 @@ const PostCard = (props) => {
                   {location.title}
                 </Text>
                 <Text style={[fontStyles.smallTextRegular, { paddingBottom: 5, paddingLeft: 1 }]}>
-                  {location.category}
+                  {location.category === 'Poi' ? 'Point of Interest' : location.category}
                 </Text>
               </View>
               <Pressable

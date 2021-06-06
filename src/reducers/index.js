@@ -5,6 +5,7 @@ import AppReducer from './app';
 import LocationsReducer from './locations';
 import UserReducer from './user';
 import MissionsReducer from './missions';
+import BadgesReducer from './badges';
 
 const rootReducer = combineReducers({
   auth: AuthReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   locations: LocationsReducer,
   user: UserReducer,
   missions: MissionsReducer,
+  badges: BadgesReducer,
 });
 
 export default rootReducer;

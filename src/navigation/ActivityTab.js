@@ -9,7 +9,6 @@ import CameraScreen from '../screens/CameraScreen';
 import { PostCreationScreen } from '../screens/upload';
 import { bgTertiary, bgPrimary } from '../constants/colors';
 import { createPost } from '../actions/posts';
-import { getLocation } from '../selectors/app';
 import { getCurrentPost } from '../selectors/posts';
 
 const Tab = createMaterialTopTabNavigator();
@@ -77,16 +76,12 @@ const ActivityTab = () => {
 };
 
 const mapStateToProps = (state) => {
-  let location = getLocation(state);
-  const { imageUrls, caption, category } = getCurrentPost(state);
-
-  location = { ...location, category };
+  const post = getCurrentPost(state);
 
   return {
     post: {
-      imageUrls,
-      caption,
-      location,
+      ...post,
+      isMission: true,
     },
   };
 };
