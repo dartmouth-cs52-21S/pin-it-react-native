@@ -5,7 +5,6 @@ import {
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import MapView, { Marker } from 'react-native-maps';
-import { getLocation } from '../../selectors/app';
 import { getCurrentPost } from '../../selectors/posts';
 import { updateCurrentPost } from '../../actions/posts';
 import { bgPrimary, bgTertiary } from '../../constants/colors';
@@ -148,7 +147,6 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   post: getCurrentPost(state),
-  location: getLocation(state),
   currentLocation: state.locations.currentLocation,
 });
 

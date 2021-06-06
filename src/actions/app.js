@@ -1,5 +1,4 @@
 import Toast from 'react-native-toast-message';
-import { getLocationByPlaceId } from '../services/locationService';
 
 export const ActionTypes = {
   SET_ERROR: 'SET_ERROR',
@@ -27,22 +26,3 @@ export function setLocPermissionGranted(locPermissionGranted) {
     payload: locPermissionGranted,
   };
 }
-
-export function setLocation(location) {
-  return {
-    type: ActionTypes.SET_LOCATION,
-    payload: location,
-  };
-}
-
-export function clearLocation(location) {
-  return {
-    type: ActionTypes.CLEAR_LOCATION,
-    payload: null,
-  };
-}
-
-export const updateLocation = (placeId) => async (dispatch) => {
-  const location = await getLocationByPlaceId(placeId);
-  dispatch(setLocation(location));
-};
