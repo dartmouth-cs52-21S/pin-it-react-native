@@ -11,8 +11,8 @@ import { getUser, editUser } from '../../actions/user';
 import PostsTab from './PostsTab';
 import BadgesTab from './BadgesTab';
 import { signOutUser } from '../../actions/auth';
-import * as Colors from '../../constants/colors';
 import { getPhoto, uploadPhoto } from '../../services/imageUpload';
+import { accentPurple, bgPrimary, bgTertiary } from '../../constants/colors';
 // import fontStyles from '../../constants/fonts';
 
 const instaLogo = require('../../assets/instagram.png');
@@ -38,7 +38,7 @@ const renderLabel = (labelProps) => (
         textAlign: 'center',
         width: windowWidth,
       },
-      labelProps.focused ? { color: Colors.accentPurple, fontWeight: 'bold' } : { color: 'white' },
+      labelProps.focused ? { color: accentPurple, fontWeight: 'bold' } : { color: 'white' },
     ]}
     >
       {labelProps.route.title}
@@ -52,9 +52,9 @@ const renderTabBar = (props) => (
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...props}
     scrollEnabled
-    indicatorStyle={{ backgroundColor: Colors.accentPurple }}
+    indicatorStyle={{ backgroundColor: accentPurple }}
     style={{
-      backgroundColor: Colors.bgPrimary,
+      backgroundColor: bgPrimary,
       maxWidth: '100%',
     }}
     tabStyle={{
@@ -129,7 +129,7 @@ const ProfileScreen = (props) => {
               <View style={styles.header}>
                 <View />
                 <Pressable
-                  style={[styles.button, styles.buttonClose]}
+                  style={[styles.button]}
                   onPress={() => { setModalVisible(!modalVisible); setEditing(false); changeWorkAround(0); }}
                 >
                   <View style={styles.imagesIcon}>
@@ -137,22 +137,14 @@ const ProfileScreen = (props) => {
                   </View>
                 </Pressable>
               </View>
-              <Image style={styles.profilePhoto2} source={{ uri: pfpUrl }} />
+              <Image style={styles.profilePhoto} source={{ uri: pfpUrl }} />
               <TouchableOpacity style={styles.uploadButtonContainer} onPress={uploadPFP}>
                 <Text style={styles.logoutButton}>Upload Profile Photo</Text>
               </TouchableOpacity>
-              <View style={{
-                width: '80%', marginBottom: 20,
-              }}
-              >
-                <Text style={[styles.logoutButton, { marginBottom: 10, color: Colors.accentPurple }]}>Bio</Text>
+              <View style={styles.inputContainer}>
+                <Text style={[styles.logoutButton, { marginBottom: 10, color: accentPurple }]}>Bio</Text>
                 <TextInput
-                  style={{
-                    color: 'white',
-                    borderBottomColor: Colors.accentPurple, // Add this to specify bottom border color
-                    borderBottomWidth: 1.5, // Add this to specify bottom border thickness
-
-                  }}
+                  style={styles.inputText}
                   maxLength={200}
                   onChangeText={onChangeBio}
                   value={bio}
@@ -160,36 +152,22 @@ const ProfileScreen = (props) => {
                 />
 
               </View>
-              <View style={{
-                height: '7%', width: '80%', marginBottom: 30,
-              }}
-              >
-                <Text style={[styles.logoutButton, { marginBottom: 10, color: Colors.accentPurple }]}>Instagram</Text>
+              <View style={styles.inputContainer}>
+                <Text style={[styles.logoutButton, { marginBottom: 10, color: accentPurple }]}>Instagram</Text>
                 <TextInput
-                  style={{
-                    borderBottomColor: Colors.accentPurple, // Add this to specify bottom border color
-                    borderBottomWidth: 1.5, // Add this to specify bottom border thickness
-                    color: 'white',
-
-                  }}
+                  style={styles.inputText}
+                  maxLength={100}
                   onChangeText={onChangeInsta}
                   value={instagram}
                   multiline
                 />
 
               </View>
-              <View style={{
-                height: '7%', width: '80%', marginBottom: 30,
-              }}
-              >
-                <Text style={[styles.logoutButton, { marginBottom: 10, color: Colors.accentPurple }]}>Twitter</Text>
+              <View style={styles.inputContainer}>
+                <Text style={[styles.logoutButton, { marginBottom: 10, color: accentPurple }]}>Twitter</Text>
                 <TextInput
-                  style={{
-                    borderBottomColor: Colors.accentPurple, // Add this to specify bottom border color
-                    borderBottomWidth: 1.5, // Add this to specify bottom border thickness
-                    color: 'white',
-
-                  }}
+                  style={styles.inputText}
+                  maxLength={100}
                   onChangeText={onChangeTwitter}
                   value={twitter}
                   multiline
@@ -276,8 +254,6 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 15,
-    paddingBottom: 5,
   },
   centeredView: {
     flex: 1,
@@ -286,10 +262,10 @@ const styles = StyleSheet.create({
   },
   modalView: {
     borderRadius: 20,
-    backgroundColor: Colors.bgTertiary,
+    backgroundColor: bgTertiary,
     alignItems: 'center',
     shadowColor: '#000',
-    width: '100%',
+    width: '90%',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -297,6 +273,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    paddingHorizontal: '10%',
+    paddingVertical: '8%',
   },
   button: {
     borderRadius: 20,
@@ -311,7 +289,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
-    backgroundColor: Colors.bgPrimary,
+    backgroundColor: bgPrimary,
     paddingTop: Platform.OS === 'android' ? 45 : 0,
   },
   bannerContainer: {
@@ -344,7 +322,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   profileHeaderContainer: {
-    marginTop: '5%',
+    marginVertical: '3%',
+    marginHorizontal: '5%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -358,13 +337,6 @@ const styles = StyleSheet.create({
   profilePhoto: {
     width: 80,
     height: 80,
-    marginLeft: 30,
-    borderRadius: 100,
-  },
-  profilePhoto2: {
-    width: 80,
-    height: 80,
-    marginTop: 15,
     borderRadius: 100,
   },
   usernameText: {
@@ -378,6 +350,15 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 2,
   },
+  inputContainer: {
+    marginBottom: 20,
+    width: '100%',
+  },
+  inputText: {
+    color: 'white',
+    borderBottomColor: accentPurple, // Add this to specify bottom border color
+    borderBottomWidth: 1, // Add this to specify bottom border thickness
+  },
   bioText: {
     color: 'white',
     fontSize: 14,
@@ -386,7 +367,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   socialsContainer: {
-    marginTop: 15,
+    marginVertical: 12,
     flexDirection: 'row',
     justifyContent: 'center',
   },
@@ -396,7 +377,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   socialsText: {
-    color: Colors.accentPurple,
+    color: accentPurple,
     marginLeft: 8,
     marginRight: 20,
     fontSize: 14,
