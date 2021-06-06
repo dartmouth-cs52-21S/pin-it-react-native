@@ -18,7 +18,7 @@ import ProfileTab from './ProfileTab';
 import {
   bgPrimary, bgSecondary, accentPurple,
 } from '../constants/colors';
-import { getCurrentLocation } from '../services/locationService';
+import { getCurrentLatLong } from '../services/locationService';
 import { setCurrentLocation } from '../actions/locations';
 
 const Tab = createBottomTabNavigator();
@@ -33,9 +33,8 @@ const MainTabBar = (props) => {
   };
 
   useEffect(() => {
-    getCurrentLocation((place) => {
-      const curr = { latitude: place.latitude, longitude: place.longitude };
-      props.setCurrentLocation(curr);
+    getCurrentLatLong((coords) => {
+      props.setCurrentLocation(coords);
     });
   });
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import {
   ActivityIndicator, TextInput, Image, View, StyleSheet,
@@ -11,11 +11,18 @@ import { updateCurrentPost } from '../../actions/posts';
 import { bgPrimary, bgTertiary } from '../../constants/colors';
 import TagRow from '../../components/TagRow';
 import LocationDisplay from '../../components/LocationDisplay';
+import { getLocationByPlaceId, getCurrentLocation } from '../../services/locationService';
 
 const PostCreationScreen = (props) => {
   const { post, updatePost, currentLocation } = props;
   const [postCaption, setPostCaption] = useState('');
   const [location, setLocation] = useState(currentLocation);
+
+  useEffect(() => {
+    getCurrentLocation((loc) => {
+      updatePost({ ...post, location: loc });
+    });
+  });
 
   const { latitude, longitude } = location || { };
 
@@ -28,6 +35,12 @@ const PostCreationScreen = (props) => {
       </View>
     );
   }
+
+  const setLocationToPost = async (place) => {
+    const loc = await getLocationByPlaceId(place.place_id);
+    setLocation(loc);
+    updatePost({ ...post, location: loc });
+  };
 
   return (
     <View style={styles.container}>
@@ -62,7 +75,7 @@ const PostCreationScreen = (props) => {
             numberOfLines={3}
           />
           <LocationDisplay
-            onPress={(place) => setLocation(place)}
+            onPress={setLocationToPost}
             onClear={() => setLocation(currentLocation)}
           />
           {location && (
@@ -75,10 +88,6 @@ const PostCreationScreen = (props) => {
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
               }}
-              pitchEnabled={false}
-              rotateEnabled={false}
-              zoomEnabled={false}
-              scrollEnabled={false}
             >
               <Marker coordinate={{ latitude, longitude }} />
             </MapView>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Button } from 'react-native';
 import { connect } from 'react-redux';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
@@ -8,57 +8,65 @@ import NewActivityScreen from '../screens/NewActivityScreen';
 import CameraScreen from '../screens/CameraScreen';
 import { PostCreationScreen } from '../screens/upload';
 import { bgTertiary, bgPrimary } from '../constants/colors';
-import { createPost } from '../actions/posts';
-import { getLocation } from '../selectors/app';
+import { createPost, updateCurrentPost } from '../actions/posts';
 import { getCurrentPost } from '../selectors/posts';
+import { getCurrentLocation } from '../services/locationService';
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 
 const onCreatePost = (props, navigation) => {
-  if (!props.post) return;
+  if (!props.post?.location) return;
   props.createPost(props.post, () => navigation.navigate('MainActivityScreen'));
 };
 
-const ActivityStack = (props) => (
-  <Stack.Navigator
-    screenOptions={{
-      headerStyle: {
-        backgroundColor: bgPrimary,
-        elevation: 0,
-        shadowOpacity: 0,
-        borderBottomWidth: 0,
-      },
-    }}
-  >
-    <Stack.Screen name="MainActivityScreen"
-      component={ActivityTab}
-      options={{ headerShown: false, title: 'Activities' }}
-    />
-    <Stack.Screen name="CameraScreen"
-      component={CameraScreen}
-      options={{
-        headerTitleStyle: { color: 'white' },
-        title: 'Camera',
-      }}
-    />
-    <Stack.Screen name="PostCreationScreen"
-      component={PostCreationScreen}
-      options={({ navigation }) => ({
-        title: 'New Post',
+const ActivityStack = (props) => {
+  useEffect(() => {
+    getCurrentLocation((location) => {
+      updateCurrentPost({ ...props.post, location });
+    });
+  });
+
+  return (
+    <Stack.Navigator
+      screenOptions={{
         headerStyle: {
           backgroundColor: bgPrimary,
-          shadowOffset: { height: 0, width: 0 },
+          elevation: 0,
+          shadowOpacity: 0,
+          borderBottomWidth: 0,
         },
-        headerBackTitle: 'Cancel',
-        headerTintColor: '#fff',
-        headerTitleStyle: { fontSize: 25 },
-        headerTitleAlign: 'center',
-        headerRight: () => (<Button title="Submit" onPress={() => onCreatePost(props, navigation)} />),
-      })}
-    />
-  </Stack.Navigator>
-);
+      }}
+    >
+      <Stack.Screen name="MainActivityScreen"
+        component={ActivityTab}
+        options={{ headerShown: false, title: 'Activities' }}
+      />
+      <Stack.Screen name="CameraScreen"
+        component={CameraScreen}
+        options={{
+          headerTitleStyle: { color: 'white' },
+          title: 'Camera',
+        }}
+      />
+      <Stack.Screen name="PostCreationScreen"
+        component={PostCreationScreen}
+        options={({ navigation }) => ({
+          title: 'New Post',
+          headerStyle: {
+            backgroundColor: bgPrimary,
+            shadowOffset: { height: 0, width: 0 },
+          },
+          headerBackTitle: 'Cancel',
+          headerTintColor: '#fff',
+          headerTitleStyle: { fontSize: 25 },
+          headerTitleAlign: 'center',
+          headerRight: () => (<Button title="Submit" onPress={() => onCreatePost(props, navigation)} />),
+        })}
+      />
+    </Stack.Navigator>
+  );
+};
 
 const ActivityTab = () => {
   return (
@@ -81,20 +89,9 @@ const ActivityTab = () => {
   );
 };
 
-const mapStateToProps = (state) => {
-  let location = getLocation(state);
-  const { imageUrls, caption, category } = getCurrentPost(state);
-
-  location = { ...location, category };
-
-  return {
-    post: {
-      imageUrls,
-      caption,
-      location,
-    },
-  };
-};
+const mapStateToProps = (state) => ({
+  post: getCurrentPost(state),
+});
 
 export default connect(mapStateToProps, { createPost })(ActivityStack);
 

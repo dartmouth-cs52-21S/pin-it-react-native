@@ -51,6 +51,7 @@ export const handleUploadfromCamera = (photo, onSuccess) => async (dispatch) => 
 
 export const createPost = (newPost, onSuccess) => async (dispatch) => {
   const token = await AsyncStorage.getItem('token');
+  console.log(newPost);
   axios
     .post(`${api}/posts`, newPost, { headers: { authorization: token } })
     .then((response) => {

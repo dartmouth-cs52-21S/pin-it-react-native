@@ -5,13 +5,14 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { PostCreationScreen, UploadScreen } from '../screens/upload';
 import { bgPrimary } from '../constants/colors';
 import { createPost } from '../actions/posts';
-import { getLocation } from '../selectors/app';
 import { getCurrentPost } from '../selectors/posts';
 import fontStyles from '../constants/fonts';
 
 const Stack = createStackNavigator();
 
 const UploadTab = (props) => {
+  const { post } = props;
+  console.log(post);
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -41,26 +42,15 @@ const UploadTab = (props) => {
           headerTintColor: '#fff',
           headerTitleStyle: { fontSize: 25 },
           headerTitleAlign: 'center',
-          headerRight: () => (<Button title="Submit" onPress={() => props.createPost(props.post, () => navigation.navigate('UploadScreen'))} />),
+          headerRight: () => (<Button title="Submit" onPress={() => props.createPost(post, () => navigation.navigate('UploadScreen'))} />),
         })}
       />
     </Stack.Navigator>
   );
 };
 
-const mapStateToProps = (state) => {
-  let location = getLocation(state);
-  const { imageUrls, caption, category } = getCurrentPost(state);
-
-  location = { ...location, category };
-
-  return {
-    post: {
-      imageUrls,
-      caption,
-      location,
-    },
-  };
-};
+const mapStateToProps = (state) => ({
+  post: getCurrentPost(state),
+});
 
 export default connect(mapStateToProps, { createPost })(UploadTab);
