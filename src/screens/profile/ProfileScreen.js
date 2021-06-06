@@ -12,6 +12,7 @@ import PostsTab from './PostsTab';
 import BadgesTab from './BadgesTab';
 import { signOutUser } from '../../actions/auth';
 import * as Colors from '../../constants/colors';
+import { getPhoto, uploadPhoto } from '../../services/imageUpload';
 // import fontStyles from '../../constants/fonts';
 
 const instaLogo = require('../../assets/instagram.png');
@@ -70,7 +71,10 @@ const ProfileScreen = (props) => {
 
   const [index, setIndex] = useState(0);
   const [editing, setEditing] = useState(false);
-  const [text, onChangeText] = useState('');
+  const [bio, onChangeBio] = useState('');
+  const [instagram, onChangeInsta] = useState('');
+  const [twitter, onChangeTwitter] = useState('');
+  const [pfpUrl, setNewPfpUrl] = useState('');
   const [workaround, changeWorkAround] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
   const [routes] = useState([
@@ -79,6 +83,15 @@ const ProfileScreen = (props) => {
     { key: 'pins', title: 'Pins' },
     { key: 'badges', title: 'Badges' },
   ]);
+
+  const uploadPFP = async () => {
+    const photo = await getPhoto();
+
+    if (photo) {
+      const result = await uploadPhoto(photo);
+      setNewPfpUrl(result.data.url);
+    }
+  };
 
   const renderEditButton = (edit) => {
     if (!edit) {
@@ -89,11 +102,17 @@ const ProfileScreen = (props) => {
       );
     } else {
       if (workaround === 0) {
-        onChangeText(user.bio);
+        onChangeBio(user.bio);
+        setNewPfpUrl(profileUrl);
+        onChangeInsta(instaLink);
+        onChangeTwitter(twitterLink);
         changeWorkAround(1);
       }
       const userdata = {
-        bio: text,
+        instagram,
+        twitter,
+        bio,
+        profPic: pfpUrl,
       };
       return (
         <Modal
@@ -108,22 +127,78 @@ const ProfileScreen = (props) => {
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <View style={styles.header}>
-
+                <View />
                 <Pressable
                   style={[styles.button, styles.buttonClose]}
-                  onPress={() => { setModalVisible(!modalVisible); setEditing(false); props.editUser(userdata); }}
+                  onPress={() => { setModalVisible(!modalVisible); setEditing(false); changeWorkAround(0); }}
                 >
                   <View style={styles.imagesIcon}>
-                    <FontAwesomeIcon icon={faTimes} size={40} color="white" />
+                    <FontAwesomeIcon icon={faTimes} size={29} color="white" />
                   </View>
                 </Pressable>
               </View>
-              <TextInput
-                style={{ height: 70, backgroundColor: 'white', margin: 10 }}
-                onChangeText={onChangeText}
-                value={text}
-                multiline
-              />
+              <Image style={styles.profilePhoto2} source={{ uri: pfpUrl }} />
+              <TouchableOpacity style={styles.uploadButtonContainer} onPress={uploadPFP}>
+                <Text style={styles.logoutButton}>Upload Profile Photo</Text>
+              </TouchableOpacity>
+              <View style={{
+                width: '80%', marginBottom: 20,
+              }}
+              >
+                <Text style={[styles.logoutButton, { marginBottom: 10, color: Colors.accentPurple }]}>Bio</Text>
+                <TextInput
+                  style={{
+                    color: 'white',
+                    borderBottomColor: Colors.accentPurple, // Add this to specify bottom border color
+                    borderBottomWidth: 1.5, // Add this to specify bottom border thickness
+
+                  }}
+                  maxLength={200}
+                  onChangeText={onChangeBio}
+                  value={bio}
+                  multiline
+                />
+
+              </View>
+              <View style={{
+                height: '7%', width: '80%', marginBottom: 30,
+              }}
+              >
+                <Text style={[styles.logoutButton, { marginBottom: 10, color: Colors.accentPurple }]}>Instagram</Text>
+                <TextInput
+                  style={{
+                    borderBottomColor: Colors.accentPurple, // Add this to specify bottom border color
+                    borderBottomWidth: 1.5, // Add this to specify bottom border thickness
+                    color: 'white',
+
+                  }}
+                  onChangeText={onChangeInsta}
+                  value={instagram}
+                  multiline
+                />
+
+              </View>
+              <View style={{
+                height: '7%', width: '80%', marginBottom: 30,
+              }}
+              >
+                <Text style={[styles.logoutButton, { marginBottom: 10, color: Colors.accentPurple }]}>Twitter</Text>
+                <TextInput
+                  style={{
+                    borderBottomColor: Colors.accentPurple, // Add this to specify bottom border color
+                    borderBottomWidth: 1.5, // Add this to specify bottom border thickness
+                    color: 'white',
+
+                  }}
+                  onChangeText={onChangeTwitter}
+                  value={twitter}
+                  multiline
+                />
+
+              </View>
+              <TouchableOpacity style={styles.logoutButtonContainer} onPress={() => { setModalVisible(!modalVisible); setEditing(false); props.editUser(userdata); }}>
+                <Text style={styles.logoutButton}>Done</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </Modal>
@@ -133,10 +208,14 @@ const ProfileScreen = (props) => {
 
   useEffect(() => {
     props.getUser();
-  }, []);
+  }, [user.posts]);
 
   const blankProfile = 'https://res.cloudinary.com/djc5u8rjt/image/upload/v1621833029/ux9xmvmtjl3nf7x7ls2n.png';
-  const profileUrl = user.profilePhoto ? user.profilePhoto : blankProfile;
+  const blankInsta = 'https://www.instagram.com/?hl=en';
+  const blankTwitter = 'https://twitter.com/home';
+  const profileUrl = user.profPic ? user.profPic : blankProfile;
+  const instaLink = user.instagram ? user.instagram : blankInsta;
+  const twitterLink = user.twitter ? user.twitter : blankTwitter;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -169,13 +248,13 @@ const ProfileScreen = (props) => {
       <View style={styles.socialsContainer}>
         <Image style={styles.socialsLogo} source={instaLogo} />
         <Text style={styles.socialsText}
-          onPress={() => Linking.openURL('https://www.youtube.com/channel/UCSzN7Vl0SwahaxAqHpx5tng')}
+          onPress={() => Linking.openURL(instaLink)}
         >
           Instagram
         </Text>
         <Image style={styles.socialsLogo} source={youtubeLogo} />
         <Text style={styles.socialsText}
-          onPress={() => Linking.openURL('https://www.youtube.com/channel/UCSzN7Vl0SwahaxAqHpx5tng')}
+          onPress={() => Linking.openURL(twitterLink)}
         >
           Youtube
 
@@ -194,10 +273,7 @@ const ProfileScreen = (props) => {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: Colors.bgSecondary,
     width: '100%',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 15,
@@ -230,7 +306,7 @@ const styles = StyleSheet.create({
   imagesIcon: {
     position: 'absolute',
     right: '5%',
-    top: '5%',
+    top: '-20%',
   },
   container: {
     flex: 1,
@@ -253,6 +329,16 @@ const styles = StyleSheet.create({
     height: 'auto',
     width: 'auto',
   },
+  uploadButtonContainer: {
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    marginHorizontal: 5,
+    margin: 20,
+    borderRadius: 20,
+    height: 'auto',
+    width: 'auto',
+  },
   logoutButton: {
     color: 'white',
     fontSize: 16,
@@ -270,9 +356,15 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   profilePhoto: {
-    width: 100,
-    height: 100,
+    width: 80,
+    height: 80,
     marginLeft: 30,
+    borderRadius: 100,
+  },
+  profilePhoto2: {
+    width: 80,
+    height: 80,
+    marginTop: 15,
     borderRadius: 100,
   },
   usernameText: {
@@ -291,10 +383,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginLeft: 30,
     marginRight: 30,
-    marginTop: 25,
+    marginTop: 15,
   },
   socialsContainer: {
-    marginTop: 25,
+    marginTop: 15,
     flexDirection: 'row',
     justifyContent: 'center',
   },
@@ -317,7 +409,7 @@ const styles = StyleSheet.create({
   },
   tabViewContainer: {
     maxWidth: '100%',
-    marginTop: 20,
+    marginTop: 5,
   },
 });
 
