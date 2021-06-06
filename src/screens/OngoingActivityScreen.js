@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { bgPrimary } from '../constants/colors';
 import fontStyles from '../constants/fonts';
 import { getMissionsList } from '../selectors/mission';
-import { getMissions, setMission } from '../actions/missions';
+import { getMissions, setMission, deleteMission } from '../actions/missions';
 import MissionCard from '../components/MissionCard';
 
 const OngoingActivityScreen = (props) => {
@@ -58,11 +58,12 @@ const OngoingActivityScreen = (props) => {
       </View>
       <ScrollView>
         {activeTab
-          ? active.map((mission) => (
+          ? active.map((mission, index) => (
             <MissionCard
               mission={mission}
               key={`${mission.title}${mission.createdAt}`}
               onPress={() => onMissionPress(mission)}
+              onRemove={() => props.deleteMission(mission.id)}
             />
           ))
           : completed.map((mission) => (
@@ -70,6 +71,7 @@ const OngoingActivityScreen = (props) => {
               mission={mission}
               key={`${mission.title}${mission.createdAt}`}
               onPress={() => {}}
+              onRemove={() => props.deleteMission(mission.id)}
             />
           ))}
       </ScrollView>
@@ -127,4 +129,4 @@ const mapStateToProps = (state) => ({
   missions: getMissionsList(state),
 });
 
-export default connect(mapStateToProps, { getMissions, setMission })(OngoingActivityScreen);
+export default connect(mapStateToProps, { getMissions, setMission, deleteMission })(OngoingActivityScreen);
