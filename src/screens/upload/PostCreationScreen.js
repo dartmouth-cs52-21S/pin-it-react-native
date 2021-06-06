@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import {
   ActivityIndicator, TextInput, Image, View, StyleSheet,
@@ -15,6 +15,7 @@ const PostCreationScreen = (props) => {
   const { post, updatePost, currentLocation } = props;
   const [postCaption, setPostCaption] = useState('');
   const [location, setLocation] = useState(currentLocation);
+  const map = useRef(null);
 
   useEffect(() => {
     getCurrentLocation((loc) => {
@@ -38,6 +39,12 @@ const PostCreationScreen = (props) => {
     const loc = await getLocationByPlaceId(place.place_id);
     setLocation(loc);
     updatePost({ ...post, location: loc });
+    map.current?.animateToRegion({
+      latitude: loc.latitude,
+      longitude: loc.longitude,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    }, 1000);
   };
 
   return (
@@ -77,6 +84,7 @@ const PostCreationScreen = (props) => {
           {location && (
           <>
             <MapView
+              ref={map}
               style={styles.mapView}
               initialRegion={{
                 latitude,

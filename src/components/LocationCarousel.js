@@ -9,7 +9,7 @@ import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import {
   bgPrimary, bgSecondary,
 } from '../constants/colors';
-import categories from '../constants/categories';
+import { categories } from '../constants/categories';
 import PostCard from './PostCard';
 import { getLocationPostsById } from '../services/locationService';
 

@@ -7,6 +7,7 @@ import MapView, { Marker } from 'react-native-maps';
 import { getUserData } from '../../selectors/user';
 import * as Colors from '../../constants/colors';
 import fontStyles from '../../constants/fonts';
+import { formatImgUrl } from '../../services/imageUpload';
 
 const N_BOXES = 20;
 const EPS = 5;
@@ -63,7 +64,7 @@ const PinsTab = ({ user, ...props }) => {
         onPress={() => props.navigation.navigate('PinsLocationFeedScreen', { posts: location.posts })}
       >
         <View>
-          <Image style={styles.imageIcon} source={{ uri: location.imageUrl }} />
+          <Image style={styles.imageIcon} source={{ uri: formatImgUrl(location.imageUrl, 200, 200) }} />
           <View style={styles.numberIndicator}>
             <Text style={fontStyles.smallTextBold}>{location.numberOfPosts}</Text>
           </View>
