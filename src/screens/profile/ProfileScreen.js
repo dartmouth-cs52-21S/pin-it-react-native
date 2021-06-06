@@ -23,6 +23,50 @@ const windowWidth = (Dimensions.get('window').width) / 4;
 
 const MissionsTab = () => (<Text style={styles.testText}>Missions</Text>);
 
+const renderScene = (props) => SceneMap({
+  posts: PostsTab,
+  missions: MissionsTab,
+  // eslint-disable-next-line react/destructuring-assignment
+  pins: () => (<PinsTab navigation={props.navigation} />),
+  badges: BadgesTab,
+});
+
+const renderLabel = (labelProps) => (
+  <View>
+    <Text style={[
+      {
+        fontSize: 16,
+        textAlign: 'center',
+        width: windowWidth,
+      },
+      labelProps.focused ? { color: accentPurple, fontWeight: 'bold' } : { color: 'white' },
+    ]}
+    >
+      {labelProps.route.title}
+    </Text>
+  </View>
+
+);
+
+const renderTabBar = (tabBarProps) => (
+  <TabBar
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    {...tabBarProps}
+    scrollEnabled
+    indicatorStyle={{ backgroundColor: accentPurple }}
+    style={{
+      backgroundColor: bgPrimary,
+      maxWidth: '100%',
+    }}
+    tabStyle={{
+      padding: 0,
+      borderColor: 'red',
+      width: 'auto',
+    }}
+    renderLabel={renderLabel}
+  />
+);
+
 const ProfileScreen = (props) => {
   const { user } = props;
 
@@ -40,50 +84,6 @@ const ProfileScreen = (props) => {
     { key: 'pins', title: 'Pins' },
     { key: 'badges', title: 'Badges' },
   ]);
-
-  const renderScene = SceneMap({
-    posts: PostsTab,
-    missions: MissionsTab,
-    // eslint-disable-next-line react/destructuring-assignment
-    pins: () => (<PinsTab navigation={props.navigation} />),
-    badges: BadgesTab,
-  });
-
-  const renderLabel = (labelProps) => (
-    <View>
-      <Text style={[
-        {
-          fontSize: 16,
-          textAlign: 'center',
-          width: windowWidth,
-        },
-        labelProps.focused ? { color: accentPurple, fontWeight: 'bold' } : { color: 'white' },
-      ]}
-      >
-        {labelProps.route.title}
-      </Text>
-    </View>
-
-  );
-
-  const renderTabBar = (tabBarProps) => (
-    <TabBar
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...tabBarProps}
-      scrollEnabled
-      indicatorStyle={{ backgroundColor: accentPurple }}
-      style={{
-        backgroundColor: bgPrimary,
-        maxWidth: '100%',
-      }}
-      tabStyle={{
-        padding: 0,
-        borderColor: 'red',
-        width: 'auto',
-      }}
-      renderLabel={renderLabel}
-    />
-  );
 
   const uploadPFP = async () => {
     const photo = await getPhoto();
@@ -242,7 +242,7 @@ const ProfileScreen = (props) => {
       <TabView
         style={styles.tabViewContainer}
         navigationState={{ index, routes }}
-        renderScene={renderScene}
+        renderScene={renderScene(props)}
         onIndexChange={setIndex}
         renderTabBar={renderTabBar}
       />

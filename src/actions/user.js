@@ -33,7 +33,6 @@ export const editUser = (userdata) => async (dispatch) => {
     .put(`${api}/user`, userdata, { headers: { authorization: token } })
     .then((response) => {
       dispatch({ type: ActionTypes.GET_USER, payload: response.data });
-      getUser();
     })
     .catch((error) => {
       dispatch(setError(`Posting failed: ${error.response.data}`));

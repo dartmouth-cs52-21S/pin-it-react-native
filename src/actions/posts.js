@@ -50,7 +50,7 @@ export const createPost = (newPost, onSuccess) => async (dispatch) => {
     .then((response) => {
       onSuccess();
       displayToast('success', 'Post successfully created');
-      getUser();
+      dispatch(getUser());
     })
     .catch((error) => {
       dispatch(setError(`Posting failed: ${error.response.data}`));
