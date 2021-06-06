@@ -192,7 +192,6 @@ const styles = StyleSheet.create({
   touchableImage: {
     flex: 1 / 2,
     aspectRatio: 1,
-    margin: 2,
   },
 });
 
