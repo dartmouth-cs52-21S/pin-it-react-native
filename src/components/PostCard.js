@@ -8,6 +8,7 @@ import { faImages, faTimes } from '@fortawesome/free-solid-svg-icons';
 import {
   bgTertiary, bgSecondary,
 } from '../constants/colors';
+import { formatImgUrl } from '../services/imageUpload';
 import ModalCard from './ModalCard';
 import fontStyles from '../constants/fonts';
 
@@ -28,7 +29,7 @@ const PostCard = (props) => {
         <View style={styles.touchableImage}>
           <Image
             style={styles.carouselImage}
-            source={{ uri: item.imageUrls[0] }}
+            source={{ uri: formatImgUrl(item.imageUrls[0], 500, 500) }}
           />
           {item.imageUrls.length > 1 && (
           <View style={styles.imagesIcon}>

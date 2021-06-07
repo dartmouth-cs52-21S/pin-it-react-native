@@ -37,3 +37,15 @@ export const uploadPhoto = async (photo) => {
     return error;
   }
 };
+
+export const formatImgUrl = (url, width, height) => {
+  if (!url) return null;
+  const key = 'upload/';
+  const startUrl = url.substring(0, url.indexOf(key) + key.length);
+  const endUrl = url.substring(url.indexOf(key) + key.length, url.length);
+  let params = '';
+  if (width) params += `w_${width},`;
+  if (height) params += `h_${height},`;
+  params += 'c_scale/';
+  return startUrl + params + endUrl;
+};
