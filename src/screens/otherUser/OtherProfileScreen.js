@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import {
-  SafeAreaView, StyleSheet, Text, Image, View, Platform, Dimensions, Pressable, Linking,
+  SafeAreaView, StyleSheet, Text, Image, View, Platform, Dimensions, Linking,
 } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { getOtherUserInfo } from '../../actions/user';
-import PostsTab from './PostsTab';
-import BadgesTab from './BadgesTab';
+import PostsTab from './OtherPostsTab';
+import BadgesTab from './OtherBadgesTab';
 import { accentPurple, bgPrimary, bgTertiary } from '../../constants/colors';
-import PinsTab from './PinsTab';
-import { getUserData } from '../../selectors/user';
+import PinsTab from './OtherPinsTab';
+import getOtherUserInfo from '../../services/userService';
 
 const instaLogo = require('../../assets/instagram.png');
 const youtubeLogo = require('../../assets/youtube.png');
@@ -22,10 +18,10 @@ const windowWidth = (Dimensions.get('window').width) / 4;
 const MissionsTab = () => (<Text style={styles.testText}>Missions</Text>);
 
 const renderScene = (props) => SceneMap({
-  posts: PostsTab,
+  posts: () => (<PostsTab posts={props.posts} />),
   missions: MissionsTab,
-  pins: () => (<PinsTab navigation={props.navigation} />),
-  badges: BadgesTab,
+  pins: () => (<PinsTab user={props} navigation={props.navigation} />),
+  badges: () => (<BadgesTab badges={props.badges} />),
 });
 
 const renderLabel = (labelProps) => (
@@ -64,8 +60,12 @@ const renderTabBar = (tabBarProps) => (
   />
 );
 
-const OtherProfileScreen = (props) => {
-  const { user } = props;
+// Get other user info by username
+
+const OtherProfileScreen = (route, props) => {
+  const [user, setOtherUser] = useState('hi');
+  // eslint-disable-next-line react/destructuring-assignment
+  const { thisUsername } = route.route.params;
 
   const [index, setIndex] = useState(0);
   const [routes] = useState([
@@ -75,8 +75,13 @@ const OtherProfileScreen = (props) => {
     { key: 'badges', title: 'Badges' },
   ]);
 
+  const getThisUser = async () => {
+    const thisUserData = await getOtherUserInfo(thisUsername);
+    setOtherUser(thisUserData);
+  };
+
   useEffect(() => {
-    props.getOtherUserInfo(); // ! PASS USERNAME HERE
+    getThisUser();
   }, [JSON.stringify(user)]);
 
   const blankProfile = 'https://res.cloudinary.com/djc5u8rjt/image/upload/v1621833029/ux9xmvmtjl3nf7x7ls2n.png';
@@ -127,7 +132,7 @@ const OtherProfileScreen = (props) => {
       <TabView
         style={styles.tabViewContainer}
         navigationState={{ index, routes }}
-        renderScene={renderScene(props)}
+        renderScene={renderScene(user)}
         onIndexChange={setIndex}
         renderTabBar={renderTabBar}
       />
@@ -280,8 +285,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => ({
-  user: getUserData(state),
-});
-
-export default connect(mapStateToProps, { getOtherUserInfo })(OtherProfileScreen);
+export default connect(null, null)(OtherProfileScreen);
