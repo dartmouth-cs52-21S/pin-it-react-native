@@ -30,6 +30,16 @@ export const getQueriedLocations = (search, location, tags) => async (dispatch) 
   });
 };
 
+// Get location object from our server
+export const getLocationPostsById = async (id) => {
+  try {
+    const response = await axios.get(`${api}/locations/posts/${id}`);
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
+
 export const setCurrentLocation = (location) => {
   return {
     type: ActionTypes.SET_CURRENT_LOCATION,

@@ -2,16 +2,13 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import {
-  View, Text, StyleSheet, Image, Modal, Pressable, TouchableWithoutFeedback, ScrollView, Platform, SafeAreaView,
+  View, Text, StyleSheet, Image, Modal, Pressable, TouchableWithoutFeedback, ScrollView, SafeAreaView,
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faImages, faTimes } from '@fortawesome/free-solid-svg-icons';
-import {
-  bgTertiary, bgSecondary, bgPrimary,
-} from '../constants/colors';
 import { formatImgUrl } from '../services/imageUpload';
 import ModalCard from './ModalCard';
-import * as LocationService from '../services/locationService';
+import { getLocationPostsById } from '../actions/locations';
 import { getUser } from '../actions/user';
 import fontStyles from '../constants/fonts';
 
@@ -22,7 +19,7 @@ const PostCard = (props) => {
     location, item, isGridScreen, id,
   } = props;
   const {
-    title, category, longitude, latitude,
+    title, category, longitude, latitude, address,
   } = location;
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -86,10 +83,10 @@ const PostCard = (props) => {
                 <View>
                   <Text style={[fontStyles.largeHeaderTitle, { marginTop: 15, paddingBottom: 5, alignSelf: 'center' }]}
                     onPress={async () => {
-                      const fullLocation = await LocationService.getLocationPostsById(id);
+                      const fullLocation = await getLocationPostsById(id);
                       props.navigation.navigate('GridScreen', {
                         location: {
-                          title, category, latitude, longitude,
+                          title, category, latitude, longitude, address,
                         },
                         posts: fullLocation.data[0].posts,
                       });
@@ -101,9 +98,9 @@ const PostCard = (props) => {
                     {location.address}
                   </Text>
                   <Text style={[fontStyles.smallTextRegular, { paddingBottom: 5, paddingLeft: 1, alignSelf: 'center' }]}>
-                    {LocationService.getLocationPostsById.length}
+                    {getLocationPostsById.length}
                     {' total post'}
-                    {LocationService.getLocationPostsById.length === 1 ? '' : 's'}
+                    {getLocationPostsById.length === 1 ? '' : 's'}
                   </Text>
                   <View style={styles.horizontalLine} />
                   <View style={{
@@ -200,7 +197,7 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 20,
-    padding: 10,
+    padding: 20,
     zIndex: 10,
   },
   imagesIcon: {
@@ -212,8 +209,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
   },
   carouselFooter: {
     position: 'absolute',
@@ -224,14 +219,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(147,129,255, 0.5)',
   },
   carouselFooterFeedScreen: {
-    bottom: 10,
-    left: 10,
+    borderTopRightRadius: 15,
+    bottom: 0,
+    left: 0,
     padding: 5,
   },
   carouselFooterGridScreen: {
-    bottom: 5,
-    left: 5,
-    padding: 3,
+    bottom: 0,
+    left: 0,
+    paddingVertical: 3,
+    paddingHorizontal: 6,
+    borderTopRightRadius: 10,
   },
   carouselUsername: {
     color: 'white',
@@ -239,11 +237,11 @@ const styles = StyleSheet.create({
     paddingRight: 10,
   },
   carouselUsernameGridScreen: {
-    fontSize: 20,
+    fontSize: 16,
     maxWidth: 100,
   },
   carouselUsernameFeedScreen: {
-    fontSize: 22,
+    fontSize: 18,
     maxWidth: 200,
   },
   circle: {
@@ -252,12 +250,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   circleGridScreen: {
-    width: 30,
-    height: 30,
+    width: 23,
+    height: 23,
   },
   circleFeedScreen: {
-    width: 40,
-    height: 40,
+    width: 28,
+    height: 28,
   },
   carouselNumImages: {
     color: 'white',
