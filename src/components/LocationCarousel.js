@@ -7,7 +7,7 @@ import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import {
-  bgPrimary, bgSecondary,
+  bgPrimary, accentPurple, bgSecondary,
 } from '../constants/colors';
 import { categories } from '../constants/categories';
 import PostCard from './PostCard';
@@ -26,9 +26,11 @@ const LocationCarousel = (props) => {
   // Carousel Image
   const renderItem = useCallback(({ item }) => (
     <PostCard item={item}
+      id={id}
       location={{
         title, category, latitude, longitude, address,
       }}
+      navigation={props.navigation}
     />
   ), []);
 
@@ -71,7 +73,6 @@ const LocationCarousel = (props) => {
     if (address) {
       const addressarray = address.split(',');
       const state2 = addressarray[2];
-      console.log(state2);
       const state = String(state2).split(' ');
       if (state2 !== undefined) {
         return (
@@ -202,12 +203,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   locationHeader: {
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
     backgroundColor: bgSecondary,
     padding: '4%',
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    // borderTopColor: accentPurple, // Add this to specify bottom border color
+    // borderTopWidth: 0.7, // Add this to specify bottom border thickness
   },
 });
 
