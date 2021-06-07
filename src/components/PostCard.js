@@ -1,14 +1,11 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import {
-  View, Text, StyleSheet, Image, Modal, Pressable, TouchableWithoutFeedback, Dimensions
+  View, Text, StyleSheet, Image, Modal, Pressable, TouchableWithoutFeedback, ScrollView,
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faImages, faTimes } from '@fortawesome/free-solid-svg-icons';
-import {
-  bgTertiary, bgSecondary,
-} from '../constants/colors';
 import ModalCard from './ModalCard';
 import * as LocationService from '../services/locationService';
 import { getUser } from '../actions/user';
@@ -18,13 +15,16 @@ import fontStyles from '../constants/fonts';
 
 const PostCard = (props) => {
   const {
-    location, item, isGridScreen, id
+    location, item, isGridScreen, id,
   } = props;
-  const { title, category, longitude, latitude } = location;
+  const {
+    title, category, longitude, latitude,
+  } = location;
   const [modalVisible, setModalVisible] = useState(false);
 
   const blankProfile = 'https://res.cloudinary.com/djc5u8rjt/image/upload/v1621833029/ux9xmvmtjl3nf7x7ls2n.png';
-  const profileUrl = item.user? (item.user.profilePhoto ? item.user.profilePhoto : blankProfile):blankProfile;
+  // eslint-disable-next-line no-nested-ternary
+  const profileUrl = item.user ? (item.user.profilePhoto ? item.user.profilePhoto : blankProfile) : blankProfile;
   return (
     <>
       {/* Code for displaying images evenly in grid view
@@ -67,7 +67,7 @@ const PostCard = (props) => {
           setModalVisible(!modalVisible);
         }}
       >
-<View style={styles.centeredView}>
+        <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <View style={styles.header}>
               <Pressable
@@ -78,55 +78,68 @@ const PostCard = (props) => {
                   <FontAwesomeIcon icon={faTimes} size={40} color="white" />
                 </View>
               </Pressable>
-            <View style={styles.header}>
-              <View>
-                <Text style={[fontStyles.largeHeaderTitle, { paddingBottom: 5, alignSelf: 'center'}]}
-                onPress={async () => {
-                  const fullLocation = await LocationService.getLocationPostsById(id);
-                  props.navigation.navigate('GridScreen', {
-                    location: {
-                      title, category, latitude,longitude,
-                    },
-                    posts: fullLocation.data[0].posts,
-                  });
-                }}>
-                  {location.title}
-                  
-                </Text>
-                <Text style={[fontStyles.smallTextRegular, { paddingBottom: 5, paddingLeft: 1, alignSelf: 'center' }]}>
-                  {location.address}
-                </Text>
-                <Text style={[fontStyles.smallTextRegular, { paddingBottom: 5, paddingLeft: 1, alignSelf: 'center' }]}>
-                  {LocationService.getLocationPostsById.length}
-                  {' reaches'}
-                </Text>
-                <View style={styles.horizontalLine}/>
-                <Image style={styles.profilePhoto} source={{ uri: profileUrl }} />
-                <Text style={[fontStyles.mediumTextRegular, { paddingTop: 5, paddingBottom: 5, paddingLeft: 1, alignSelf: 'center' }]}>
-                  {'Reach by'}
-                  {'\n'}
-                  <View style={styles.userid}>
-                  <Text style={[fontStyles.mediumTextRegular,{ paddingTop: 2, paddingBottom: 2, paddingLeft: 1, alignSelf: 'center'}]}>
-                  {' @'}
-                  {item.username}
-                  {' '}
-                </Text>
+              <View style={styles.header}>
+                <View>
+                  <Text style={[fontStyles.largeHeaderTitle, { paddingBottom: 5, alignSelf: 'center' }]}
+                    onPress={async () => {
+                      const fullLocation = await LocationService.getLocationPostsById(id);
+                      props.navigation.navigate('GridScreen', {
+                        location: {
+                          title, category, latitude, longitude,
+                        },
+                        posts: fullLocation.data[0].posts,
+                      });
+                    }}
+                  >
+                    {location.title}
+                  </Text>
+                  <Text style={[fontStyles.smallTextRegular, { paddingBottom: 5, paddingLeft: 1, alignSelf: 'center' }]}>
+                    {location.address}
+                  </Text>
+                  <Text style={[fontStyles.smallTextRegular, { paddingBottom: 5, paddingLeft: 1, alignSelf: 'center' }]}>
+                    {LocationService.getLocationPostsById.length}
+                    {' reaches'}
+                  </Text>
+                  <View style={styles.horizontalLine} />
+                  <View>
+                    <Image style={styles.profilePhoto} source={{ uri: profileUrl }} />
+                    <Text style={[fontStyles.mediumTextRegular, {
+                      paddingTop: 5, paddingBottom: 5, paddingLeft: 1, alignSelf: 'center',
+                    }]}
+                    >
+                      {'Reach by'}
+                      {'\n'}
+                      <View style={styles.userid}>
+                        <Text style={[fontStyles.mediumTextRegular, {
+                          paddingTop: 2, paddingBottom: 2, paddingLeft: 1, alignSelf: 'center',
+                        }]}
+                        >
+                          {' @'}
+                          {item.username}
+                          {' '}
+                        </Text>
+                      </View>
+                    </Text>
+                  </View>
+                  <Text style={[fontStyles.smallTextRegular, {
+                    paddingBottom: 5, paddingLeft: 1, alignSelf: 'center', justifyContent: 'center',
+                  }]}
+                  >
+                    {item.user ? item.user.badges.length : null}
+                    {' badges '}
+                    <Text style={[fontStyles.smallTextRegular, { paddingBottom: 5, paddingLeft: 1, fontSize: 10 }]}>
+                      {' \u2B24  '}
+                    </Text>
+                    {item.user ? item.user.missionsCompleted : null}
+                    {' missions completed'}
+                  </Text>
                 </View>
-                </Text>
-                <Text style={[fontStyles.smallTextRegular, { paddingBottom: 5, paddingLeft: 1, alignSelf: 'center', justifyContent: 'center'}]}>
-                  {item.user?item.user.badges.length:null}
-                  {' badges '}
-                  <Text style={[fontStyles.smallTextRegular, { paddingBottom: 5, paddingLeft: 1, fontSize: 10}]}>
-                  {' \u2B24  '}
-                  </Text>
-                  {item.user?item.user.missionsCompleted:null}
-                  {' missions completed'}
-                  </Text>
               </View>
-            </View>
-            <ModalCard {...item}
-              location={location}
-            />
+              <ScrollView>
+                <ModalCard {...item}
+                  location={location}
+                />
+              </ScrollView>
             </View>
           </View>
         </View>
@@ -164,14 +177,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    width: '100%',
   },
-  horizontalLine:{
+  horizontalLine: {
     borderBottomColor: 'rgb(67, 78, 142)',
     borderBottomWidth: 1,
-    width: 100,
-    paddingTop:10,
-    paddingBottom:10,
+    width: 500,
+    paddingTop: 10,
+    paddingBottom: 10,
   },
   button: {
     borderRadius: 20,
@@ -243,18 +255,19 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     margin: 2,
   },
-  userid:{
+  userid: {
     backgroundColor: 'rgb(129, 46, 125)',
     borderRadius: 30,
   },
   profilePhoto: {
-    width: 80,
-    height: 80,
+    width: 65,
+    height: 65,
     borderRadius: 100,
+    alignSelf: 'center',
   },
 });
 
 const mapStateToProps = (state) => ({
   user: state.user.userData,
 });
-export default connect(mapStateToProps, { getUser})(PostCard);
+export default connect(mapStateToProps, { getUser })(PostCard);
