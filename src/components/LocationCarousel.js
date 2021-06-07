@@ -7,11 +7,11 @@ import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import {
-  bgPrimary, accentPurple, bgSecondary,
+  bgPrimary, bgSecondary,
 } from '../constants/colors';
 import { categories } from '../constants/categories';
 import PostCard from './PostCard';
-import { getLocationPostsById } from '../services/locationService';
+import { getLocationPostsById } from '../actions/locations';
 
 const { width: viewportWidth } = Dimensions.get('window');
 
@@ -138,7 +138,7 @@ const LocationCarousel = (props) => {
                   const fullLocation = await getLocationPostsById(id);
                   props.navigation.navigate('GridScreen', {
                     location: {
-                      title, category, latitude, longitude,
+                      title, category, latitude, longitude, address,
                     },
                     posts: fullLocation.data[0].posts,
                   });
@@ -203,14 +203,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   locationHeader: {
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    backgroundColor: bgSecondary,
     padding: '4%',
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    backgroundColor: bgSecondary,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    marginTop: 8,
     // borderTopColor: accentPurple, // Add this to specify bottom border color
     // borderTopWidth: 0.7, // Add this to specify bottom border thickness
   },
