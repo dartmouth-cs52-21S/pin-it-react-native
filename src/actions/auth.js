@@ -45,7 +45,6 @@ export function signInUser(authInfo) {
         displayToast('success', 'Successfully signed in');
       })
       .catch((error) => {
-        console.log('bruh');
         displayToast('error', 'Sign in failed', 'Username or password is incorrect');
       });
   };
