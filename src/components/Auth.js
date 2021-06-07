@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   View,
-  TextInput, Text, StyleSheet, TouchableOpacity,
+  KeyboardAvoidingView, TextInput, Text, StyleSheet, TouchableOpacity, ImageBackground, Image,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -9,8 +9,11 @@ import { faUser, faLock, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { displayToast } from '../actions/app';
 import { signInUser, signUpUser } from '../actions/auth';
 import {
-  bgPrimary, bgTertiary, accentPink,
+  bgTertiary, accentPurple,
 } from '../constants/colors';
+
+const backgroundImage = require('../assets/gradient.png');
+const logo = require('../assets/logo.png');
 
 const Auth = (props) => {
   const { navigation, authType } = props;
@@ -82,7 +85,7 @@ const Auth = (props) => {
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
           <Text style={styles.changeTab}>
-            <Text>I&apos;m new here!  </Text>
+            <Text style={styles.buttonText}>I&apos;m new here!  </Text>
             <Text style={styles.link}
               onPress={() => { navigation.navigate('SignUpScreen'); }}
             >
@@ -101,7 +104,7 @@ const Auth = (props) => {
             <Text style={styles.buttonText}>Sign up</Text>
           </TouchableOpacity>
           <Text style={styles.changeTab}>
-            <Text>I already have an account.  </Text>
+            <Text style={styles.buttonText}>I already have an account.  </Text>
             <Text style={styles.link}
               onPress={() => { navigation.navigate('SignInScreen'); }}
             >
@@ -117,39 +120,39 @@ const Auth = (props) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Not Pin-It</Text>
-      </View>
-      <View style={styles.footer}>
-        {renderUsername()}
-        <View style={styles.userEntry}>
-          <FontAwesomeIcon icon={faEnvelope} size={28} color={bgTertiary} />
-          <TextInput
-            style={styles.textInput}
-            value={email}
-            onChangeText={(text) => setEmail(text)}
-            placeholder="Email"
-            type="email"
-            placeholderTextColor="grey"
-            autoCapitalize="none"
-          />
+      <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
+        <Image source={logo} style={styles.logo} />
+        <View style={styles.footer}>
+          {renderUsername()}
+          <View style={styles.userEntry}>
+            <FontAwesomeIcon icon={faEnvelope} size={28} color={bgTertiary} />
+            <TextInput
+              style={styles.textInput}
+              value={email}
+              onChangeText={(text) => setEmail(text)}
+              placeholder="Email"
+              type="email"
+              placeholderTextColor="grey"
+              autoCapitalize="none"
+            />
+          </View>
+          <View style={styles.userEntry}>
+            <FontAwesomeIcon icon={faLock} size={28} color={bgTertiary} />
+            <TextInput
+              style={styles.textInput}
+              value={password}
+              onChangeText={(text) => setPassword(text)}
+              placeholder="Password"
+              type="password"
+              autoCapitalize="none"
+              placeholderTextColor="grey"
+              secureTextEntry
+            />
+          </View>
+          {renderPassword2()}
+          {renderButtons()}
         </View>
-        <View style={styles.userEntry}>
-          <FontAwesomeIcon icon={faLock} size={28} color={bgTertiary} />
-          <TextInput
-            style={styles.textInput}
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-            placeholder="Password"
-            type="password"
-            autoCapitalize="none"
-            placeholderTextColor="grey"
-            secureTextEntry
-          />
-        </View>
-        {renderPassword2()}
-        {renderButtons()}
-      </View>
+      </ImageBackground>
     </View>
   );
 };
@@ -157,19 +160,18 @@ const Auth = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: bgPrimary,
   },
-  header: {
+  backgroundImage: {
     flex: 1,
-    justifyContent: 'center',
+    resizeMode: 'cover',
+    paddingTop: '10%',
   },
-  headerText: {
-    color: 'white',
-    fontSize: 30,
-    textAlign: 'center',
+  logo: {
+    alignSelf: 'center',
+    width: 200,
+    height: 200,
   },
   footer: {
-    flex: 3,
     alignItems: 'center',
   },
   userEntry: {
@@ -189,7 +191,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   link: {
-    color: accentPink,
+    color: accentPurple,
     fontWeight: 'bold',
   },
   changeTab: {
@@ -198,14 +200,14 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: 'center',
-    backgroundColor: accentPink,
+    backgroundColor: accentPurple,
     marginTop: 20,
     paddingVertical: 10,
     width: '80%',
     borderRadius: 15,
   },
   buttonText: {
-    color: '#DDDDDD',
+    color: '#DED9FF',
   },
 });
 
