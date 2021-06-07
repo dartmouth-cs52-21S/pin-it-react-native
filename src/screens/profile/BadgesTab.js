@@ -5,6 +5,7 @@ import {
 import { connect } from 'react-redux';
 import BadgeTile from '../../components/BadgeTile';
 import { bgPrimary } from '../../constants/colors';
+import { getUserData } from '../../selectors/user';
 
 const renderItem = ({ item }) => {
   const { dateEarned } = item;
@@ -21,7 +22,7 @@ const BadgesTab = (props) => {
         data={badges}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
-        keyExtractor={(item) => item.badge.title}
+        keyExtractor={(item) => item.title}
       />
     </SafeAreaView>
   );
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => ({
-  user: state.user.userData,
+  user: getUserData(state),
 });
 
 export default connect(mapStateToProps, null)(BadgesTab);

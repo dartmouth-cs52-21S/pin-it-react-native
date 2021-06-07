@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import * as Colors from '../constants/colors';
 import config from '../../app-config';
+import fontStyles from '../constants/fonts';
 
 const { googleApiKey } = config;
 
@@ -14,17 +15,15 @@ const MissionFoundModal = ({ location, onAccept }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titleText}>TAKE A PHOTO AT</Text>
-      <Text style={[styles.titleText, { fontWeight: 'bold' }]}>{location ? location.title.toUpperCase() : ''}</Text>
+      <Text style={[styles.titleText, fontStyles.largeTextRegular]}>TAKE A PHOTO AT</Text>
+      <Text style={[styles.titleText, fontStyles.smallHeaderTitle]} numberOfLines={3}>{location ? location.title.toUpperCase() : ''}</Text>
       <Image style={styles.locationImage} source={{ uri: finalUri }} />
       <TouchableOpacity style={styles.startButton} onPress={onAccept}>
-        <Text style={styles.startButtonText}>Accept</Text>
+        <Text style={fontStyles.mediumTextBold}>Accept</Text>
       </TouchableOpacity>
     </View>
   );
 };
-
-export default MissionFoundModal;
 
 const styles = StyleSheet.create({
   container: {
@@ -33,37 +32,27 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     paddingTop: 60,
+    justifyContent: 'center',
     paddingHorizontal: 30,
   },
-
   titleText: {
-    fontSize: 26,
-    color: 'white',
-    marginBottom: 15,
+    marginBottom: 10,
     textAlign: 'center',
-    fontWeight: '200',
   },
-
   locationImage: {
-    marginTop: 20,
-    marginBottom: 50,
-    height: 250,
+    marginVertical: 20,
     width: 250,
-    resizeMode: 'contain',
+    height: undefined,
+    aspectRatio: 1,
+    resizeMode: 'cover',
   },
-
   startButton: {
-    height: 60,
-    width: 180,
-    borderRadius: 15,
+    alignSelf: 'center',
     backgroundColor: Colors.accentGreen,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  startButtonText: {
-    fontSize: 20,
-    color: 'white',
-    fontWeight: 'bold',
+    padding: 10,
+    borderRadius: 10,
+    marginVertical: 20,
   },
 });
+
+export default MissionFoundModal;

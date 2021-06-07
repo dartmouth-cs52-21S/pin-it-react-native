@@ -16,10 +16,11 @@ import DistanceIndicator from '../components/DistanceIndicator';
 import {
   generateMission, routeToMission, postMission,
 } from '../services/missionService';
-import { getLocation } from '../selectors/app';
 import { getMission } from '../selectors/mission';
 import { setMission, clearMission } from '../actions/missions';
+import { setCurrentLocation } from '../actions/locations';
 import ErrorModal from '../components/ErrorModal';
+import BadgeModal from '../components/BadgeModal';
 
 const NewActivityScreen = (props) => {
   const ARRIVED_DIST = 50; // when 50 m within destination, register arrival
@@ -34,12 +35,13 @@ const NewActivityScreen = (props) => {
   const [missionLocation, setMissionLocation] = useState(null);
   const [raiseModal, setRaiseModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [badgeModalVisible, setBadgeModalVisible] = useState(false);
   const [route, setRoute] = useState([]);
 
-  const { location, mission, navigation } = props;
-  const { latitude, longitude } = location || {};
+  const {
+    mission, navigation, currentLocation, badges,
+  } = props;
 
-  const [myLocation, setMyLocation] = useState(location);
   const [distance, setDistance] = useState(0);
   const [arrived, setArrived] = useState(false);
 
@@ -53,12 +55,12 @@ const NewActivityScreen = (props) => {
     setTimeout(() => confettiRef.current?.start(), 200);
   };
 
-  // whenever the user moves (myLocation changes), update value of distance
+  // whenever the user moves (currentLocation changes), update value of distance
   useEffect(() => {
-    if (mission && myLocation) {
+    if (mission && currentLocation) {
       const loc = { latitude: mission.location.latitude, longitude: mission.location.longitude };
       const METERS_TO_MILES = 1609.34;
-      const dist = haversine(myLocation, loc, { unit: 'meter' });
+      const dist = haversine(currentLocation, loc, { unit: 'meter' });
       setDistance((dist / METERS_TO_MILES).toFixed(1));
 
       if (!arrived && dist < ARRIVED_DIST) {
@@ -69,7 +71,7 @@ const NewActivityScreen = (props) => {
         setArrived(false);
       }
     }
-  }, [myLocation]);
+  }, [currentLocation]);
 
   const drawRoute = async (lat, lng, placeId) => {
     setLoading(true);
@@ -88,7 +90,7 @@ const NewActivityScreen = (props) => {
   useEffect(() => {
     if (mission && (!missionLocation || missionLocation.placeId !== mission.location.placeId)) {
       setMissionLocation(mission.location);
-      drawRoute(myLocation.latitude, myLocation.longitude, mission.location.placeId);
+      drawRoute(currentLocation.latitude, currentLocation.longitude, mission.location.placeId);
     }
     if (!mission) {
       setRoute([]);
@@ -99,6 +101,12 @@ const NewActivityScreen = (props) => {
   const onModalPress = (e) => {
     newMissionRef.current?.open();
   };
+
+  useEffect(() => {
+    if (props.badges.length > 0) {
+      setBadgeModalVisible(true);
+    }
+  }, [JSON.stringify(badges)]);
 
   const onSubmit = async (lat, lng, radius, query) => {
     setRaiseModal(false);
@@ -119,7 +127,7 @@ const NewActivityScreen = (props) => {
     const createdMission = await postMission(missionLocation.title, missionLocation.category, missionLocation);
     const toSet = { ...createdMission, location: missionLocation }; // until we populate location
     props.setMission(toSet);
-    drawRoute(myLocation.latitude, myLocation.longitude, toSet.location.placeId);
+    drawRoute(currentLocation.latitude, currentLocation.longitude, toSet.location.placeId);
   };
 
   const onCancel = () => {
@@ -142,8 +150,8 @@ const NewActivityScreen = (props) => {
         ref={mapRef}
         style={[styles.mapView, mission ? { height: '90%' } : null]}
         initialRegion={{
-          latitude,
-          longitude,
+          latitude: currentLocation.latitude,
+          longitude: currentLocation.longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
@@ -153,13 +161,9 @@ const NewActivityScreen = (props) => {
             latitude: e.nativeEvent.coordinate.latitude,
             longitude: e.nativeEvent.coordinate.longitude,
           };
-          setMyLocation(userLocation);
+          props.setCurrentLocation(userLocation);
         }}
       >
-        {latitude && (
-        <Marker coordinate={{ latitude, longitude }} />
-        )}
-
         {missionLocation && (
           <Marker coordinate={missionLocation}
             title="destination"
@@ -182,7 +186,6 @@ const NewActivityScreen = (props) => {
             scrollViewProps={{ keyboardShouldPersistTaps: 'always' }}
           >
             <NewMissionModal onSubmit={onSubmit}
-              initialLocation={location}
               onFocus={() => setRaiseModal(true)}
               onBlur={() => setRaiseModal(false)}
             />
@@ -232,6 +235,7 @@ const NewActivityScreen = (props) => {
         mainText="No Route Found"
         secondaryText="Could not calculate route between your location and the destination"
       />
+      <BadgeModal modalVisible={badgeModalVisible} setModalVisible={setBadgeModalVisible} />
     </View>
   );
 };
@@ -283,8 +287,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => ({
-  location: getLocation(state),
   mission: getMission(state),
+  currentLocation: state.locations.currentLocation,
+  badges: state.badges.badgeList,
 });
 
-export default connect(mapStateToProps, { setMission, clearMission })(NewActivityScreen);
+export default connect(mapStateToProps, { setMission, clearMission, setCurrentLocation })(NewActivityScreen);

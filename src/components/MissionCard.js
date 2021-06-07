@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import * as Colors from '../constants/colors';
 import fontStyles from '../constants/fonts';
 import { categories } from '../constants/categories';
+import { getTimeString } from '../constants/time';
 
 const MissionCard = ({ mission, onPress }) => {
   const category = categories[mission.category];
@@ -15,6 +16,11 @@ const MissionCard = ({ mission, onPress }) => {
     icon = category.icon;
     iconStyle = category.style;
   }
+
+  const created = new Date(mission.completedDate).getTime();
+  const now = new Date().getTime();
+  const timeElapsed = now - created;
+  const timeString = `Completed ${getTimeString(timeElapsed)} ago`;
 
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
@@ -26,15 +32,7 @@ const MissionCard = ({ mission, onPress }) => {
           {mission.title}
         </Text>
         <Text style={fontStyles.mediumTextRegular} numberOfLines={1}>
-          {mission.category}
-        </Text>
-      </View>
-      <View style={styles.detailsContainer}>
-        <Text style={fontStyles.mediumTextRegular}>
-          {`${0} mins  👟`}
-        </Text>
-        <Text style={fontStyles.mediumTextRegular}>
-          {`${0} mins  🚗`}
+          {mission.completed ? timeString : mission.location.address}
         </Text>
       </View>
     </TouchableOpacity>

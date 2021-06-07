@@ -69,6 +69,22 @@ export const getCurrentLocation = async (callback) => {
   }
 };
 
+export const getCurrentLatLong = async (callback) => {
+  try {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      callback(null);
+      return;
+    }
+
+    const geolocationInfo = await Location.getCurrentPositionAsync({ accuracy: 4 });
+    const { latitude, longitude } = geolocationInfo.coords;
+    callback({ latitude, longitude });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const createLocation = async (location) => {
   try {
     const response = await axios.post(`${api}/locations`, location);
@@ -77,3 +93,9 @@ export const createLocation = async (location) => {
     return error;
   }
 };
+
+// export const getDestinationTime = async (origins, destination, mode) => {
+//   const req = `${googleApi}/distancematrix/json?origins=place_id:${origins}&destinations=place_id:${destination}&mode=${mode}&key=${googleApiKey}`;
+//   const response = await axios.get(req);
+//   const { result } = response.data;
+// };

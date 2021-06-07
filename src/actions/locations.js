@@ -6,6 +6,7 @@ const { api } = config;
 
 export const ActionTypes = {
   GET_QUERIED_LOCATIONS: 'GET_QUERIED_LOCATIONS',
+  SET_CURRENT_LOCATION: 'SET_CURRENT_LOCATION',
 };
 
 export const getQueriedLocations = (search, location, tags) => async (dispatch) => {
@@ -27,4 +28,11 @@ export const getQueriedLocations = (search, location, tags) => async (dispatch) 
         reject();
       });
   });
+};
+
+export const setCurrentLocation = (location) => {
+  return {
+    type: ActionTypes.SET_CURRENT_LOCATION,
+    payload: location,
+  };
 };

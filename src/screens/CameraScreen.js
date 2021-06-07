@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
-  View, Text, StyleSheet, TouchableOpacity, ActivityIndicator,
+  View, Text, StyleSheet, TouchableOpacity,
 } from 'react-native';
 import { Camera } from 'expo-camera';
 import { connect } from 'react-redux';
 import * as Colors from '../constants/colors';
-import { handleUploadfromCamera } from '../actions/posts';
+import { handleUploadfromCamera, clearPost } from '../actions/posts';
 import { clearMission } from '../actions/missions';
 import { completeMission } from '../services/missionService';
 import { getMission } from '../selectors/mission';
@@ -13,14 +13,11 @@ import { getMission } from '../selectors/mission';
 // adapted from sample code at https://docs.expo.io/versions/latest/sdk/camera/
 const CameraScreen = (props) => {
   const [camPermission, setCamPermission] = useState(false);
-  const [loading, setLoading] = useState(false);
   const cam = useRef(null);
 
   const onSuccess = () => {
-    setLoading(false);
     props.clearMission();
     completeMission(props.mission.id);
-    props.navigation.navigate('PostCreationScreen');
   };
 
   const getPermissions = async () => {
@@ -34,14 +31,14 @@ const CameraScreen = (props) => {
 
   const takePhoto = async () => {
     if (!cam) return;
-    if (loading) return;
+    props.clearPost();
 
-    setLoading(true);
     try {
       const newPhoto = await cam.current?.takePictureAsync({ base64: true });
       props.handleUploadfromCamera(newPhoto.base64, onSuccess);
+      props.navigation.navigate('PostCreationScreen');
     } catch (error) {
-      setLoading(false);
+      console.log(error);
     }
   };
 
@@ -56,12 +53,6 @@ const CameraScreen = (props) => {
           </TouchableOpacity>
         </View>
       </Camera>
-      {loading && (
-        <ActivityIndicator style={styles.activityIndicator}
-          size="large"
-          color={Colors.accentPurple}
-        />
-      )}
     </View>
   );
 };
@@ -70,12 +61,13 @@ const mapStateToProps = (state) => ({
   mission: getMission(state),
 });
 
-export default connect(mapStateToProps, { handleUploadfromCamera, clearMission })(CameraScreen);
+export default connect(mapStateToProps, { handleUploadfromCamera, clearMission, clearPost })(CameraScreen);
 
 const styles = StyleSheet.create({
   container: {
     width: '100%',
     height: '100%',
+    backgroundColor: Colors.bgPrimary,
   },
   camera: {
     width: '100%',
