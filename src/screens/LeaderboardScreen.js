@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import {
-  View, StyleSheet, Text, Image,
+  View, StyleSheet, Text, Image, TouchableWithoutFeedback,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { getTopUsers, getUser, getUserRankInfo } from '../actions/user';
@@ -58,21 +58,26 @@ const LeaderboardScreen = (props) => {
   );
 
   const renderRow = (user, index) => (
-    <View style={styles.rowContainer} key={user.id}>
-      <View style={styles.rowDetails}>
-        <Text style={styles.rowRank}>{index}</Text>
-        <Image
-          style={styles.rowImage}
-          source={{ uri: user.profPic }}
-        />
-        <Text style={styles.rowUsername}>
-          {user.username}
+    <TouchableWithoutFeedback
+      onPress={() => props.navigation.navigate('OtherProfileScreen', { thisUsername: user.username })}
+    >
+      <View style={styles.rowContainer} key={user.id}>
+        <View style={styles.rowDetails}>
+          <Text style={styles.rowRank}>{index}</Text>
+          <Image
+            style={styles.rowImage}
+            source={{ uri: user.profPic }}
+          />
+          <Text style={styles.rowUsername}>
+            {user.username}
+          </Text>
+        </View>
+        <Text style={styles.rowReaches}>
+          {user.missionsCompleted}
         </Text>
       </View>
-      <Text style={styles.rowReaches}>
-        {user.missionsCompleted}
-      </Text>
-    </View>
+    </TouchableWithoutFeedback>
+
   );
 
   return (

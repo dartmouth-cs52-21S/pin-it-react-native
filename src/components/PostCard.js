@@ -119,6 +119,9 @@ const PostCard = (props) => {
                         <Text style={[fontStyles.mediumTextRegular, {
                           paddingTop: 2, paddingBottom: 2, paddingLeft: 1, alignSelf: 'center',
                         }]}
+                          onPress={async () => {
+                            props.navigation.navigate('OtherProfileScreen', { thisUsername: item.username });
+                          }}
                         >
                           {' @'}
                           {item.username}
