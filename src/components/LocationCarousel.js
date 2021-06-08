@@ -12,6 +12,7 @@ import {
 import { categories } from '../constants/categories';
 import PostCard from './PostCard';
 import { getLocationPostsById } from '../actions/locations';
+import fontStyles from '../constants/fonts';
 
 const { width: viewportWidth } = Dimensions.get('window');
 
@@ -115,7 +116,7 @@ const LocationCarousel = (props) => {
               {renderIcon()}
               <Text
                 numberOfLines={1}
-                style={styles.title}
+                style={[fontStyles.mediumTextBold, styles.title]}
                 onPress={async () => {
                   const fullLocation = await getLocationPostsById(id);
                   props.navigation.navigate('GridScreen', {
@@ -129,13 +130,8 @@ const LocationCarousel = (props) => {
                 {title}
               </Text>
             </View>
-            <View style={{
-              alignSelf: 'center', height: 24, borderRadius: 10, backgroundColor: 'rgba(255, 255, 255, 0.2)', padding: 2, paddingLeft: 7,
-            }}
-            >
-              <Text style={{
-                height: 20, fontSize: 16, color: 'white', alignSelf: 'center',
-              }}
+            <View style={styles.arrowContainer}>
+              <Text style={fontStyles.smallMediumTextBold}
                 onPress={async () => {
                   const fullLocation = await getLocationPostsById(id);
                   props.navigation.navigate('GridScreen', {
@@ -148,8 +144,8 @@ const LocationCarousel = (props) => {
               >
                 {posts?.length || 0}
                 {' '}
-                <FontAwesomeIcon icon={faChevronRight} size={14} color="white" />
               </Text>
+              <FontAwesomeIcon icon={faChevronRight} size={14} color="white" />
             </View>
           </View>
           <View style={styles.subheading}>
@@ -183,9 +179,16 @@ const styles = StyleSheet.create({
     flex: 1,
     marginBottom: '3%',
   },
+  arrowContainer: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    padding: 5,
+    paddingLeft: 8,
+  },
   title: {
-    color: 'white',
-    fontSize: 22,
     fontWeight: 'bold',
     alignSelf: 'center',
     paddingLeft: 7,
