@@ -8,7 +8,7 @@ import categories from '../constants/categories';
 const LocationHeader = (props) => {
   const { location } = props;
   const {
-    category, title, latitude, longitude,
+    category, title, address,
   } = location || {};
 
   const renderIcon = () => {
@@ -22,6 +22,41 @@ const LocationHeader = (props) => {
     );
   };
 
+  const renderAddress = () => {
+    if (address) {
+      const addressarray = address.split(',');
+      const state2 = addressarray[2];
+      const state = String(state2).split(' ');
+      if (state2 !== undefined) {
+        return (
+          <Text style={styles.detail} numberOfLines={1}>
+            {addressarray[0]}
+            ,
+            {addressarray[1]}
+            ,
+            {' '}
+            {state[1]}
+          </Text>
+        );
+      } else {
+        return (
+          <Text style={styles.detail} numberOfLines={1}>
+            {addressarray[0]}
+            ,
+            {' '}
+            {addressarray[1]}
+          </Text>
+        );
+      }
+    } else {
+      return (
+        <Text style={styles.detail} numberOfLines={1}>
+          {' '}
+        </Text>
+      );
+    }
+  };
+
   return (
     <View>
       <View style={styles.heading}>
@@ -33,14 +68,7 @@ const LocationHeader = (props) => {
       </View>
 
       <View style={styles.subheading}>
-        <Text style={styles.detail}>
-          Location:
-          {' '}
-          {latitude}
-          ,
-          {' '}
-          {longitude}
-        </Text>
+        {renderAddress()}
       </View>
     </View>
   );
@@ -49,7 +77,7 @@ const LocationHeader = (props) => {
 const styles = StyleSheet.create({
   title: {
     color: 'white',
-    fontSize: 20,
+    fontSize: 28,
     fontWeight: 'bold',
     width: '80%',
   },
@@ -63,7 +91,7 @@ const styles = StyleSheet.create({
   },
 
   detail: {
-    fontSize: 12,
+    fontSize: 13,
     color: 'white',
   },
   iconContainer: {

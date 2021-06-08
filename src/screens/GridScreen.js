@@ -6,11 +6,12 @@ import { bgPrimary } from '../constants/colors';
 import LocationHeader from '../components/LocationHeader';
 import PostCard from '../components/PostCard';
 
-const GridScreen = ({ route }) => {
+const GridScreen = ({ route, navigation }) => {
   const { location, posts } = route.params;
+  const postlen = posts.length;
 
   const renderItem = useCallback(({ item }) => (
-    <PostCard location={location} item={item} isGridScreen />
+    <PostCard location={location} item={item} length={postlen} navigation={navigation} isGridScreen />
   ));
 
   return (
