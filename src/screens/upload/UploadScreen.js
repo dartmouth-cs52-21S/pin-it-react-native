@@ -27,7 +27,7 @@ const UploadScreen = (props) => {
       <Image style={styles.uploadImage} source={bgImage} />
       <Text style={[fontStyles.largeTextBold, styles.title]}>Share your journey</Text>
       <Text style={[fontStyles.smallTextRegular, styles.descriptionText]}>Let us know of the exciting, beautiful, spontaneous, or boring places where you go! Or go to 🎲 to complete missions and earn badges.</Text>
-      <TouchableOpacity style={styles.uploadButton} onPress={() => handleUploadPress(onUploadPress)}>
+      <TouchableOpacity style={styles.uploadButton} onPress={() => handleUploadPress(onUploadPress, props.navigation)}>
         <Text style={fontStyles.mediumTextBold}>Share photos</Text>
       </TouchableOpacity>
       <BadgeModal modalVisible={modalVisible} setModalVisible={setModalVisible} />

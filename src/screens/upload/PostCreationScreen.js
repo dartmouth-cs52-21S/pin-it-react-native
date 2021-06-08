@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import {
-  ActivityIndicator, TextInput, Image, View, StyleSheet,
+  ActivityIndicator, TextInput, View, StyleSheet,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import MapView, { Marker } from 'react-native-maps';
@@ -10,6 +10,7 @@ import { updateCurrentPost } from '../../actions/posts';
 import { bgPrimary, bgTertiary } from '../../constants/colors';
 import LocationDisplay from '../../components/LocationDisplay';
 import { getLocationByPlaceId, getCurrentLocation } from '../../services/locationService';
+import UploadImageCarousel from '../../components/UploadImageCarousel';
 
 const PostCreationScreen = (props) => {
   const { post, updatePost, currentLocation } = props;
@@ -25,7 +26,16 @@ const PostCreationScreen = (props) => {
 
   const { latitude, longitude } = location || { };
 
-  const imageUrl = post?.imageUrls?.[0];
+  // const imageUrl = post?.imageUrls?.[0];
+  // const renderImages = post.imageUrls?.map((uri) => (
+  //   <Image
+  //     style={styles.uploadedImage}
+  //     source={{
+  //       uri,
+  //     }}
+  //   />
+  // ));
+  const renderImages = <UploadImageCarousel imageUrls={post.imageUrls} />;
 
   if (!post) {
     return (
@@ -50,14 +60,9 @@ const PostCreationScreen = (props) => {
   return (
     <View style={styles.container}>
       <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
-        {imageUrl
+        {post.imageUrls
           ? (
-            <Image
-              style={styles.uploadedImage}
-              source={{
-                uri: imageUrl,
-              }}
-            />
+            renderImages
           )
           : (
             <View style={styles.uploadedImage}>

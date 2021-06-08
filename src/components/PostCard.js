@@ -134,9 +134,7 @@ const PostCard = (props) => {
                     {item.user ? item.user.badges.length : '0'}
                     {' badge'}
                     {item.user?.badges.length === 1 ? ' ' : 's '}
-                    <Text style={[fontStyles.smallTextRegular, { paddingBottom: 5, paddingLeft: 1, fontSize: 10 }]}>
-                      {' \u2B24  '}
-                    </Text>
+                    <View style={styles.circle} />
                     {item.user ? item.user.missionsCompleted : null}
                     {' missions completed'}
                   </Text>
