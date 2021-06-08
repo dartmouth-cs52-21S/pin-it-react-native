@@ -11,6 +11,7 @@ import ModalCard from './ModalCard';
 import { getLocationPostsById } from '../actions/locations';
 import { getUser } from '../actions/user';
 import fontStyles from '../constants/fonts';
+import { accentPurple, accentPink } from '../constants/colors';
 
 // const width = Dimensions.get('window').width;
 
@@ -123,9 +124,8 @@ const PostCard = (props) => {
                             props.navigation.navigate('OtherProfileScreen', { thisUsername: item.username });
                           }}
                         >
-                          {' @'}
+                          {'@'}
                           {item.username}
-                          {' '}
                         </Text>
                       </View>
                     </View>
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
   },
   userid: {
-    backgroundColor: 'rgb(129, 46, 125)',
+    backgroundColor: accentPink,
     borderRadius: 30,
   },
   profilePhoto: {
