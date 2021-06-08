@@ -1,5 +1,5 @@
 import React from 'react';
-import PostCarouselList from '../../components/PostCarouselList';
+import PostCarouselList from '../components/PostCarouselList';
 
 const PinsLocationFeedScreen = ({ route }) => {
   const { posts } = route.params;

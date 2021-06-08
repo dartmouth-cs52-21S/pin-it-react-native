@@ -17,11 +17,11 @@ const windowWidth = (Dimensions.get('window').width) / 4;
 
 const MissionsTab = () => (<Text style={styles.testText}>Missions</Text>);
 
-const renderScene = (props) => SceneMap({
-  posts: () => (<PostsTab posts={props.posts} />),
+const renderScene = ({ user, navigation }) => SceneMap({
+  posts: () => (<PostsTab posts={user.posts} />),
   missions: MissionsTab,
-  pins: () => (<PinsTab user={props} navigation={props.navigation} />),
-  badges: () => (<BadgesTab badges={props.badges} />),
+  pins: () => (<PinsTab user={user} navigation={navigation} />),
+  badges: () => (<BadgesTab badges={user.badges} />),
 });
 
 const renderLabel = (labelProps) => (
@@ -62,10 +62,11 @@ const renderTabBar = (tabBarProps) => (
 
 // Get other user info by username
 
-const OtherProfileScreen = (route, props) => {
+const OtherProfileScreen = (props) => {
   const [user, setOtherUser] = useState('hi');
   // eslint-disable-next-line react/destructuring-assignment
-  const { thisUsername } = route.route.params;
+  const { thisUsername } = props.route.params;
+  const { navigation } = props;
 
   const [index, setIndex] = useState(0);
   const [routes] = useState([
@@ -131,7 +132,7 @@ const OtherProfileScreen = (route, props) => {
       <TabView
         style={styles.tabViewContainer}
         navigationState={{ index, routes }}
-        renderScene={renderScene(user)}
+        renderScene={renderScene({ user, navigation })}
         onIndexChange={setIndex}
         renderTabBar={renderTabBar}
       />
