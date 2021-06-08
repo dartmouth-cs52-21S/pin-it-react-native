@@ -120,7 +120,7 @@ const LocationCarousel = (props) => {
                   const fullLocation = await getLocationPostsById(id);
                   props.navigation.navigate('GridScreen', {
                     location: {
-                      title, category, latitude, longitude,
+                      title, category, latitude, longitude, address,
                     },
                     posts: fullLocation.data[0].posts,
                   });

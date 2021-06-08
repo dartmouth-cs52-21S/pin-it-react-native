@@ -11,6 +11,7 @@ import { bgPrimary, bgTertiary } from '../../constants/colors';
 import LocationDisplay from '../../components/LocationDisplay';
 import { getLocationByPlaceId, getCurrentLocation } from '../../services/locationService';
 import UploadImageCarousel from '../../components/UploadImageCarousel';
+import fontStyles from '../../constants/fonts';
 
 const PostCreationScreen = (props) => {
   const { post, updatePost, currentLocation } = props;
@@ -58,20 +59,24 @@ const PostCreationScreen = (props) => {
   };
 
   return (
-    <View style={styles.container}>
-      <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
-        {post.imageUrls
-          ? (
-            renderImages
-          )
-          : (
-            <View style={styles.uploadedImage}>
-              <ActivityIndicator />
-            </View>
-          )}
-        <View style={styles.postDetailsContainer}>
+    <KeyboardAwareScrollView
+      keyboardShouldPersistTaps="handled"
+      style={styles.container}
+      extraHeight={200}
+    >
+      {post.imageUrls
+        ? (
+          renderImages
+        )
+        : (
+          <View style={styles.uploadedImage}>
+            <ActivityIndicator />
+          </View>
+        )}
+      <View style={styles.postDetailsContainer}>
+        <View style={styles.textContainer}>
           <TextInput
-            style={styles.textInput}
+            style={fontStyles.smallMediumText}
             value={postCaption}
             onChangeText={(caption) => {
               updatePost({ ...post, caption });
@@ -80,46 +85,44 @@ const PostCreationScreen = (props) => {
             placeholder="Caption"
             placeholderTextColor="grey"
             multiline
-            numberOfLines={3}
+            blurOnSubmit
+            maxLength={100}
           />
-          <LocationDisplay
-            onPress={setLocationToPost}
-            onClear={() => setLocation(currentLocation)}
-          />
-          {location && (
-          <>
-            <MapView
-              ref={map}
-              style={styles.mapView}
-              initialRegion={{
-                latitude,
-                longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-              }}
-            >
-              <Marker coordinate={{ latitude, longitude }} />
-            </MapView>
-          </>
-          )}
-
         </View>
-      </KeyboardAwareScrollView>
-    </View>
+        <LocationDisplay
+          onPress={setLocationToPost}
+          onClear={() => setLocation(currentLocation)}
+        />
+      </View>
+      {location && (
+      <>
+        <MapView
+          ref={map}
+          style={styles.mapView}
+          initialRegion={{
+            latitude,
+            longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        >
+          <Marker coordinate={{ latitude, longitude }} />
+        </MapView>
+      </>
+      )}
+    </KeyboardAwareScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '100%',
-    height: '100%',
     backgroundColor: bgPrimary,
   },
   postDetailsContainer: {
     flex: 1,
     paddingHorizontal: 20,
-    marginTop: 45,
+    paddingBottom: 20,
   },
   uploadedImage: {
     width: '100%',
@@ -128,24 +131,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  textInput: {
+  textContainer: {
     backgroundColor: bgTertiary,
-    borderRadius: 10,
-    paddingTop: 12,
-    paddingBottom: 12,
     padding: 10,
-    color: 'white',
-    width: '100%',
-    minWidth: '100%',
-    maxWidth: '100%',
-    marginBottom: 15,
+    marginBottom: 20,
+    borderRadius: 10,
+    minHeight: 100,
   },
-  locationDisplay: {
-    marginBottom: 15,
+  textInput: {
+    color: 'white',
   },
   mapView: {
     width: '100%',
-    height: 200,
+    height: 300,
     zIndex: -1,
     marginBottom: 20,
   },

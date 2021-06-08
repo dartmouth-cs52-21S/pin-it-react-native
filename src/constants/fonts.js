@@ -28,6 +28,11 @@ const fontStyles = StyleSheet.create({
     color: 'white',
     fontFamily: 'Montserrat_400Regular',
   },
+  smallMediumTextBold: {
+    fontSize: RFValue(13),
+    color: 'white',
+    fontFamily: 'Montserrat_700Bold',
+  },
   mediumTextRegular: {
     fontSize: RFValue(15),
     color: 'white',
