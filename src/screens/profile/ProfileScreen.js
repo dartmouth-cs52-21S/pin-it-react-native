@@ -5,6 +5,7 @@ import {
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { getUser, editUser } from '../../actions/user';
@@ -16,6 +17,7 @@ import PostsTab from './PostsTab';
 import BadgesTab from './BadgesTab';
 import PinsTab from './PinsTab';
 import OngoingActivityScreen from '../OngoingActivityScreen';
+import fontStyles from '../../constants/fonts';
 
 const instaLogo = require('../../assets/instagram.png');
 const youtubeLogo = require('../../assets/youtube.png');
@@ -32,12 +34,14 @@ const renderScene = (props) => SceneMap({
 const renderLabel = (labelProps) => (
   <View>
     <Text style={[
+      fontStyles.smallMediumText,
       {
-        fontSize: 16,
         textAlign: 'center',
         width: windowWidth,
       },
-      labelProps.focused ? { color: accentPurple, fontWeight: 'bold' } : { color: 'white' },
+      labelProps.focused
+        ? [fontStyles.smallMediumTextBold, { color: accentPurple }]
+        : {},
     ]}
     >
       {labelProps.route.title}
@@ -96,7 +100,7 @@ const ProfileScreen = (props) => {
     if (!edit) {
       return (
         <TouchableOpacity style={styles.logoutButtonContainer} onPress={() => { setModalVisible(true); setEditing(true); }}>
-          <Text style={styles.logoutButton}>Edit</Text>
+          <Text style={fontStyles.smallTextRegular}>Edit</Text>
         </TouchableOpacity>
       );
     } else {
@@ -123,61 +127,65 @@ const ProfileScreen = (props) => {
             setEditing(false);
           }}
         >
-          <View style={styles.centeredView}>
+          <KeyboardAwareScrollView
+            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={styles.scrollView}
+          >
             <View style={styles.modalView}>
-              <View style={styles.header}>
-                <View />
+              <View style={styles.closeContainer}>
                 <Pressable
                   style={[styles.button]}
                   onPress={() => { setModalVisible(!modalVisible); setEditing(false); changeWorkAround(0); }}
                 >
-                  <View style={styles.imagesIcon}>
-                    <FontAwesomeIcon icon={faTimes} size={29} color="white" />
-                  </View>
+                  <FontAwesomeIcon icon={faTimes} size={29} color="white" />
                 </Pressable>
               </View>
               <Image style={styles.profilePhoto} source={{ uri: pfpUrl }} />
               <TouchableOpacity style={styles.uploadButtonContainer} onPress={uploadPFP}>
-                <Text style={styles.logoutButton}>Upload Profile Photo</Text>
+                <Text style={fontStyles.smallTextRegular}>Upload Profile Photo</Text>
               </TouchableOpacity>
               <View style={styles.inputContainer}>
-                <Text style={[styles.logoutButton, { marginBottom: 10, color: accentPurple }]}>Bio</Text>
+                <Text style={[fontStyles.smallTextRegular, { marginBottom: 10, color: accentPurple }]}>Bio</Text>
                 <TextInput
                   style={styles.inputText}
-                  maxLength={200}
+                  maxLength={150}
                   onChangeText={onChangeBio}
                   value={bio}
                   multiline
+                  blurOnSubmit
                 />
 
               </View>
               <View style={styles.inputContainer}>
-                <Text style={[styles.logoutButton, { marginBottom: 10, color: accentPurple }]}>Instagram</Text>
+                <Text style={[fontStyles.smallTextRegular, { marginBottom: 10, color: accentPurple }]}>Instagram</Text>
                 <TextInput
                   style={styles.inputText}
                   maxLength={100}
                   onChangeText={onChangeInsta}
                   value={instagram}
                   multiline
+                  blurOnSubmit
                 />
 
               </View>
               <View style={styles.inputContainer}>
-                <Text style={[styles.logoutButton, { marginBottom: 10, color: accentPurple }]}>Twitter</Text>
+                <Text style={[fontStyles.smallTextRegular, { marginBottom: 10, color: accentPurple }]}>Twitter</Text>
                 <TextInput
                   style={styles.inputText}
                   maxLength={100}
                   onChangeText={onChangeTwitter}
                   value={twitter}
                   multiline
+                  blurOnSubmit
                 />
 
               </View>
               <TouchableOpacity style={styles.logoutButtonContainer} onPress={() => { setModalVisible(!modalVisible); setEditing(false); props.editUser(userdata); }}>
-                <Text style={styles.logoutButton}>Done</Text>
+                <Text style={fontStyles.smallTextRegular}>Done</Text>
               </TouchableOpacity>
+
             </View>
-          </View>
+          </KeyboardAwareScrollView>
         </Modal>
       );
     }
@@ -199,38 +207,38 @@ const ProfileScreen = (props) => {
       <View style={styles.bannerContainer}>
         {renderEditButton(editing)}
         <TouchableOpacity style={styles.logoutButtonContainer} onPress={() => props.signOutUser()}>
-          <Text style={styles.logoutButton}>Log Out</Text>
+          <Text style={fontStyles.smallTextRegular}>Log Out</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.profileHeaderContainer}>
         <Image style={styles.profilePhoto} source={{ uri: profileUrl }} />
         <View style={styles.profileHeaderTextContainer}>
-          <Text style={styles.usernameText}>
+          <Text style={[fontStyles.mediumTextBold, styles.usernameText]}>
             @
             {user.username}
           </Text>
-          <Text style={styles.userSubtitleText}>
+          <Text style={[fontStyles.smallTextRegular, styles.userSubtitleText]}>
             {user ? user.posts?.length : 0}
             {' '}
             Posts
           </Text>
-          <Text style={styles.userSubtitleText}>
+          <Text style={[fontStyles.smallTextRegular, styles.userSubtitleText]}>
             {user.missionsCompleted}
             {' '}
             Completed Missions
           </Text>
         </View>
       </View>
-      <Text style={styles.bioText}>{user.bio}</Text>
+      <Text style={[fontStyles.smallTextRegular, styles.bioText]}>{user.bio}</Text>
       <View style={styles.socialsContainer}>
         <Image style={styles.socialsLogo} source={instaLogo} />
-        <Text style={styles.socialsText}
+        <Text style={[fontStyles.smallTextRegular, styles.socialsText]}
           onPress={() => Linking.openURL(instaLink)}
         >
           Instagram
         </Text>
         <Image style={styles.socialsLogo} source={youtubeLogo} />
-        <Text style={styles.socialsText}
+        <Text style={[fontStyles.smallTextRegular, styles.socialsText]}
           onPress={() => Linking.openURL(twitterLink)}
         >
           Youtube
@@ -249,19 +257,21 @@ const ProfileScreen = (props) => {
 };
 
 const styles = StyleSheet.create({
-  header: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  centeredView: {
+  closeContainer: {
     flex: 1,
+    position: 'absolute',
+    right: '5%',
+    top: '3%',
+  },
+  scrollView: {
+    flexGrow: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
   },
   modalView: {
     borderRadius: 20,
     backgroundColor: bgTertiary,
+    alignSelf: 'center',
     alignItems: 'center',
     shadowColor: '#000',
     width: '90%',
@@ -279,11 +289,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     zIndex: 10,
-  },
-  imagesIcon: {
-    position: 'absolute',
-    right: '5%',
-    top: '-20%',
   },
   container: {
     flex: 1,
@@ -316,12 +321,8 @@ const styles = StyleSheet.create({
     height: 'auto',
     width: 'auto',
   },
-  logoutButton: {
-    color: 'white',
-    fontSize: 16,
-  },
   profileHeaderContainer: {
-    marginVertical: '3%',
+    marginTop: '3%',
     marginHorizontal: '5%',
     flexDirection: 'row',
     alignItems: 'center',
@@ -339,15 +340,10 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
   usernameText: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
     marginBottom: 6,
   },
   userSubtitleText: {
     color: 'lightgrey',
-    fontSize: 14,
-    marginBottom: 2,
   },
   inputContainer: {
     marginBottom: 20,
@@ -359,14 +355,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1, // Add this to specify bottom border thickness
   },
   bioText: {
-    color: 'white',
-    fontSize: 14,
-    marginLeft: 30,
-    marginRight: 30,
-    marginTop: 15,
+    marginHorizontal: '5%',
+    marginVertical: '3%',
   },
   socialsContainer: {
-    marginVertical: 12,
+    marginVertical: '3%',
     flexDirection: 'row',
     justifyContent: 'center',
   },
@@ -379,7 +372,6 @@ const styles = StyleSheet.create({
     color: accentPurple,
     marginLeft: 8,
     marginRight: 20,
-    fontSize: 14,
   },
   testText: {
     marginTop: 50,
