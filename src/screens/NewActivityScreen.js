@@ -47,6 +47,7 @@ const NewActivityScreen = (props) => {
 
   const [placeError, setPlaceError] = useState(false);
   const [routeError, setRouteError] = useState(false);
+  const [longRouteError, setLongRouteError] = useState(false);
 
   const arrive = () => {
     if (!mission) return;
@@ -74,11 +75,17 @@ const NewActivityScreen = (props) => {
   }, [currentLocation]);
 
   const drawRoute = async (lat, lng, placeId) => {
+    const MAX_COORDS = 60000;
     setLoading(true);
     const response = await routeToMission(lat, lng, placeId);
     setLoading(false);
     if (!response.coords) {
       setRouteError(true);
+      setRoute([]);
+      return;
+    }
+    if (response.coords.length > MAX_COORDS) {
+      setLongRouteError(true);
       setRoute([]);
       return;
     }
@@ -234,6 +241,12 @@ const NewActivityScreen = (props) => {
         onDismiss={() => setRouteError(false)}
         mainText="No Route Found"
         secondaryText="Could not calculate route between your location and the destination"
+      />
+      <ErrorModal
+        visible={longRouteError}
+        onDismiss={() => setLongRouteError(false)}
+        mainText="Mission is far away"
+        secondaryText="You might want to hop on a plane in order to do this mission"
       />
       <BadgeModal modalVisible={badgeModalVisible} setModalVisible={setBadgeModalVisible} />
     </View>
