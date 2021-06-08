@@ -125,8 +125,7 @@ const OtherProfileScreen = (props) => {
         <Text style={styles.socialsText}
           onPress={() => Linking.openURL(twitterLink)}
         >
-          Youtube
-
+          Twitter
         </Text>
       </View>
       <TabView
