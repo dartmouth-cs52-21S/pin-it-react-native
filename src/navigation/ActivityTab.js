@@ -11,12 +11,19 @@ import { bgTertiary, bgPrimary } from '../constants/colors';
 import { createPost, updateCurrentPost } from '../actions/posts';
 import { getCurrentPost } from '../selectors/posts';
 import { getCurrentLocation } from '../services/locationService';
+import { clearMission } from '../actions/missions';
+import { completeMission } from '../services/missionService';
+import { getMission } from '../selectors/mission';
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 
 const onCreatePost = (props, navigation) => {
   if (!props.post?.location) return;
+  if (props.post.isMission) {
+    props.clearMission();
+    completeMission(props.mission.id);
+  }
   props.createPost(props.post, () => navigation.navigate('MainActivityScreen'));
 };
 
@@ -96,10 +103,11 @@ const mapStateToProps = (state) => {
       ...post,
       isMission: true,
     },
+    mission: getMission(state),
   };
 };
 
-export default connect(mapStateToProps, { createPost })(ActivityStack);
+export default connect(mapStateToProps, { createPost, clearMission })(ActivityStack);
 
 const styles = StyleSheet.create({
   tabBar: {
