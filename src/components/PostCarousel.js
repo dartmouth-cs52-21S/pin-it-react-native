@@ -119,7 +119,7 @@ const PostCarousel = (props) => {
           onPress={() => setModalVisible(true)}
         >
           <View style={styles.imagesIcon}>
-            <FontAwesomeIcon icon={faEllipsisH} size={29} color="white" />
+            <FontAwesomeIcon icon={faEllipsisH} size={27} color="white" />
           </View>
         </Pressable>
       </View>
