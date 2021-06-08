@@ -33,7 +33,6 @@ const ProfileTab = () => {
           },
           headerTintColor: '#fff',
           headerTitleAlign: 'center',
-          eaderBackTitle: 'Cancel',
         }}
       />
     </Stack.Navigator>

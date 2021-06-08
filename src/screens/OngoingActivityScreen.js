@@ -10,7 +10,7 @@ import { getMissions, setMission, deleteMission } from '../actions/missions';
 import MissionCard from '../components/MissionCard';
 
 const OngoingActivityScreen = (props) => {
-  const { navigation, missions } = props;
+  const { navigation, missions, isProfileScreen } = props;
   const [activeTab, setActiveTab] = useState(true);
 
   useEffect(() => {
@@ -31,9 +31,11 @@ const OngoingActivityScreen = (props) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      {!isProfileScreen && (
       <View style={styles.headerContainer}>
-        <Text style={fontStyles.smallHeaderTitle}>My Missions</Text>
+        <Text style={fontStyles.smallHeaderTitle}>My Reaches</Text>
       </View>
+      )}
       <View style={styles.selectorContainer}>
         <TouchableWithoutFeedback onPress={() => setActiveTab(true)}>
           <View style={styles.selectorTextContainer}>
@@ -84,32 +86,29 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     backgroundColor: bgPrimary,
-  },
-  headerText: {
-    fontSize: 36,
-    color: 'white',
-    fontWeight: 'bold',
+    paddingVertical: 15,
   },
   headerContainer: {
-    marginTop: 80,
-    padding: 20,
+    marginTop: 70,
+    paddingVertical: 20,
+    marginHorizontal: '5%',
   },
   missionText: {
     color: 'white',
   },
   selectorContainer: {
     width: '100%',
-    height: 50,
     flexDirection: 'row',
     marginBottom: 10,
+    justifyContent: 'center',
   },
   selectorTextContainer: {
-    width: 150,
     flexDirection: 'column',
     alignItems: 'center',
+    marginHorizontal: '5%',
   },
   selectorText: {
-    fontSize: 18,
+    fontSize: 16,
     width: '100%',
     color: 'white',
     textAlign: 'center',

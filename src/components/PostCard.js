@@ -1,23 +1,31 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import {
-  View, Text, StyleSheet, Image, Modal, Pressable, TouchableWithoutFeedback,
+  View, Text, StyleSheet, Image, Modal, Pressable, TouchableWithoutFeedback, ScrollView, SafeAreaView,
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faImages, faTimes } from '@fortawesome/free-solid-svg-icons';
-import {
-  bgTertiary, bgSecondary,
-} from '../constants/colors';
 import { formatImgUrl } from '../services/imageUpload';
 import ModalCard from './ModalCard';
+import { getLocationPostsById } from '../actions/locations';
+import { getUser } from '../actions/user';
 import fontStyles from '../constants/fonts';
+
+// const width = Dimensions.get('window').width;
 
 const PostCard = (props) => {
   const {
-    location, item, isGridScreen,
+    location, item, isGridScreen, id,
   } = props;
+  const {
+    title, category, longitude, latitude, address,
+  } = location;
   const [modalVisible, setModalVisible] = useState(false);
 
+  const blankProfile = 'https://res.cloudinary.com/djc5u8rjt/image/upload/v1621833029/ux9xmvmtjl3nf7x7ls2n.png';
+  // eslint-disable-next-line no-nested-ternary
+  const profileUrl = item.user ? (item.user.profPic ? item.user.profPic : blankProfile) : blankProfile;
   return (
     <>
       {/* Code for displaying images evenly in grid view
@@ -60,22 +68,9 @@ const PostCard = (props) => {
           setModalVisible(!modalVisible);
         }}
       >
-        <View style={styles.centeredView}>
+        <SafeAreaView style={styles.centeredView}>
           <View style={styles.modalView}>
             <View style={styles.header}>
-              <View>
-                <Text style={[fontStyles.mediumTextBold, { paddingTop: 5, paddingBottom: 5, paddingLeft: 1 }]}>
-                  {item.username}
-                  {' '}
-                  @
-                </Text>
-                <Text style={[fontStyles.largeHeaderTitle, { paddingBottom: 5 }]}>
-                  {location.title}
-                </Text>
-                <Text style={[fontStyles.smallTextRegular, { paddingBottom: 5, paddingLeft: 1 }]}>
-                  {location.category === 'Poi' ? 'Point of Interest' : location.category}
-                </Text>
-              </View>
               <Pressable
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => setModalVisible(!modalVisible)}
@@ -84,28 +79,96 @@ const PostCard = (props) => {
                   <FontAwesomeIcon icon={faTimes} size={40} color="white" />
                 </View>
               </Pressable>
+              <View style={styles.header}>
+                <View>
+                  <Text style={[fontStyles.largeHeaderTitle, { marginTop: 15, paddingBottom: 5, alignSelf: 'center' }]}
+                    onPress={async () => {
+                      const fullLocation = await getLocationPostsById(id);
+                      props.navigation.navigate('GridScreen', {
+                        location: {
+                          title, category, latitude, longitude, address,
+                        },
+                        posts: fullLocation.data[0].posts,
+                      });
+                    }}
+                  >
+                    {location.title}
+                  </Text>
+                  <Text style={[fontStyles.smallTextRegular, { paddingBottom: 5, paddingLeft: 1, alignSelf: 'center' }]}>
+                    {location.address}
+                  </Text>
+                  <Text style={[fontStyles.smallTextRegular, { paddingBottom: 5, paddingLeft: 1, alignSelf: 'center' }]}>
+                    {getLocationPostsById.length}
+                    {' total post'}
+                    {getLocationPostsById.length === 1 ? '' : 's'}
+                  </Text>
+                  <View style={styles.horizontalLine} />
+                  <View style={{
+                    flex: 0, flexDirection: 'row', alignItems: 'center', margin: 10, justifyContent: 'center',
+                  }}
+                  >
+                    <Image style={styles.profilePhoto} source={{ uri: profileUrl }} />
+                    <View>
+                      <Text style={[fontStyles.mediumTextRegular, {
+                        paddingTop: 5, paddingBottom: 5, paddingLeft: 1, alignSelf: 'center',
+                      }]}
+                      >
+                        Reach by
+                      </Text>
+                      <View style={styles.userid}>
+                        <Text style={[fontStyles.mediumTextRegular, {
+                          paddingTop: 2, paddingBottom: 2, paddingLeft: 1, alignSelf: 'center',
+                        }]}
+                          onPress={async () => {
+                            props.navigation.navigate('OtherProfileScreen', { thisUsername: item.username });
+                          }}
+                        >
+                          {' @'}
+                          {item.username}
+                          {' '}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                  <Text style={[fontStyles.smallTextRegular, {
+                    paddingBottom: 5, paddingLeft: 1, alignSelf: 'center', justifyContent: 'center',
+                  }]}
+                  >
+                    {item.user ? item.user.badges.length : '0'}
+                    {' badge'}
+                    {item.user?.badges.length === 1 ? ' ' : 's '}
+                    <Text style={[fontStyles.smallTextRegular, { paddingBottom: 5, paddingLeft: 1, fontSize: 10 }]}>
+                      {' \u2B24  '}
+                    </Text>
+                    {item.user ? item.user.missionsCompleted : null}
+                    {' missions completed'}
+                  </Text>
+                </View>
+              </View>
+              <ScrollView>
+                <ModalCard {...item}
+                  location={location}
+                />
+              </ScrollView>
             </View>
-            <ModalCard {...item}
-              location={location}
-            />
           </View>
-        </View>
+        </SafeAreaView>
       </Modal>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  header: {
-    backgroundColor: bgSecondary,
-    width: '100%',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 15,
-    paddingBottom: 5,
-  },
+  // header: {
+  //   backgroundColor: 'rgb(3, 9, 44)',
+  //   width: '100%',
+  //   borderTopLeftRadius: 20,
+  //   borderTopRightRadius: 20,
+  //   flexDirection: 'row',
+  //   justifyContent: 'space-between',
+  //   padding: 15,
+  //   paddingBottom: 5,
+  // },
   centeredView: {
     flex: 1,
     justifyContent: 'center',
@@ -113,9 +176,9 @@ const styles = StyleSheet.create({
   },
   modalView: {
     borderRadius: 20,
-    backgroundColor: bgTertiary,
-    alignItems: 'center',
+    backgroundColor: 'rgb(3, 9, 44)',
     shadowColor: '#000',
+    height: '100%',
     width: '100%',
     shadowOffset: {
       width: 0,
@@ -125,9 +188,16 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  horizontalLine: {
+    borderBottomColor: 'rgb(67, 78, 142)',
+    borderBottomWidth: 1,
+    width: 500,
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
   button: {
     borderRadius: 20,
-    padding: 10,
+    padding: 20,
     zIndex: 10,
   },
   imagesIcon: {
@@ -149,14 +219,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(147,129,255, 0.5)',
   },
   carouselFooterFeedScreen: {
-    bottom: 10,
-    left: 10,
+    borderTopRightRadius: 15,
+    bottom: 0,
+    left: 0,
     padding: 5,
   },
   carouselFooterGridScreen: {
-    bottom: 5,
-    left: 5,
-    padding: 3,
+    bottom: 0,
+    left: 0,
+    paddingVertical: 3,
+    paddingHorizontal: 6,
+    borderTopRightRadius: 10,
   },
   carouselUsername: {
     color: 'white',
@@ -164,11 +237,11 @@ const styles = StyleSheet.create({
     paddingRight: 10,
   },
   carouselUsernameGridScreen: {
-    fontSize: 20,
+    fontSize: 16,
     maxWidth: 100,
   },
   carouselUsernameFeedScreen: {
-    fontSize: 22,
+    fontSize: 18,
     maxWidth: 200,
   },
   circle: {
@@ -177,12 +250,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   circleGridScreen: {
-    width: 30,
-    height: 30,
+    width: 23,
+    height: 23,
   },
   circleFeedScreen: {
-    width: 40,
-    height: 40,
+    width: 28,
+    height: 28,
   },
   carouselNumImages: {
     color: 'white',
@@ -193,8 +266,21 @@ const styles = StyleSheet.create({
   touchableImage: {
     flex: 1 / 2,
     aspectRatio: 1,
-    margin: 2,
+  },
+  userid: {
+    backgroundColor: 'rgb(129, 46, 125)',
+    borderRadius: 30,
+  },
+  profilePhoto: {
+    width: 65,
+    height: 65,
+    borderRadius: 100,
+    alignSelf: 'center',
+    marginHorizontal: 15,
   },
 });
 
-export default PostCard;
+const mapStateToProps = (state) => ({
+  user: state.user.userData,
+});
+export default connect(mapStateToProps, { getUser })(PostCard);

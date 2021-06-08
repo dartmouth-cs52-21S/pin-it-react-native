@@ -68,6 +68,6 @@ export const getUserRankInfo = (userId) => async (dispatch) => {
       dispatch({ type: ActionTypes.GET_USER_RANK_INFO, payload: response.data[0] });
     })
     .catch((error) => {
-      dispatch(setError(`Getting user rnak info failed: ${error.response.data}`));
+      dispatch(setError(`Getting user rank info failed: ${error.response.data}`));
     });
 };
