@@ -3,7 +3,7 @@ import { AsyncStorage } from 'react-native';
 import { setError, displayToast } from './app';
 import { getUser } from './user';
 import config from '../../app-config';
-import { getPhoto, uploadPhoto } from '../services/imageUpload';
+import { uploadPhoto } from '../services/imageUpload';
 import { setBadges } from './badges';
 
 const { api } = config;
@@ -41,14 +41,28 @@ export const setPostImage = (img) => {
 /*
  * Api Calls
  */
-export const handleImageUpload = (onSuccess) => async (dispatch) => {
-  const photo = await getPhoto();
+export const handleImageUpload = (onSuccess, navigation) => async (dispatch) => {
+  navigation.navigate('ImageProcess');
 
-  if (photo) {
-    const result = await uploadPhoto(photo);
-    dispatch(setPostImage({ imageUrls: [result.data.url] }));
-    onSuccess();
-  }
+//   if (photo) {
+//     const result = await uploadPhoto(photo);
+//     dispatch(setPostImage({ imageUrls: [result.data.url] }));
+//     onSuccess();
+//   }
+};
+
+export const handleImageProcess = (photos, navigation) => {
+  return async (dispatch) => {
+    const allImages = [];
+    // eslint-disable-next-line guard-for-in
+    for (const photo of photos) {
+      // eslint-disable-next-line no-await-in-loop
+      const result = await uploadPhoto(photo);
+      allImages.push(result.data.url);
+    }
+    dispatch(setPostImage({ imageUrls: allImages }));
+    navigation.navigate('PostCreationScreen');
+  };
 };
 
 export const handleUploadfromCamera = (photo, onSuccess) => async (dispatch) => {
