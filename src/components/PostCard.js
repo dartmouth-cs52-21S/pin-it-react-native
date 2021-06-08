@@ -84,6 +84,7 @@ const PostCard = (props) => {
                   <Text style={[fontStyles.largeHeaderTitle, { marginTop: 15, paddingBottom: 5, alignSelf: 'center' }]}
                     onPress={async () => {
                       const fullLocation = await getLocationPostsById(id);
+                      setModalVisible(false);
                       props.navigation.navigate('GridScreen', {
                         location: {
                           title, category, latitude, longitude, address,
@@ -120,6 +121,7 @@ const PostCard = (props) => {
                           paddingTop: 2, paddingBottom: 2, paddingLeft: 1, alignSelf: 'center',
                         }]}
                           onPress={async () => {
+                            setModalVisible(false);
                             props.navigation.navigate('OtherProfileScreen', { thisUsername: item.username });
                           }}
                         >
