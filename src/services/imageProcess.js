@@ -7,6 +7,7 @@ import * as ImageManipulator from 'expo-image-manipulator';
 import { ImageBrowser } from 'expo-image-picker-multiple';
 import { handleImageProcess } from '../actions/posts';
 
+// Adapted from https://snack.expo.io/@monstrodev/expo-image-picker-multiple-full-example
 class ImageBrowserScreen extends Component {
   _getHeaderLoader = () => (
     <ActivityIndicator size="small" color="#0580FF" />
