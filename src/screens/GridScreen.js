@@ -8,9 +8,10 @@ import PostCard from '../components/PostCard';
 
 const GridScreen = ({ route }) => {
   const { location, posts } = route.params;
+  const postlen = posts.length;
 
   const renderItem = useCallback(({ item }) => (
-    <PostCard location={location} item={item} isGridScreen />
+    <PostCard location={location} item={item} length={postlen} isGridScreen />
   ));
 
   return (

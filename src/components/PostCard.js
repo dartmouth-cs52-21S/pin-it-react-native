@@ -11,12 +11,13 @@ import ModalCard from './ModalCard';
 import { getLocationPostsById } from '../actions/locations';
 import { getUser } from '../actions/user';
 import fontStyles from '../constants/fonts';
+import { accentPink } from '../constants/colors';
 
 // const width = Dimensions.get('window').width;
 
 const PostCard = (props) => {
   const {
-    location, item, isGridScreen, id,
+    location, item, isGridScreen, id, length,
   } = props;
   const {
     title, category, longitude, latitude, address,
@@ -98,9 +99,9 @@ const PostCard = (props) => {
                     {location.address}
                   </Text>
                   <Text style={[fontStyles.smallTextRegular, { paddingBottom: 5, paddingLeft: 1, alignSelf: 'center' }]}>
-                    {getLocationPostsById.length}
+                    {length}
                     {' total post'}
-                    {getLocationPostsById.length === 1 ? '' : 's'}
+                    {length === 1 ? '' : 's'}
                   </Text>
                   <View style={styles.horizontalLine} />
                   <View style={{
@@ -119,13 +120,9 @@ const PostCard = (props) => {
                         <Text style={[fontStyles.mediumTextRegular, {
                           paddingTop: 2, paddingBottom: 2, paddingLeft: 1, alignSelf: 'center',
                         }]}
-                          onPress={async () => {
-                            props.navigation.navigate('OtherProfileScreen', { thisUsername: item.username });
-                          }}
                         >
-                          {' @'}
+                          {'@'}
                           {item.username}
-                          {' '}
                         </Text>
                       </View>
                     </View>
@@ -268,7 +265,7 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
   },
   userid: {
-    backgroundColor: 'rgb(129, 46, 125)',
+    backgroundColor: accentPink,
     borderRadius: 30,
   },
   profilePhoto: {

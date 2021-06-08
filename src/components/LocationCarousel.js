@@ -22,6 +22,7 @@ const LocationCarousel = (props) => {
 
   const [activeIndex, setActiveIndex] = useState(0);
   const ref = useRef(null);
+  const postlen = posts.length;
 
   // Carousel Image
   const renderItem = useCallback(({ item }) => (
@@ -31,6 +32,7 @@ const LocationCarousel = (props) => {
         title, category, latitude, longitude, address,
       }}
       navigation={props.navigation}
+      length={postlen}
     />
   ), []);
 
@@ -118,7 +120,7 @@ const LocationCarousel = (props) => {
                   const fullLocation = await getLocationPostsById(id);
                   props.navigation.navigate('GridScreen', {
                     location: {
-                      title, category, latitude, longitude, address,
+                      title, category, latitude, longitude,
                     },
                     posts: fullLocation.data[0].posts,
                   });
