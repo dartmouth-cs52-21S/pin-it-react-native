@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Button } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { PostCreationScreen, UploadScreen } from '../screens/upload';
+import ImageProcess from '../services/imageProcess';
 import { bgPrimary } from '../constants/colors';
 import { createPost } from '../actions/posts';
 import { getCurrentPost } from '../selectors/posts';
@@ -48,6 +49,13 @@ const UploadTab = (props) => {
           headerTitleAlign: 'center',
           headerRight: () => (<Button title="Submit" onPress={() => handlePostSubmit(navigation)} />),
         })}
+      />
+      <Stack.Screen
+        name="ImageProcess"
+        component={ImageProcess}
+        options={{
+          title: 'Selected 0 files',
+        }}
       />
     </Stack.Navigator>
   );
