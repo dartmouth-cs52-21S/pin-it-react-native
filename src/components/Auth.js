@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import {
   View,
-  KeyboardAvoidingView, TextInput, Text, StyleSheet, TouchableOpacity, ImageBackground, Image,
+  KeyboardAvoidingView, Platform, TextInput, Text, StyleSheet, TouchableOpacity, Image,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faUser, faLock, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { displayToast } from '../actions/app';
 import { signInUser, signUpUser } from '../actions/auth';
 import {
-  bgTertiary, accentPurple,
+  bgTertiary, accentPurple, bgPrimary,
 } from '../constants/colors';
 
-const backgroundImage = require('../assets/gradient.png');
 const logo = require('../assets/logo.png');
 
 const Auth = (props) => {
@@ -120,12 +120,22 @@ const Auth = (props) => {
 
   return (
     <View style={styles.container}>
-      <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
+      <LinearGradient
+        style={styles.backgroundImage}
+        colors={[bgPrimary, accentPurple]}
+        // Gradient starts 50% from the left
+        // and 70% from the top
+        start={{ x: 0.5, y: 0.6 }}
+      >
         <Image source={logo} style={styles.logo} />
         <View style={styles.footer}>
           {renderUsername()}
-          <View style={styles.userEntry}>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={styles.userEntry}
+          >
             <FontAwesomeIcon icon={faEnvelope} size={28} color={bgTertiary} />
+
             <TextInput
               style={styles.textInput}
               value={email}
@@ -135,7 +145,7 @@ const Auth = (props) => {
               placeholderTextColor="grey"
               autoCapitalize="none"
             />
-          </View>
+          </KeyboardAvoidingView>
           <View style={styles.userEntry}>
             <FontAwesomeIcon icon={faLock} size={28} color={bgTertiary} />
             <TextInput
@@ -152,7 +162,7 @@ const Auth = (props) => {
           {renderPassword2()}
           {renderButtons()}
         </View>
-      </ImageBackground>
+      </LinearGradient>
     </View>
   );
 };
