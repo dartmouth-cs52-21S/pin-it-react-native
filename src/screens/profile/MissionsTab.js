@@ -13,10 +13,7 @@ const MissionsTab = (props) => {
 
   useEffect(() => {
     // will trigger whenever screen is focused on (from https://reactnavigation.org/docs/navigation-lifecycle/)
-    const unsubscribe = navigation.addListener('focus', () => {
-      props.getMissions();
-    });
-    return unsubscribe;
+    props.getMissions();
   }, [navigation]);
 
   const completed = missions.filter((mission) => mission.completed);
