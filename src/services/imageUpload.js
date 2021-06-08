@@ -19,7 +19,7 @@ export const getPhoto = async () => {
     });
 
     if (!result.cancelled) {
-      return result.base64;
+      return result;
     }
     return null;
   } catch (error) {

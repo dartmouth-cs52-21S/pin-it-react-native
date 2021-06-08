@@ -141,9 +141,9 @@ const ProfileScreen = (props) => {
                 </Pressable>
               </View>
               <Image style={styles.profilePhoto} source={{ uri: pfpUrl }} />
-              <TouchableOpacity style={styles.uploadButtonContainer} onPress={uploadPFP}>
+              <Pressable style={styles.uploadButtonContainer} onPress={uploadPFP}>
                 <Text style={fontStyles.smallTextRegular}>Upload Profile Photo</Text>
-              </TouchableOpacity>
+              </Pressable>
               <View style={styles.inputContainer}>
                 <Text style={[fontStyles.smallTextRegular, { marginBottom: 10, color: accentPurple }]}>Bio</Text>
                 <TextInput
@@ -180,9 +180,9 @@ const ProfileScreen = (props) => {
                 />
 
               </View>
-              <TouchableOpacity style={styles.logoutButtonContainer} onPress={() => { setModalVisible(!modalVisible); setEditing(false); props.editUser(userdata); }}>
+              <Pressable style={styles.logoutButtonContainer} onPress={() => { setModalVisible(!modalVisible); setEditing(false); props.editUser(userdata); }}>
                 <Text style={fontStyles.smallTextRegular}>Done</Text>
-              </TouchableOpacity>
+              </Pressable>
 
             </View>
           </KeyboardAwareScrollView>
