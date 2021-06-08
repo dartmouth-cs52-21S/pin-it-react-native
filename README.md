@@ -6,7 +6,6 @@ This is the frontend repository for our CS52 final project, Reached. Reached is 
 
 ## All app repositories
 - [Front-end, mobile app](https://github.com/dartmouth-cs52-21S/pin-it-react-native)
-- [Front-end, web app](https://github.com/dartmouth-cs52-21S/pin-it-web)
 - [Back-end](https://github.com/dartmouth-cs52-21S/pin-it-api)
 
 ## Architecture
