@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import {
   View,
-  TextInput, Text, StyleSheet, TouchableOpacity,
+  KeyboardAvoidingView, Platform, TextInput, Text, StyleSheet, TouchableOpacity, Image,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faUser, faLock, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { displayToast } from '../actions/app';
 import { signInUser, signUpUser } from '../actions/auth';
 import {
-  bgPrimary, bgTertiary, accentPink,
+  bgTertiary, accentPurple, bgPrimary,
 } from '../constants/colors';
+
+const logo = require('../assets/logo.png');
 
 const Auth = (props) => {
   const { navigation, authType } = props;
@@ -82,7 +85,7 @@ const Auth = (props) => {
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
           <Text style={styles.changeTab}>
-            <Text>I&apos;m new here!  </Text>
+            <Text style={styles.buttonText}>I&apos;m new here!  </Text>
             <Text style={styles.link}
               onPress={() => { navigation.navigate('SignUpScreen'); }}
             >
@@ -101,7 +104,7 @@ const Auth = (props) => {
             <Text style={styles.buttonText}>Sign up</Text>
           </TouchableOpacity>
           <Text style={styles.changeTab}>
-            <Text>I already have an account.  </Text>
+            <Text style={styles.buttonText}>I already have an account.  </Text>
             <Text style={styles.link}
               onPress={() => { navigation.navigate('SignInScreen'); }}
             >
@@ -116,60 +119,77 @@ const Auth = (props) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Not Pin-It</Text>
-      </View>
-      <View style={styles.footer}>
-        {renderUsername()}
-        <View style={styles.userEntry}>
-          <FontAwesomeIcon icon={faEnvelope} size={28} color={bgTertiary} />
-          <TextInput
-            style={styles.textInput}
-            value={email}
-            onChangeText={(text) => setEmail(text)}
-            placeholder="Email"
-            type="email"
-            placeholderTextColor="grey"
-            autoCapitalize="none"
-          />
+    <LinearGradient
+      style={styles.backgroundImage}
+      colors={[bgPrimary, accentPurple]}
+        // Gradient starts 50% from the left
+        // and 70% from the top
+      start={{ x: 0.5, y: 0.6 }}
+    >
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={[styles.container,
+          (authType === 'signIn')
+            ? { marginBottom: '55%' } : {}]}
+      >
+        <View style={[styles.inner,
+          (authType === 'signIn')
+            ? { justifyContent: 'flex-end' }
+            : { justifyContent: 'space-around', paddingBottom: '20%' },
+        ]}
+
+        >
+          <View style={styles.footer}>
+            <Image source={logo} style={styles.logo} />
+            {renderUsername()}
+            <View style={styles.userEntry}>
+              <FontAwesomeIcon icon={faEnvelope} size={28} color={bgTertiary} />
+              <TextInput
+                style={styles.textInput}
+                value={email}
+                onChangeText={(text) => setEmail(text)}
+                placeholder="Email"
+                type="email"
+                placeholderTextColor="grey"
+                autoCapitalize="none"
+              />
+            </View>
+            <View style={styles.userEntry}>
+              <FontAwesomeIcon icon={faLock} size={28} color={bgTertiary} />
+              <TextInput
+                style={styles.textInput}
+                value={password}
+                onChangeText={(text) => setPassword(text)}
+                placeholder="Password"
+                type="password"
+                autoCapitalize="none"
+                placeholderTextColor="grey"
+                secureTextEntry
+              />
+            </View>
+            {renderPassword2()}
+            {renderButtons()}
+          </View>
         </View>
-        <View style={styles.userEntry}>
-          <FontAwesomeIcon icon={faLock} size={28} color={bgTertiary} />
-          <TextInput
-            style={styles.textInput}
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-            placeholder="Password"
-            type="password"
-            autoCapitalize="none"
-            placeholderTextColor="grey"
-            secureTextEntry
-          />
-        </View>
-        {renderPassword2()}
-        {renderButtons()}
-      </View>
-    </View>
+      </KeyboardAvoidingView>
+    </LinearGradient>
+
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: bgPrimary,
   },
-  header: {
+  backgroundImage: {
     flex: 1,
-    justifyContent: 'center',
+    resizeMode: 'cover',
   },
-  headerText: {
-    color: 'white',
-    fontSize: 30,
-    textAlign: 'center',
+  logo: {
+    width: 200,
+    height: 200,
   },
   footer: {
-    flex: 3,
     alignItems: 'center',
   },
   userEntry: {
@@ -180,6 +200,9 @@ const styles = StyleSheet.create({
     borderBottomColor: 'grey',
     borderBottomWidth: 1,
   },
+  inner: {
+    flex: 1,
+  },
   textInput: {
     width: '80%',
     paddingVertical: 3,
@@ -189,7 +212,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   link: {
-    color: accentPink,
+    color: accentPurple,
     fontWeight: 'bold',
   },
   changeTab: {
@@ -198,14 +221,14 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: 'center',
-    backgroundColor: accentPink,
+    backgroundColor: accentPurple,
     marginTop: 20,
     paddingVertical: 10,
     width: '80%',
     borderRadius: 15,
   },
   buttonText: {
-    color: '#DDDDDD',
+    color: '#DED9FF',
   },
 });
 
