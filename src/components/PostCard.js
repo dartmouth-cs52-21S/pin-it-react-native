@@ -137,7 +137,7 @@ const PostCard = (props) => {
                       </Text>
                       <View style={styles.userid}>
                         <Text style={[fontStyles.mediumTextRegular, {
-                          paddingTop: 2, paddingBottom: 2, paddingLeft: 1, alignSelf: 'center',
+                          paddingTop: 2, paddingBottom: 2, paddingHorizontal: 3, alignSelf: 'center',
                         }]}
                           onPress={async () => {
                             setModalVisible(false);
