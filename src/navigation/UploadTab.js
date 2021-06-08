@@ -43,7 +43,7 @@ const UploadTab = (props) => {
             backgroundColor: bgPrimary,
             shadowOffset: { height: 0, width: 0 },
           },
-          headerBackTitle: 'Cancel',
+          headerBackTitle: 'Back',
           headerTintColor: '#fff',
           headerTitleStyle: { fontSize: 25 },
           headerTitleAlign: 'center',

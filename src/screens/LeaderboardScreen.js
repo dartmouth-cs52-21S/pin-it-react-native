@@ -60,8 +60,9 @@ const LeaderboardScreen = (props) => {
   const renderRow = (user, index) => (
     <TouchableWithoutFeedback
       onPress={() => props.navigation.navigate('OtherProfileScreen', { thisUsername: user.username })}
+      key={user.id}
     >
-      <View style={styles.rowContainer} key={user.id}>
+      <View style={styles.rowContainer}>
         <View style={styles.rowDetails}>
           <Text style={styles.rowRank}>{index}</Text>
           <Image
