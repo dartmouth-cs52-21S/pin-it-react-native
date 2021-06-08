@@ -10,12 +10,19 @@ export const ActionTypes = {
 };
 
 export const getQueriedLocations = (search, location, tags) => async (dispatch) => {
+  let title = '';
+  if (location) {
+    title = location.title;
+    if (!title) {
+      title = location.structured_formatting.main_text;
+    }
+  }
   return new Promise((resolve, reject) => {
     axios
       .get(`${api}/locations`, {
         params: {
           search,
-          location: location ? location.title : '',
+          location: location ? title : '',
           tags,
         },
       })

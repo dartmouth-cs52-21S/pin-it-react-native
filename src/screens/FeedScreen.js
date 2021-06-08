@@ -73,7 +73,7 @@ const FeedScreen = (props) => {
 
   const handleSubmitLocation = (loc) => {
     setLocation(loc);
-    props.getQueriedLocations(null, loc);
+    props.getQueriedLocations(search, loc);
   };
 
   const onClearLocation = () => {
