@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { getUser, editUser } from '../../actions/user';
 import { signOutUser } from '../../actions/auth';
-import { getPhoto, uploadPhoto2 } from '../../services/imageUpload';
+import { getPhoto, uploadProfilePhoto } from '../../services/imageUpload';
 import { accentPurple, bgPrimary, bgTertiary } from '../../constants/colors';
 import { getUserData } from '../../selectors/user';
 import PostsTab from './PostsTab';
@@ -91,7 +91,7 @@ const ProfileScreen = (props) => {
     const photo = await getPhoto();
 
     if (photo) {
-      const result = await uploadPhoto2(photo);
+      const result = await uploadProfilePhoto(photo);
       setNewPfpUrl(result.data.url);
     }
   };
