@@ -19,7 +19,7 @@ const OngoingActivityScreen = (props) => {
       props.getMissions();
     });
     return unsubscribe;
-  }, [navigation]);
+  }, []);
 
   const onMissionPress = (mission) => {
     props.setMission(mission);

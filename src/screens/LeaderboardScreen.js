@@ -16,8 +16,11 @@ const LeaderboardScreen = (props) => {
   };
 
   useEffect(() => {
-    getLeaderboardData();
-    props.getTopUsers();
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      getLeaderboardData();
+      props.getTopUsers();
+    });
+    return unsubscribe;
   }, []);
 
   const { topUsers, userRankInfo } = props;

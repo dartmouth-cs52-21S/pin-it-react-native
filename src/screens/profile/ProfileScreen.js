@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { getUser, editUser } from '../../actions/user';
 import { signOutUser } from '../../actions/auth';
-import { getPhoto, uploadPhoto } from '../../services/imageUpload';
+import { getPhoto, uploadPhoto, formatImgUrl } from '../../services/imageUpload';
 import { accentPurple, bgPrimary, bgTertiary } from '../../constants/colors';
 import { getUserData } from '../../selectors/user';
 import PostsTab from './PostsTab';
@@ -140,7 +140,7 @@ const ProfileScreen = (props) => {
                   <FontAwesomeIcon icon={faTimes} size={29} color="white" />
                 </Pressable>
               </View>
-              <Image style={styles.profilePhoto} source={{ uri: pfpUrl }} />
+              <Image style={styles.profilePhoto} source={{ uri: formatImgUrl(pfpUrl, 200, null) }} />
               <Pressable style={styles.uploadButtonContainer} onPress={uploadPFP}>
                 <Text style={fontStyles.smallTextRegular}>Upload Profile Photo</Text>
               </Pressable>
@@ -211,7 +211,7 @@ const ProfileScreen = (props) => {
         </TouchableOpacity>
       </View>
       <View style={styles.profileHeaderContainer}>
-        <Image style={styles.profilePhoto} source={{ uri: profileUrl }} />
+        <Image style={styles.profilePhoto} source={{ uri: formatImgUrl(profileUrl, 200, null) }} />
         <View style={styles.profileHeaderTextContainer}>
           <Text style={[fontStyles.mediumTextBold, styles.usernameText]}>
             @
