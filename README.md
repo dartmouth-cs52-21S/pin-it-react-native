@@ -1,8 +1,8 @@
-# Pin-It React Native
+# Reached React Native
 
 ![Team Photo](https://user-images.githubusercontent.com/52898557/118916227-1e035d00-b8f4-11eb-9403-fc47679e1dfc.png)
 
-This is the frontend repository for our CS52 final project, Pin-It (*name subject to change*). Pin-It is a mobile app that challenges users to explore their surroundings by suggesting new locations to visit nearby.
+This is the frontend repository for our CS52 final project, Reached. Reached is a mobile app that challenges users to explore their surroundings by suggesting new locations to visit nearby.
 
 ## All app repositories
 - [Front-end, mobile app](https://github.com/dartmouth-cs52-21S/pin-it-react-native)
