@@ -119,51 +119,61 @@ const Auth = (props) => {
   };
 
   return (
-    <View style={styles.container}>
-      <LinearGradient
-        style={styles.backgroundImage}
-        colors={[bgPrimary, accentPurple]}
+    <LinearGradient
+      style={styles.backgroundImage}
+      colors={[bgPrimary, accentPurple]}
         // Gradient starts 50% from the left
         // and 70% from the top
-        start={{ x: 0.5, y: 0.6 }}
+      start={{ x: 0.5, y: 0.6 }}
+    >
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={[styles.container,
+          (authType === 'signIn')
+            ? { marginBottom: '55%' } : {}]}
       >
-        <Image source={logo} style={styles.logo} />
-        <View style={styles.footer}>
-          {renderUsername()}
-          <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={styles.userEntry}
-          >
-            <FontAwesomeIcon icon={faEnvelope} size={28} color={bgTertiary} />
+        <View style={[styles.inner,
+          (authType === 'signIn')
+            ? { justifyContent: 'flex-end' }
+            : { justifyContent: 'space-around', paddingBottom: '20%' },
+        ]}
 
-            <TextInput
-              style={styles.textInput}
-              value={email}
-              onChangeText={(text) => setEmail(text)}
-              placeholder="Email"
-              type="email"
-              placeholderTextColor="grey"
-              autoCapitalize="none"
-            />
-          </KeyboardAvoidingView>
-          <View style={styles.userEntry}>
-            <FontAwesomeIcon icon={faLock} size={28} color={bgTertiary} />
-            <TextInput
-              style={styles.textInput}
-              value={password}
-              onChangeText={(text) => setPassword(text)}
-              placeholder="Password"
-              type="password"
-              autoCapitalize="none"
-              placeholderTextColor="grey"
-              secureTextEntry
-            />
+        >
+          <View style={styles.footer}>
+            <Image source={logo} style={styles.logo} />
+            {renderUsername()}
+            <View style={styles.userEntry}>
+              <FontAwesomeIcon icon={faEnvelope} size={28} color={bgTertiary} />
+              <TextInput
+                style={styles.textInput}
+                value={email}
+                onChangeText={(text) => setEmail(text)}
+                placeholder="Email"
+                type="email"
+                placeholderTextColor="grey"
+                autoCapitalize="none"
+              />
+            </View>
+            <View style={styles.userEntry}>
+              <FontAwesomeIcon icon={faLock} size={28} color={bgTertiary} />
+              <TextInput
+                style={styles.textInput}
+                value={password}
+                onChangeText={(text) => setPassword(text)}
+                placeholder="Password"
+                type="password"
+                autoCapitalize="none"
+                placeholderTextColor="grey"
+                secureTextEntry
+              />
+            </View>
+            {renderPassword2()}
+            {renderButtons()}
           </View>
-          {renderPassword2()}
-          {renderButtons()}
         </View>
-      </LinearGradient>
-    </View>
+      </KeyboardAvoidingView>
+    </LinearGradient>
+
   );
 };
 
@@ -174,10 +184,8 @@ const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
     resizeMode: 'cover',
-    paddingTop: '10%',
   },
   logo: {
-    alignSelf: 'center',
     width: 200,
     height: 200,
   },
@@ -191,6 +199,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderBottomColor: 'grey',
     borderBottomWidth: 1,
+  },
+  inner: {
+    flex: 1,
   },
   textInput: {
     width: '80%',
