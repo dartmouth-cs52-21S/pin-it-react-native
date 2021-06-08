@@ -32,6 +32,7 @@ Note: Although the app is using currently using Expo, we are planning to eject i
 ## Deployment
 
 The expo app is accessible with this qr code, set up in our workflows for continuous integration 😃. 
+
 <img width="288" alt="Screen Shot 2021-05-22 at 5 59 43 PM" src="https://user-images.githubusercontent.com/77286845/119244667-9b62e380-bb27-11eb-8b63-fbde30829525.png">
 
 
