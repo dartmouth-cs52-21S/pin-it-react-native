@@ -15,7 +15,7 @@ export const getQueriedLocations = (search, location, tags) => async (dispatch) 
       .get(`${api}/locations`, {
         params: {
           search,
-          location: location ? location.title : '',
+          location: location ? location.structured_formatting.main_text : '',
           tags,
         },
       })
