@@ -57,7 +57,6 @@ const ActivityStack = (props) => {
             backgroundColor: bgPrimary,
             shadowOffset: { height: 0, width: 0 },
           },
-          headerBackTitle: 'Cancel',
           headerTintColor: '#fff',
           headerTitleStyle: { fontSize: 25 },
           headerTitleAlign: 'center',
