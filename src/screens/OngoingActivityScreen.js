@@ -84,13 +84,11 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     backgroundColor: bgPrimary,
-  },
-  headerSpacing: {
-    marginTop: 80,
+    paddingVertical: 15,
   },
   headerContainer: {
-    marginTop: 80,
-    paddingVertical: 10,
+    marginTop: 70,
+    paddingVertical: 20,
     marginHorizontal: '5%',
   },
   missionText: {
@@ -112,7 +110,7 @@ const styles = StyleSheet.create({
     width: '100%',
     color: 'white',
     textAlign: 'center',
-    marginVertical: 8,
+    marginBottom: 8,
     fontWeight: '300',
   },
   circleSelector: {
