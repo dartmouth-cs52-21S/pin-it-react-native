@@ -3,7 +3,8 @@ import {
   View, Text, StyleSheet,
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import categories from '../constants/categories';
+import { categories } from '../constants/categories';
+import fontStyles from '../constants/fonts';
 
 const LocationHeader = (props) => {
   const { location } = props;
@@ -60,7 +61,7 @@ const LocationHeader = (props) => {
   return (
     <View>
       <View style={styles.heading}>
-        <Text numberOfLines={1} style={styles.title}>
+        <Text numberOfLines={1} style={fontStyles.largeTextBold}>
           {' '}
           {title}
         </Text>
@@ -77,7 +78,7 @@ const LocationHeader = (props) => {
 const styles = StyleSheet.create({
   title: {
     color: 'white',
-    fontSize: 28,
+    fontSize: 30,
     fontWeight: 'bold',
     width: '80%',
   },

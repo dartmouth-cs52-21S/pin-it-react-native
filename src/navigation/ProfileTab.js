@@ -2,7 +2,8 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { bgPrimary } from '../constants/colors';
 
-import { ProfileScreen, PinsLocationFeedScreen } from '../screens/profile';
+import ProfileScreen from '../screens/profile';
+import PinsLocationFeedScreen from '../screens/PinsLocationFeedScreen';
 
 const Stack = createStackNavigator();
 

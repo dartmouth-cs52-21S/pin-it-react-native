@@ -10,7 +10,8 @@ import { formatImgUrl } from '../../services/imageUpload';
 const N_BOXES = 20;
 const EPS = 5;
 
-const PinsTab = (props) => {
+const PinsTab = ({ user, navigation }) => {
+  console.log(navigation);
   const mapRef = useRef(null);
   const [region, setRegion] = useState({
     latitude: 20,
@@ -59,7 +60,7 @@ const PinsTab = (props) => {
       <Marker
         key={location.id}
         coordinate={{ latitude, longitude }}
-        onPress={() => props.navigation.navigate('PinsLocationFeedScreen', { posts: location.posts })}
+        onPress={() => navigation.navigate('PinsLocationFeedScreen', { posts: location.posts })}
       >
         <View>
           <Image style={styles.imageIcon} source={{ uri: formatImgUrl(location.imageUrl, 200, 200) }} />
@@ -71,11 +72,11 @@ const PinsTab = (props) => {
     );
   };
 
-  const [locations, setLocations] = useState(groupLocations(props.user.posts));
+  const [locations, setLocations] = useState(groupLocations(user.posts));
 
   useEffect(() => {
-    setLocations(groupLocations(props.user.posts));
-  }, [Math.ceil(region.longitudeDelta / EPS), JSON.stringify(props.user.posts)]); // Optimize to listen to significant changes in long Delta only
+    setLocations(groupLocations(user.posts));
+  }, [Math.ceil(region.longitudeDelta / EPS), JSON.stringify(user.posts)]); // Optimize to listen to significant changes in long Delta only
 
   return (
     <MapView

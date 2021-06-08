@@ -16,7 +16,7 @@ import { getUserData } from '../../selectors/user';
 import PostsTab from './PostsTab';
 import BadgesTab from './BadgesTab';
 import PinsTab from './PinsTab';
-import OngoingActivityScreen from '../OngoingActivityScreen';
+import MissionsTab from './MissionsTab';
 import fontStyles from '../../constants/fonts';
 
 const instaLogo = require('../../assets/instagram.png');
@@ -26,7 +26,7 @@ const windowWidth = (Dimensions.get('window').width) / 4;
 
 const renderScene = (props) => SceneMap({
   posts: PostsTab,
-  missions: () => (<OngoingActivityScreen navigation={props.navigation} isProfileScreen />),
+  missions: () => (<MissionsTab navigation={props.navigation} />),
   pins: () => (<PinsTab navigation={props.navigation} />),
   badges: BadgesTab,
 });
