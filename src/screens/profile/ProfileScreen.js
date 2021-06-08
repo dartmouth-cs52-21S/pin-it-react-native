@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { getUser, editUser } from '../../actions/user';
 import { signOutUser } from '../../actions/auth';
-import { getPhoto, uploadPhoto } from '../../services/imageUpload';
+import { getPhoto, uploadPhoto2 } from '../../services/imageUpload';
 import { accentPurple, bgPrimary, bgTertiary } from '../../constants/colors';
 import { getUserData } from '../../selectors/user';
 import PostsTab from './PostsTab';
@@ -91,7 +91,7 @@ const ProfileScreen = (props) => {
     const photo = await getPhoto();
 
     if (photo) {
-      const result = await uploadPhoto(photo);
+      const result = await uploadPhoto2(photo);
       setNewPfpUrl(result.data.url);
     }
   };
@@ -141,9 +141,9 @@ const ProfileScreen = (props) => {
                 </Pressable>
               </View>
               <Image style={styles.profilePhoto} source={{ uri: pfpUrl }} />
-              <TouchableOpacity style={styles.uploadButtonContainer} onPress={uploadPFP}>
+              <Pressable style={styles.uploadButtonContainer} onPress={uploadPFP}>
                 <Text style={fontStyles.smallTextRegular}>Upload Profile Photo</Text>
-              </TouchableOpacity>
+              </Pressable>
               <View style={styles.inputContainer}>
                 <Text style={[fontStyles.smallTextRegular, { marginBottom: 10, color: accentPurple }]}>Bio</Text>
                 <TextInput
@@ -180,9 +180,9 @@ const ProfileScreen = (props) => {
                 />
 
               </View>
-              <TouchableOpacity style={styles.logoutButtonContainer} onPress={() => { setModalVisible(!modalVisible); setEditing(false); props.editUser(userdata); }}>
+              <Pressable style={styles.logoutButtonContainer} onPress={() => { setModalVisible(!modalVisible); setEditing(false); props.editUser(userdata); }}>
                 <Text style={fontStyles.smallTextRegular}>Done</Text>
-              </TouchableOpacity>
+              </Pressable>
 
             </View>
           </KeyboardAwareScrollView>

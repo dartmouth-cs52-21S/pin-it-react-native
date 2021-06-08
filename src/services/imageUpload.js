@@ -38,6 +38,16 @@ export const uploadPhoto = async (photo) => {
   }
 };
 
+export const uploadPhoto2 = async (photo) => {
+  try {
+    const base64Img = `data:image/jpg;base64,${photo}`;
+    const result = await axios.post(cloudinaryApi, { file: base64Img, upload_preset: 'zem5scju' });
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
 export const formatImgUrl = (url, width, height) => {
   if (!url) return null;
   const key = 'upload/';
