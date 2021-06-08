@@ -151,13 +151,20 @@ const PostCard = (props) => {
                     </View>
                   </View>
                   <Text style={[fontStyles.smallTextRegular, {
-                    paddingBottom: 5, paddingLeft: 1, alignSelf: 'center', justifyContent: 'center',
+                    paddingBottom: 5, paddingLeft: 1, alignSelf: 'center', justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center',
                   }]}
                   >
                     {item.user ? item.user.badges.length : '0'}
                     {' badge'}
                     {item.user?.badges.length === 1 ? ' ' : 's '}
-                    <View style={styles.circle} />
+                    <View style={[{
+                      paddingBottom: 2.5, paddingLeft: 5, paddingRight: 5, alignSelf: 'center', justifyContent: 'center', textAlignVertical: 'center',
+                    }]}
+                    >
+                      <Text style={styles.bulletpoint}>
+                        {' \u2B24 '}
+                      </Text>
+                    </View>
                     {item.user ? item.user.missionsCompleted : null}
                     {' missions completed'}
                   </Text>
@@ -217,6 +224,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 20,
     zIndex: 10,
+  },
+  bulletpoint: {
+    width: 2.5,
+    height: 2.5,
+    borderRadius: 2.5 / 2,
+    backgroundColor: 'white',
+
   },
   imagesIcon: {
     position: 'absolute',
