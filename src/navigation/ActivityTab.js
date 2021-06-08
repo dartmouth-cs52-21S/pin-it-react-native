@@ -88,9 +88,16 @@ const ActivityTab = () => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  post: getCurrentPost(state),
-});
+const mapStateToProps = (state) => {
+  const post = getCurrentPost(state);
+
+  return {
+    post: {
+      ...post,
+      isMission: true,
+    },
+  };
+};
 
 export default connect(mapStateToProps, { createPost })(ActivityStack);
 
