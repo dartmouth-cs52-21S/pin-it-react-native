@@ -38,12 +38,11 @@ const LocationDisplay = (props) => {
   return (
     <GooglePlacesAutocomplete
       ref={locationInputRef}
-      placeholder="neighborhood, city, state, or zip code"
+      placeholder="Current Location"
       fetchDetails
       onPress={(data, details = null) => {
         props.onPress(data, details);
       }}
-      currentLocation
       query={{
         key: googleApiKey,
         language: 'en',
