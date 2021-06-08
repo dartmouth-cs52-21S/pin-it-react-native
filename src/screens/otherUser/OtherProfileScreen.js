@@ -1,32 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import {
-  SafeAreaView, StyleSheet, Text, Image, View, Platform, TextInput, Dimensions, Pressable, Linking, Modal,
+  SafeAreaView, StyleSheet, Text, Image, View, Platform, Dimensions, Linking,
 } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { getUser, editUser } from '../../actions/user';
-import { signOutUser } from '../../actions/auth';
-import { getPhoto, uploadPhoto } from '../../services/imageUpload';
+import PostsTab from './OtherPostsTab';
+import BadgesTab from './OtherBadgesTab';
 import { accentPurple, bgPrimary, bgTertiary } from '../../constants/colors';
-import { getUserData } from '../../selectors/user';
-import PostsTab from './PostsTab';
-import BadgesTab from './BadgesTab';
-import PinsTab from './PinsTab';
-import OngoingActivityScreen from '../OngoingActivityScreen';
+import PinsTab from './OtherPinsTab';
+import getOtherUserInfo from '../../services/userService';
 
 const instaLogo = require('../../assets/instagram.png');
 const youtubeLogo = require('../../assets/youtube.png');
 
 const windowWidth = (Dimensions.get('window').width) / 4;
 
+const MissionsTab = () => (<Text style={styles.testText}>Missions</Text>);
+
 const renderScene = (props) => SceneMap({
-  posts: PostsTab,
-  missions: () => (<OngoingActivityScreen navigation={props.navigation} isProfileScreen />),
-  pins: () => (<PinsTab navigation={props.navigation} />),
-  badges: BadgesTab,
+  posts: () => (<PostsTab posts={props.posts} />),
+  missions: MissionsTab,
+  pins: () => (<PinsTab user={props} navigation={props.navigation} />),
+  badges: () => (<BadgesTab badges={props.badges} />),
 });
 
 const renderLabel = (labelProps) => (
@@ -65,17 +60,14 @@ const renderTabBar = (tabBarProps) => (
   />
 );
 
-const ProfileScreen = (props) => {
-  const { user } = props;
+// Get other user info by username
+
+const OtherProfileScreen = (route, props) => {
+  const [user, setOtherUser] = useState('hi');
+  // eslint-disable-next-line react/destructuring-assignment
+  const { thisUsername } = route.route.params;
 
   const [index, setIndex] = useState(0);
-  const [editing, setEditing] = useState(false);
-  const [bio, onChangeBio] = useState('');
-  const [instagram, onChangeInsta] = useState('');
-  const [twitter, onChangeTwitter] = useState('');
-  const [pfpUrl, setNewPfpUrl] = useState('');
-  const [workaround, changeWorkAround] = useState(0);
-  const [modalVisible, setModalVisible] = useState(false);
   const [routes] = useState([
     { key: 'posts', title: 'Posts' },
     { key: 'missions', title: 'Missions' },
@@ -83,108 +75,13 @@ const ProfileScreen = (props) => {
     { key: 'badges', title: 'Badges' },
   ]);
 
-  const uploadPFP = async () => {
-    const photo = await getPhoto();
-
-    if (photo) {
-      const result = await uploadPhoto(photo);
-      setNewPfpUrl(result.data.url);
-    }
-  };
-
-  const renderEditButton = (edit) => {
-    if (!edit) {
-      return (
-        <TouchableOpacity style={styles.logoutButtonContainer} onPress={() => { setModalVisible(true); setEditing(true); }}>
-          <Text style={styles.logoutButton}>Edit</Text>
-        </TouchableOpacity>
-      );
-    } else {
-      if (workaround === 0) {
-        onChangeBio(user.bio);
-        setNewPfpUrl(profileUrl);
-        onChangeInsta(instaLink);
-        onChangeTwitter(twitterLink);
-        changeWorkAround(1);
-      }
-      const userdata = {
-        instagram,
-        twitter,
-        bio,
-        profPic: pfpUrl,
-      };
-      return (
-        <Modal
-          animationType="slide"
-          visible={modalVisible}
-          transparent
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-            setEditing(false);
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <View style={styles.header}>
-                <View />
-                <Pressable
-                  style={[styles.button]}
-                  onPress={() => { setModalVisible(!modalVisible); setEditing(false); changeWorkAround(0); }}
-                >
-                  <View style={styles.imagesIcon}>
-                    <FontAwesomeIcon icon={faTimes} size={29} color="white" />
-                  </View>
-                </Pressable>
-              </View>
-              <Image style={styles.profilePhoto} source={{ uri: pfpUrl }} />
-              <TouchableOpacity style={styles.uploadButtonContainer} onPress={uploadPFP}>
-                <Text style={styles.logoutButton}>Upload Profile Photo</Text>
-              </TouchableOpacity>
-              <View style={styles.inputContainer}>
-                <Text style={[styles.logoutButton, { marginBottom: 10, color: accentPurple }]}>Bio</Text>
-                <TextInput
-                  style={styles.inputText}
-                  maxLength={200}
-                  onChangeText={onChangeBio}
-                  value={bio}
-                  multiline
-                />
-
-              </View>
-              <View style={styles.inputContainer}>
-                <Text style={[styles.logoutButton, { marginBottom: 10, color: accentPurple }]}>Instagram</Text>
-                <TextInput
-                  style={styles.inputText}
-                  maxLength={100}
-                  onChangeText={onChangeInsta}
-                  value={instagram}
-                  multiline
-                />
-
-              </View>
-              <View style={styles.inputContainer}>
-                <Text style={[styles.logoutButton, { marginBottom: 10, color: accentPurple }]}>Twitter</Text>
-                <TextInput
-                  style={styles.inputText}
-                  maxLength={100}
-                  onChangeText={onChangeTwitter}
-                  value={twitter}
-                  multiline
-                />
-
-              </View>
-              <TouchableOpacity style={styles.logoutButtonContainer} onPress={() => { setModalVisible(!modalVisible); setEditing(false); props.editUser(userdata); }}>
-                <Text style={styles.logoutButton}>Done</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
-      );
-    }
+  const getThisUser = async () => {
+    const thisUserData = await getOtherUserInfo(thisUsername);
+    setOtherUser(thisUserData);
   };
 
   useEffect(() => {
-    props.getUser();
+    getThisUser();
   }, [JSON.stringify(user)]);
 
   const blankProfile = 'https://res.cloudinary.com/djc5u8rjt/image/upload/v1621833029/ux9xmvmtjl3nf7x7ls2n.png';
@@ -196,12 +93,6 @@ const ProfileScreen = (props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.bannerContainer}>
-        {renderEditButton(editing)}
-        <TouchableOpacity style={styles.logoutButtonContainer} onPress={() => props.signOutUser()}>
-          <Text style={styles.logoutButton}>Log Out</Text>
-        </TouchableOpacity>
-      </View>
       <View style={styles.profileHeaderContainer}>
         <Image style={styles.profilePhoto} source={{ uri: profileUrl }} />
         <View style={styles.profileHeaderTextContainer}>
@@ -240,7 +131,7 @@ const ProfileScreen = (props) => {
       <TabView
         style={styles.tabViewContainer}
         navigationState={{ index, routes }}
-        renderScene={renderScene(props)}
+        renderScene={renderScene(user)}
         onIndexChange={setIndex}
         renderTabBar={renderTabBar}
       />
@@ -290,12 +181,6 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: bgPrimary,
     paddingTop: Platform.OS === 'android' ? 45 : 0,
-  },
-  bannerContainer: {
-    height: 40,
-    alignItems: 'flex-end',
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
   },
   logoutButtonContainer: {
     backgroundColor: 'rgba(255,255,255,0.2)',
@@ -393,8 +278,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => ({
-  user: getUserData(state),
-});
-
-export default connect(mapStateToProps, { getUser, signOutUser, editUser })(ProfileScreen);
+export default connect(null, null)(OtherProfileScreen);

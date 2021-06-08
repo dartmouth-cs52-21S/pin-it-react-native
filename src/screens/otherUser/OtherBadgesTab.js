@@ -2,10 +2,8 @@ import React from 'react';
 import {
   SafeAreaView, FlatList, StyleSheet, StatusBar,
 } from 'react-native';
-import { connect } from 'react-redux';
 import BadgeTile from '../../components/BadgeTile';
 import { bgPrimary } from '../../constants/colors';
-import { getUserData } from '../../selectors/user';
 
 const renderItem = ({ item }) => {
   const { dateEarned } = item;
@@ -13,8 +11,7 @@ const renderItem = ({ item }) => {
 };
 
 const BadgesTab = (props) => {
-  const { user } = props;
-  const { badges } = user;
+  const { badges } = props;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -38,8 +35,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => ({
-  user: getUserData(state),
-});
-
-export default connect(mapStateToProps, null)(BadgesTab);
+export default BadgesTab;

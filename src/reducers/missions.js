@@ -14,6 +14,11 @@ const MissionsReducer = (state = initialState, action) => {
       return { ...state, currentMission: null };
     case ActionTypes.GET_MISSIONS:
       return { ...state, missionsList: payload };
+    case ActionTypes.REMOVE_MISSION: {
+      let newMissions = [...state.missionsList];
+      newMissions = newMissions.filter((mission) => mission.id !== action.payload);
+      return { ...state, missionsList: newMissions };
+    }
     default:
       return state;
   }
