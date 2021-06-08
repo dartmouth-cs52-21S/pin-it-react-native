@@ -6,9 +6,6 @@ import {
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faImages, faTimes } from '@fortawesome/free-solid-svg-icons';
-import {
-  bgTertiary, bgSecondary, bgPrimary,
-} from '../constants/colors';
 import { formatImgUrl } from '../services/imageUpload';
 import ModalCard from './ModalCard';
 import * as LocationService from '../services/locationService';

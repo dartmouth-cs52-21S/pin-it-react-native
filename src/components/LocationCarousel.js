@@ -7,7 +7,7 @@ import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import {
-  bgPrimary, accentPurple, bgSecondary,
+  bgPrimary, bgSecondary,
 } from '../constants/colors';
 import { categories } from '../constants/categories';
 import PostCard from './PostCard';
