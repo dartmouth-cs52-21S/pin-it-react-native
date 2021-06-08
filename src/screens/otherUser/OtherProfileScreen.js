@@ -93,7 +93,6 @@ const OtherProfileScreen = (route, props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.bannerContainer} />
       <View style={styles.profileHeaderContainer}>
         <Image style={styles.profilePhoto} source={{ uri: profileUrl }} />
         <View style={styles.profileHeaderTextContainer}>
@@ -182,12 +181,6 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: bgPrimary,
     paddingTop: Platform.OS === 'android' ? 45 : 0,
-  },
-  bannerContainer: {
-    height: 40,
-    alignItems: 'flex-end',
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
   },
   logoutButtonContainer: {
     backgroundColor: 'rgba(255,255,255,0.2)',
