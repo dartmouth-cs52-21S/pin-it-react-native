@@ -5,7 +5,7 @@ import {
   View, Text, StyleSheet, Image, Modal, Pressable, TouchableWithoutFeedback, ScrollView, SafeAreaView,
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faImages, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faImages, faTimes, faTrophy } from '@fortawesome/free-solid-svg-icons';
 import { formatImgUrl } from '../services/imageUpload';
 import ModalCard from './ModalCard';
 import { getLocationPostsById } from '../actions/locations';
@@ -27,6 +27,23 @@ const PostCard = (props) => {
   const blankProfile = 'https://res.cloudinary.com/djc5u8rjt/image/upload/v1621833029/ux9xmvmtjl3nf7x7ls2n.png';
   // eslint-disable-next-line no-nested-ternary
   const profileUrl = item.user ? (item.user.profPic ? item.user.profPic : blankProfile) : blankProfile;
+
+  const renderMission = () => {
+    if (!item.isMission) {
+      return (null);
+    } else {
+      return (
+        <View style={{
+          position: 'absolute', top: 0, left: 0, padding: 7, flexDirection: 'row', backgroundColor: 'rgba(147,129,255, 0.5)', borderBottomRightRadius: 15,
+        }}
+        >
+          <FontAwesomeIcon icon={faTrophy} size={23} color="white" />
+          <Text style={[fontStyles.smallMediumText, { marginLeft: 5, alignSelf: 'center' }]}>Mission</Text>
+        </View>
+      );
+    }
+  };
+
   return (
     <>
       {/* Code for displaying images evenly in grid view
@@ -40,6 +57,7 @@ const PostCard = (props) => {
             style={styles.carouselImage}
             source={{ uri: formatImgUrl(item.imageUrls[0], 500, 500) }}
           />
+          {renderMission()}
           {item.imageUrls.length > 1 && (
           <View style={styles.imagesIcon}>
             <FontAwesomeIcon icon={faImages} size={23} color="white" />
