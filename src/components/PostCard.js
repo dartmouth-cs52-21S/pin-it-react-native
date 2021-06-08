@@ -38,7 +38,7 @@ const PostCard = (props) => {
         <View style={styles.touchableImage}>
           <Image
             style={styles.carouselImage}
-            source={{ uri: formatImgUrl(item.imageUrls[0], 500, 500) }}
+            source={{ uri: formatImgUrl(item.imageUrls[0], 500, null) }}
           />
           {item.imageUrls.length > 1 && (
           <View style={styles.imagesIcon}>

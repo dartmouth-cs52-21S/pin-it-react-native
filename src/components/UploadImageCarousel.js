@@ -6,6 +6,7 @@ import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { connect } from 'react-redux';
 import { bgTertiary } from '../constants/colors';
 import { getUser, deletePost } from '../actions/user';
+import { formatImgUrl } from '../services/imageUpload';
 
 const UploadImageCarousel = (props) => {
   const {
@@ -26,7 +27,7 @@ const UploadImageCarousel = (props) => {
     >
       <Image
         style={styles.carouselImage}
-        source={{ uri: item }}
+        source={{ uri: formatImgUrl(item, 1000, null) }}
       />
     </View>
   ), []);
