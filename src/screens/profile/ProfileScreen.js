@@ -8,24 +8,23 @@ import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { getUser, editUser } from '../../actions/user';
-import PostsTab from './PostsTab';
-import BadgesTab from './BadgesTab';
 import { signOutUser } from '../../actions/auth';
 import { getPhoto, uploadPhoto } from '../../services/imageUpload';
 import { accentPurple, bgPrimary, bgTertiary } from '../../constants/colors';
-import PinsTab from './PinsTab';
 import { getUserData } from '../../selectors/user';
+import PostsTab from './PostsTab';
+import BadgesTab from './BadgesTab';
+import PinsTab from './PinsTab';
+import OngoingActivityScreen from '../OngoingActivityScreen';
 
 const instaLogo = require('../../assets/instagram.png');
 const youtubeLogo = require('../../assets/youtube.png');
 
 const windowWidth = (Dimensions.get('window').width) / 4;
 
-const MissionsTab = () => (<Text style={styles.testText}>Missions</Text>);
-
 const renderScene = (props) => SceneMap({
   posts: PostsTab,
-  missions: MissionsTab,
+  missions: () => (<OngoingActivityScreen navigation={props.navigation} isProfileScreen />),
   pins: () => (<PinsTab navigation={props.navigation} />),
   badges: BadgesTab,
 });

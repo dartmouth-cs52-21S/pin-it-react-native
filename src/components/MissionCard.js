@@ -31,7 +31,7 @@ const MissionCard = ({ mission, onPress }) => {
         <Text style={fontStyles.mediumTextBold} numberOfLines={1}>
           {mission.title}
         </Text>
-        <Text style={fontStyles.mediumTextRegular} numberOfLines={1}>
+        <Text style={[fontStyles.smallMediumText, { paddingTop: 5 }]} numberOfLines={1}>
           {mission.completed ? timeString : mission.location.address}
         </Text>
       </View>
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   textContainer: {
-    paddingVertical: 30,
+    paddingVertical: 20,
     marginRight: 15,
     flexGrow: 1,
     width: '40%',
