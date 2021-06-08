@@ -3,12 +3,13 @@ import {
   View, Text, StyleSheet, TouchableOpacity,
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import * as Colors from '../constants/colors';
 import fontStyles from '../constants/fonts';
 import { categories } from '../constants/categories';
 import { getTimeString } from '../constants/time';
 
-const MissionCard = ({ mission, onPress }) => {
+const MissionCard = ({ mission, onPress, onRemove }) => {
   const category = categories[mission.category];
   let { icon } = categories.Restaurant;
   let iconStyle = categories.Restaurant.style;
@@ -21,6 +22,11 @@ const MissionCard = ({ mission, onPress }) => {
   const now = new Date().getTime();
   const timeElapsed = now - created;
   const timeString = `Completed ${getTimeString(timeElapsed)} ago`;
+
+  const onDeleteMission = (e) => {
+    e.stopPropagation();
+    onRemove();
+  };
 
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
@@ -35,6 +41,12 @@ const MissionCard = ({ mission, onPress }) => {
           {mission.completed ? timeString : mission.location.address}
         </Text>
       </View>
+      {!mission.completed
+      && (
+      <View style={styles.trashIcon}>
+        <FontAwesomeIcon icon={faTrashAlt} size={16} color="white" onPress={onDeleteMission} />
+      </View>
+      )}
     </TouchableOpacity>
   );
 };
@@ -60,13 +72,17 @@ const styles = StyleSheet.create({
   textContainer: {
     paddingVertical: 20,
     marginRight: 15,
-    flexGrow: 1,
-    width: '40%',
+    width: '70%',
   },
   detailsContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 15,
+  },
+  trashIcon: {
+    position: 'absolute',
+    top: 15,
+    right: 10,
   },
 });
 
