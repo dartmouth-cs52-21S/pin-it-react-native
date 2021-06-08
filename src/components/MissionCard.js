@@ -41,9 +41,12 @@ const MissionCard = ({ mission, onPress, onRemove }) => {
           {mission.completed ? timeString : mission.location.address}
         </Text>
       </View>
+      {!mission.completed
+      && (
       <View style={styles.trashIcon}>
         <FontAwesomeIcon icon={faTrashAlt} size={16} color="white" onPress={onDeleteMission} />
       </View>
+      )}
     </TouchableOpacity>
   );
 };
