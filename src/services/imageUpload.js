@@ -19,7 +19,7 @@ export const getPhoto = async () => {
     });
 
     if (!result.cancelled) {
-      return result.base64;
+      return result;
     }
     return null;
   } catch (error) {
@@ -31,16 +31,6 @@ export const getPhoto = async () => {
 export const uploadPhoto = async (photo) => {
   try {
     const base64Img = `data:image/jpg;base64,${photo.base64}`;
-    const result = await axios.post(cloudinaryApi, { file: base64Img, upload_preset: 'zem5scju' });
-    return result;
-  } catch (error) {
-    return error;
-  }
-};
-
-export const uploadProfilePhoto = async (photo) => {
-  try {
-    const base64Img = `data:image/jpg;base64,${photo}`;
     const result = await axios.post(cloudinaryApi, { file: base64Img, upload_preset: 'zem5scju' });
     return result;
   } catch (error) {
