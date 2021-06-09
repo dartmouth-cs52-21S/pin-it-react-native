@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import {
   SafeAreaView, StyleSheet, Text, Image, View, Platform, Dimensions, Linking,
 } from 'react-native';
-import { connect } from 'react-redux';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import PostsTab from './OtherPostsTab';
 import BadgesTab from './OtherBadgesTab';
+import MissionsTab from './OtherMissionsTab';
 import { accentPurple, bgPrimary, bgTertiary } from '../../constants/colors';
 import PinsTab from './OtherPinsTab';
 import getOtherUserInfo from '../../services/userService';
@@ -15,11 +15,9 @@ const youtubeLogo = require('../../assets/youtube.png');
 
 const windowWidth = (Dimensions.get('window').width) / 4;
 
-const MissionsTab = () => (<Text style={styles.testText}>Missions</Text>);
-
 const renderScene = ({ user, navigation }) => SceneMap({
   posts: () => (<PostsTab posts={user.posts} />),
-  missions: MissionsTab,
+  missions: () => (<MissionsTab navigation={navigation} missions={user.missions} />),
   pins: () => (<PinsTab user={user} navigation={navigation} />),
   badges: () => (<BadgesTab badges={user.badges} />),
 });
@@ -279,4 +277,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(null, null)(OtherProfileScreen);
+export default OtherProfileScreen;
