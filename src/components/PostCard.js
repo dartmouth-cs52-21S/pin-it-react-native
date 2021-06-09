@@ -100,7 +100,9 @@ const PostCard = (props) => {
               </Pressable>
               <View style={styles.header}>
                 <View>
-                  <Text style={[fontStyles.largeHeaderTitle, { marginTop: 15, paddingBottom: 5, alignSelf: 'center' }]}
+                  <Text style={[fontStyles.largeHeaderTitle, {
+                    textAlign: 'center', marginTop: 15, paddingBottom: 5, alignSelf: 'center',
+                  }]}
                     onPress={async () => {
                       const fullLocation = await getLocationPostsById(id);
                       setModalVisible(false);
@@ -114,10 +116,10 @@ const PostCard = (props) => {
                   >
                     {location.title}
                   </Text>
-                  <Text style={[fontStyles.smallTextRegular, { paddingBottom: 5, paddingLeft: 1, alignSelf: 'center' }]}>
+                  <Text style={[fontStyles.smallTextRegular, styles.subheading]}>
                     {location.address}
                   </Text>
-                  <Text style={[fontStyles.smallTextRegular, { paddingBottom: 5, paddingLeft: 1, alignSelf: 'center' }]}>
+                  <Text style={[fontStyles.smallTextRegular, styles.subheading]}>
                     {length}
                     {' total post'}
                     {length === 1 ? '' : 's'}
@@ -129,8 +131,8 @@ const PostCard = (props) => {
                   >
                     <Image style={styles.profilePhoto} source={{ uri: profileUrl }} />
                     <View>
-                      <Text style={[fontStyles.mediumTextRegular, {
-                        paddingTop: 5, paddingBottom: 5, paddingLeft: 1, alignSelf: 'center',
+                      <Text style={[fontStyles.mediumTextRegular, styles.subheading, {
+                        paddingTop: 5,
                       }]}
                       >
                         Reach by
@@ -150,8 +152,8 @@ const PostCard = (props) => {
                       </View>
                     </View>
                   </View>
-                  <Text style={[fontStyles.smallTextRegular, {
-                    paddingBottom: 5, paddingLeft: 1, alignSelf: 'center', justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center',
+                  <Text style={[fontStyles.smallTextRegular, styles.subheading, {
+                    justifyContent: 'center', alignItems: 'center', textAlignVertical: 'center',
                   }]}
                   >
                     {item.user ? item.user.badges.length : '0'}
@@ -225,12 +227,16 @@ const styles = StyleSheet.create({
     padding: 20,
     zIndex: 10,
   },
+  subheading: {
+    paddingBottom: 5,
+    paddingLeft: 1,
+    alignSelf: 'center',
+  },
   bulletpoint: {
     width: 2.5,
     height: 2.5,
     borderRadius: 2.5 / 2,
     backgroundColor: 'white',
-
   },
   imagesIcon: {
     position: 'absolute',

@@ -61,11 +61,12 @@ const LocationHeader = (props) => {
   return (
     <View>
       <View style={styles.heading}>
+        {renderIcon()}
         <Text numberOfLines={1} style={fontStyles.largeTextBold}>
           {' '}
           {title}
         </Text>
-        {renderIcon()}
+
       </View>
 
       <View style={styles.subheading}>
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
   heading: {
     flexDirection: 'row',
     flex: 0,
-    justifyContent: 'space-between',
+    width: '80%',
   },
   subheading: {
     flexDirection: 'row',

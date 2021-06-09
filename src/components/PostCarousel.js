@@ -12,7 +12,7 @@ import { getUser, deletePost } from '../actions/user';
 
 const PostCarousel = (props) => {
   const {
-    caption, imageUrls, location, id,
+    caption, imageUrls, location, id, username, loggedInUser,
   // eslint-disable-next-line react/destructuring-assignment
   } = props;
 
@@ -110,10 +110,16 @@ const PostCarousel = (props) => {
         </View>
 
         <View style={styles.heading}>
+          {caption
+          && (
           <Text style={styles.caption}>
             {caption}
           </Text>
+          )}
+
         </View>
+        {loggedInUser === username
+        && (
         <Pressable
           style={[styles.ellipses, styles.buttonClose]}
           onPress={() => setModalVisible(true)}
@@ -122,6 +128,7 @@ const PostCarousel = (props) => {
             <FontAwesomeIcon icon={faEllipsisH} size={27} color="white" />
           </View>
         </Pressable>
+        )}
       </View>
     </View>
   );
@@ -141,11 +148,9 @@ const styles = StyleSheet.create({
   },
   ellipses: {
     borderRadius: 20,
-    padding: 10,
-    zIndex: 10,
+    padding: 13,
     position: 'absolute',
-    left: '90%',
-    bottom: '-2%',
+    right: 0,
   },
   caption: {
     color: 'white',

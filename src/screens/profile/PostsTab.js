@@ -4,8 +4,8 @@ import { getUserData } from '../../selectors/user';
 import PostCarouselList from '../../components/PostCarouselList';
 
 const PostsTab = ({ user }) => {
-  const { posts } = user;
-  return <PostCarouselList posts={posts} />;
+  const { posts, username } = user;
+  return <PostCarouselList posts={posts} loggedInUser={username} />;
 };
 
 const mapStateToProps = (state) => ({
