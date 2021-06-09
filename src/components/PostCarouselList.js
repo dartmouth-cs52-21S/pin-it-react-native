@@ -5,12 +5,12 @@ import {
 import PostCarousel from './PostCarousel';
 import { bgPrimary } from '../constants/colors';
 
-const renderItem = ({ item }) => (
-  // eslint-disable-next-line react/jsx-props-no-spreading
-  <PostCarousel {...item} />
-);
+const PostCarouselList = ({ posts, loggedInUser }) => {
+  const renderItem = ({ item }) => (
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    <PostCarousel {...item} loggedInUser={loggedInUser} />
+  );
 
-const PostCarouselList = ({ posts }) => {
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
