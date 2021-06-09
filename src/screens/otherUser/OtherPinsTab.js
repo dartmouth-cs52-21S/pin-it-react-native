@@ -11,7 +11,6 @@ const N_BOXES = 20;
 const EPS = 5;
 
 const PinsTab = ({ user, navigation }) => {
-  console.log(navigation);
   const mapRef = useRef(null);
   const [region, setRegion] = useState({
     latitude: 20,
