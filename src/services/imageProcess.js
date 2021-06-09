@@ -41,8 +41,17 @@ const ImageBrowserScreen = (props) => {
   const _renderDoneButton = (count, onSubmit) => {
     if (!count) return null;
     return (
-      <TouchableOpacity title="Done" onPress={onSubmit}>
-        <Text onPress={onSubmit}>Done</Text>
+      <TouchableOpacity
+        title="Done"
+        onPress={onSubmit}
+        style={styles.doneButton}
+      >
+        <Text
+          onPress={onSubmit}
+          style={{ fontSize: 16 }}
+        >
+          Done
+        </Text>
       </TouchableOpacity>
     );
   };
@@ -137,6 +146,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     padding: 'auto',
     color: '#ffffff',
+  },
+  doneButton: {
+    padding: 10,
   },
   loadingIndicatorContainer: {
     position: 'absolute',
