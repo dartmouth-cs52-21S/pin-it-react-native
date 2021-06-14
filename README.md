@@ -1,24 +1,56 @@
-# Project Name
+# Reached React Native
 
-![Team Photo](Insert a Team Photo URL here)
-[*how?*](https://help.github.com/articles/about-readmes/#relative-links-and-image-paths-in-readme-files)
+![Team Photo](https://user-images.githubusercontent.com/52898557/118916227-1e035d00-b8f4-11eb-9403-fc47679e1dfc.png)
 
-TODO: short project description, some sample screenshots or mockups
+This is the frontend repository for our CS52 final project, Reached. Reached is a mobile app that challenges users to explore their surroundings by suggesting new locations to visit nearby.
+
+## All app repositories
+- [Front-end, mobile app](https://github.com/dartmouth-cs52-21S/pin-it-react-native)
+- [Back-end](https://github.com/dartmouth-cs52-21S/pin-it-api)
 
 ## Architecture
 
-TODO:  descriptions of code organization and tools and libraries used
+The following is a general overview of the project structure.
+
+- **App.js** - highest level App component and redux provider
+- **actions/** - redux actions for users, posts, app
+- **assets/** - all images and icons
+- **components/** - React components
+- **navigation/** - stack navigators and main tab navigator
+- **reducers/** - reducers for users, posts, app
+- **screens/** - containers for the components
+- **selectors/** - functions to select redux state items
+
 
 ## Setup
 
-TODO: how to get the project dev environment up and running, npm install etc
+To start developing, run `npm install`, then `expo start` or `npm start`. This will allow you to run the app on a simulator or your phone if you have the Expo Go app.
+
+Note: Although the app is using currently using Expo, we are planning to eject it some time in the future.
 
 ## Deployment
 
-TODO: how to deploy the project
+The expo app is accessible with this qr code, set up in our workflows for continuous integration 😃. 
+
+<img width="288" alt="Screen Shot 2021-05-22 at 5 59 43 PM" src="https://user-images.githubusercontent.com/77286845/119244667-9b62e380-bb27-11eb-8b63-fbde30829525.png">
+
+
+To access it with an iphone you have to log in so... heres our info. 
+- Expo email: cs52goats@gmail.com
+- Expo password: cs52dart
+
+The web frontend is deployed [here](https://xenodochial-pasteur-c84734.netlify.app/) on Netlify and the Express-Mongo API server is hosted [here](https://not-pin-it.herokuapp.com/) on Heroku.
 
 ## Authors
+This repository contains the contributions of
 
-TODO: list of authors
+- Eunice Kweon ([@eunicekweon](https://github.com/eunicekweon))
+- Jack Banhanyon ([@JackBDart](https://github.com/JackBDart))
+- Lizzie Hernandez ([@lizziehv](https://github.com/lhvidea))
+- Luis Chamorro ([@luis-chamorro](https://github.com/luis-chamorro))
+- Snow Kang ([@snow-kang](https://github.com/snow-kang))
+- Wylie Kasai ([@wyliekasai](https://github.com/wyliekasai))
 
 ## Acknowledgments
+
+Thank you Prof. Tim, our TA Jordan, and San Quan Prioleau!
